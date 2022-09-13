@@ -72,6 +72,7 @@ type ProductEdge {
 type Query {
   childrenCategory(id: String): [Category]
   levelCategories(level: Int): [Category]
+  productCollection(productCategory: String!, skip: Int, take: Int): [Product]
   products(
     """Returns the elements in the list that come after the specified cursor"""
     after: String

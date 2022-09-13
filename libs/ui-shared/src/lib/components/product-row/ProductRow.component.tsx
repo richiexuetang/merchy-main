@@ -10,10 +10,12 @@ const ProductRow = () => {
         return (
           <Box data-component="ProductRow">
             <ProductHeader
+              key={index}
               button={productData.button}
               heading={productData.heading}
             />
             <Grid
+              key={index}
               data-component="SmartGridRow"
               as="ul"
               templateColumns="repeat(6, 1fr)"

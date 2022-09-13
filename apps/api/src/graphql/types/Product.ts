@@ -1,4 +1,12 @@
-import { arg, extendType, list, nonNull, objectType, stringArg } from 'nexus';
+import {
+  arg,
+  extendType,
+  intArg,
+  list,
+  nonNull,
+  objectType,
+  stringArg,
+} from 'nexus';
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 
 export const Product = objectType({
@@ -23,10 +31,11 @@ export const Product = objectType({
   },
 });
 
-// Get all products
+// Get pagination products
 export const ProductsQuery = extendType({
   type: 'Query',
   definition(t) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     t.connectionField('products', {
       type: Product,
@@ -47,6 +56,28 @@ export const ProductsQuery = extendType({
           { first, after },
           { sliceStart: offset, arrayLength: totalCount }
         );
+      },
+    });
+  },
+});
+
+export const ProductCollectionQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('productCollection', {
+      type: Product,
+      args: {
+        productCategory: nonNull(stringArg()),
+        skip: intArg(),
+        take: intArg(),
+      },
+      resolve(_parent, args, ctx) {
+        const collections = ctx.prisma.product.findMany({
+          where: { productCategory: args.productCategory },
+          skip: args.skip,
+          take: args.take,
+        });
+        return collections;
       },
     });
   },
@@ -105,9 +136,11 @@ export const DeleteProductMutation = extendType({
       args: {
         id: nonNull(stringArg()),
       },
-      resolve(_parent, args, ctx) {
-        return ctx.prisma.product.delete({
-          where: { id: args.id },
+      async resolve(_, args, ctx) {
+        await ctx.prisma.product.delete({
+          where: {
+            id: args.id,
+          },
         });
       },
     });

@@ -10,7 +10,7 @@ const ProductList = () => {
         {productLinkData.map((productList, index) => {
           return (
             <Styled.ProductList key={index}>
-              <ProductListItem items={productList} />
+              <ProductListItem key={index + 69} items={productList} />
             </Styled.ProductList>
           );
         })}

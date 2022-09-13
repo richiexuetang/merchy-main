@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import Head from 'next/head';
-import {gql, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { ProductCard } from '../components/ProductCard';
 
 const AllProductsQuery = gql`
@@ -26,32 +26,32 @@ const AllProductsQuery = gql`
 `;
 
 const Home = () => {
-    const { data, loading, error, fetchMore } = useQuery(AllProductsQuery, {
-        variables: { first: 3 },
-    });
+  const { data, loading, error, fetchMore } = useQuery(AllProductsQuery, {
+    variables: { first: 3 },
+  });
 
-    if (loading) return <p> Loading... </p>
-    if (error) return <p>Something went wrong when getting product data</p>
+  if (loading) return <p> Loading... </p>;
+  if (error) return <p>Something went wrong when getting product data</p>;
 
-    const { endCursor, hasNextPage } = data?.products.pageInfo;
+  const { endCursor, hasNextPage } = data?.products.pageInfo;
 
-    return (
-        <div>
+  return (
+    <div>
       <Head>
         <title>Merchy Admin Tool</title>
       </Head>
       <div className="container mx-auto max-w-5xl my-20 px-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {data?.products.edges.map(({ node }: any, i: any) => (
-              <ProductCard
-                title={node.title}
-                primaryCategory={node.primaryCategory}
-                urlKey={node.urlKey}
-                id={node.id}
-                description={node.description}
-                imageUrl={node.imageUrl}
-                key={i}
-              />
+            <ProductCard
+              title={node.title}
+              primaryCategory={node.primaryCategory}
+              urlKey={node.urlKey}
+              id={node.id}
+              description={node.description}
+              imageUrl={node.imageUrl}
+              key={i}
+            />
           ))}
         </div>
         {hasNextPage ? (
@@ -72,7 +72,7 @@ const Home = () => {
         )}
       </div>
     </div>
-    )
-}
+  );
+};
 
 export default Home;

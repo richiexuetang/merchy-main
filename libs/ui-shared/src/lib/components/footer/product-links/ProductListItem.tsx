@@ -20,7 +20,12 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ items }) => {
           return (
             <li>
               <Styled.TopListItem>
-                <Link color='neutral.white' as={ReachLink} to={item.url}>
+                <Link
+                  key={index}
+                  color="neutral.white"
+                  as={ReachLink}
+                  to={item.url}
+                >
                   {item.title}
                 </Link>
               </Styled.TopListItem>
@@ -29,14 +34,13 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ items }) => {
         } else {
           return (
             <Styled.ProductListItem
-              key={index}
-              lineHeight='1.5rem'
-              letterSpacing='0.004rem'
-              marginInlineStart='1em'
+              lineHeight="1.5rem"
+              letterSpacing="0.004rem"
+              marginInlineStart="1em"
               margin={0}
             >
               <Link
-                color='var(--chakra-colors-neutral-white)'
+                color="var(--chakra-colors-neutral-white)"
                 as={ReachLink}
                 to={item.url}
               >
