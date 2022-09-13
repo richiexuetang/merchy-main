@@ -22,6 +22,7 @@
     "serve": {
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
+      "port": 3001,
       "options": {
         "buildTarget": "admin-tool:build",
         "dev": true

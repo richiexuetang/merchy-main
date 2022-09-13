@@ -57,8 +57,8 @@
       "options": {
         "buildTarget": "merchy-ui:build",
         "hmr": true,
-        "port": 3000,
-        "webpackConfig": "apps/merchy-ui/custom-webpack.config.js"
+        "webpackConfig": "apps/merchy-ui/custom-webpack.config.js",
+        "proxyConfig": "apps/merchy-ui/proxy.conf.json"
       },
       "configurations": {
         "development": {
