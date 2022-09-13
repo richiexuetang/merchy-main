@@ -1,10 +1,8 @@
 import React, { Suspense } from 'react';
 import { GlobalStyle } from '../styles/global';
-import { Navbar } from '../components/navbar';
-import { HomePage } from '../components/home';
-import LogIn from '../components/authenticate/LogIn';
-import SignUp from '../components/authenticate/SignUp';
-import ProductPage from '../components/product-page/ProductPage';
+import { Navbar } from '@merchy/ui-shared';
+import { HomePage } from '../pages';
+import { LogIn, SignUp, ProductPage } from '@merchy/ui-shared';
 import { Routes, Route } from 'react-router-dom';
 
 const App: React.FC = () => (

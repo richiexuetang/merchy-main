@@ -1,1 +1,10 @@
-export * from './lib/ui-shared';
+export {
+  LogIn,
+  SignUp,
+  Navbar,
+  Footer,
+  MenuBar,
+  ImageSlider,
+  ProductRow,
+  ProductPage,
+} from './lib';

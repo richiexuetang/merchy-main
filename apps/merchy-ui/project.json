@@ -19,9 +19,9 @@
           "apps/merchy-ui/src/favicon.ico",
           "apps/merchy-ui/src/assets",
           {
-            "input": "libs/shared/assests/src/lib",
-            "glob": "*",
-            "output": "assets"
+            "input": "./libs/shared-assets/",
+            "glob": "**/*",
+            "output": "./assets"
           }
         ],
         "styles": [],

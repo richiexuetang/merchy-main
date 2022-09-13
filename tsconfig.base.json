@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@merchy/shared/assests": ["libs/shared/assests/src/index.ts"],
+      "@merchy/prisma-client": ["libs/prisma-client/src"],
+      "@merchy/shared/assets": ["libs/shared/assets/src/index.ts"],
       "@merchy/ui-shared": ["libs/ui-shared/src/index.ts"]
     }
   },

@@ -2,9 +2,13 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "admin-tool": "apps/admin-tool",
+    "admin-tool-e2e": "apps/admin-tool-e2e",
+    "api": "apps/api",
     "merchy-ui": "apps/merchy-ui",
     "merchy-ui-e2e": "apps/merchy-ui-e2e",
-    "shared-assests": "libs/shared/assests",
+    "prisma-client": "libs/prisma-client",
+    "shared-assets": "libs/shared/assets",
     "ui-shared": "libs/ui-shared"
   }
 }

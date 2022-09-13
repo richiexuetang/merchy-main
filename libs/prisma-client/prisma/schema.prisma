@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../src"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int     @id @default(autoincrement())
+  username        String? @unique
+  email           String  @unique
+  password        String  @db.VarChar(50)
+  phoneNumber     String? @db.VarChar(50)
+  recentlyViewed  Int[]
+  purchaseHistory Int[]
+}
+
+model Category {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  description String?
+  name        String
+  level       Int
+  path        String
+  urlKey      String
+  breadCrumbs BreadCrumb[]
+  products    Product[]
+  parentId    String?
+  parent      Category?    @relation("ParentChildren", fields: [parentId], references: [id])
+  children    Category[]   @relation("ParentChildren")
+}
+
+model Product {
+  id              String         @id @default(uuid())
+  index           Int            @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+  title           String
+  productCategory String
+  imageUrl        String
+  brand           String
+  price           String
+  description     String?
+  urlKey          String         @unique
+  variants        Product[]      @relation("Variants")
+  variantsOf      Product[]      @relation("Variants")
+  primaryTitle    String
+  secondaryTitle  String?
+  condition       Condition      @default(NEW)
+  model           String?        @default("Unknown")
+  traits          Trait[]
+  market          Market?
+  primaryCategory String?
+  listingType     String         @default("Standard")
+  media           ImageGallery?
+  breadCrumbs     BreadCrumb[]
+  category        Category       @relation(fields: [categoryId], references: [id])
+  categoryId      String
+}
+
+model Trait {
+  id      String    @id @default(uuid())
+  name    String
+  value   String
+  visible Boolean   @default(false)
+  product Product[]
+}
+
+model Market {
+  id               String    @id @default(uuid())
+  highestBid       Int?
+  highestBidTime   DateTime?
+  lowestBid        Int?
+  lowestAsk        Int?
+  lowestAskTime    DateTime?
+  numberofAsks     Int?
+  numberofBids     Int?
+  annualHigh       Int?
+  annualLow        Int?
+  lastSale         Int?
+  lastSaleDate     DateTime?
+  pricePremium     Int?
+  salesEver        Int?
+  changePercentage Int?
+  volatility       Float?
+  price            Int
+  product          Product   @relation(fields: [productId], references: [id])
+  productId        String    @unique
+}
+
+model BreadCrumb {
+  id       String     @id @default(uuid())
+  category Category[]
+  products Product[]
+  level    Int
+  name     String
+  url      String     @unique
+}
+
+model ImageGallery {
+  label         String?
+  imageUrl      String
+  smallImageUrl String?
+  thumbUrl      String?
+  product       Product @relation(fields: [productId], references: [id])
+  productId     String  @unique
+}
+
+enum Condition {
+  NEW
+  USED
+}
