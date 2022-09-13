@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "merchy-ui": "apps/merchy-ui",
+    "merchy-ui-e2e": "apps/merchy-ui-e2e",
+    "shared-assests": "libs/shared/assests",
+    "ui-shared": "libs/ui-shared"
+  }
+}
