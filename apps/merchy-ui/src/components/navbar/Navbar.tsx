@@ -2,10 +2,11 @@ import { ReactComponent as MerchYLogo } from '../../assets/svgs/logo.svg';
 import { Outlet } from 'react-router-dom';
 import { BrowseMenu } from './nav-menu';
 import NavInput from './NavInput';
-import { chakra, Flex, Icon } from '@chakra-ui/react';
+import { chakra, Flex, Icon, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import * as Styled from './navbar.styles';
 import { useRef, useState, useEffect } from 'react';
+import { MessageCenterIcon } from '@merchy/ui-shared';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -67,6 +68,7 @@ const Navbar = () => {
               pos="relative"
               whiteSpace="nowrap"
               fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -74,27 +76,54 @@ const Navbar = () => {
               <BrowseMenu isOpen={isOpen} />
             </chakra.li>
 
-            <li>
+            <chakra.li
+              pos="relative"
+              whiteSpace="nowrap"
+              fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
+            >
               <Styled.MenuLink to="news">News</Styled.MenuLink>
-            </li>
-            <li>
+            </chakra.li>
+
+            <chakra.li
+              pos="relative"
+              whiteSpace="nowrap"
+              fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
+            >
               <Styled.MenuLink to="about">About</Styled.MenuLink>
-            </li>
-            <li>
+            </chakra.li>
+
+            <chakra.li
+              pos="relative"
+              whiteSpace="nowrap"
+              fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
+            >
               <Styled.MenuLink to="help">Help</Styled.MenuLink>
-            </li>
-            <li>
+            </chakra.li>
+
+            <chakra.li
+              pos="relative"
+              whiteSpace="nowrap"
+              fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
+            >
               <Styled.MenuLink to="sell">Sell</Styled.MenuLink>
-            </li>
-            <li>
-              <Styled.MenuLink to="help">Help</Styled.MenuLink>
-            </li>
-            <li>
-              <Styled.MenuLink to="sell">Sell</Styled.MenuLink>
-            </li>
-            <li>
-              <Styled.MenuLink to="help">Help</Styled.MenuLink>
-            </li>
+            </chakra.li>
+
+            <chakra.li
+              pos="relative"
+              whiteSpace="nowrap"
+              fontWeight="500"
+              m={{ base: '0', md: '0 2px', lg: '0 4px' }}
+            >
+              <MessageCenterIcon />
+            </chakra.li>
+
+            <Button variant="login">Login</Button>
+
+            <Button variant="signup">SignUp</Button>
           </Styled.MenuWrapper>
         </Flex>
       </chakra.div>

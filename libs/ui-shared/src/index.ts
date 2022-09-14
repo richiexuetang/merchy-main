@@ -7,4 +7,7 @@ export {
   ImageSlider,
   ProductRow,
   ProductPage,
+  MessageCenterIcon,
+  theme,
+  GlobalStyle,
 } from './lib';

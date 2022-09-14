@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import { theme } from './styles/global';
+import { theme } from '@merchy/ui-shared';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 import App from './app/app';
