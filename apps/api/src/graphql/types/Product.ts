@@ -4,8 +4,10 @@ import {
   intArg,
   list,
   nonNull,
+  inputObjectType,
   objectType,
   stringArg,
+  enumType,
 } from 'nexus';
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 
@@ -13,6 +15,7 @@ export const Product = objectType({
   name: 'Product',
   definition(t) {
     t.string('id');
+    t.field('createdAt', { type: 'DateTime' });
     t.string('name');
     t.string('title');
     t.string('imageUrl');
@@ -28,6 +31,19 @@ export const Product = objectType({
     t.string('primaryCategory');
     t.string('productCategory');
     t.string('categoryId');
+  },
+});
+
+export const Sort = enumType({
+  name: 'Sort',
+  members: ['asc', 'desc'],
+});
+
+export const ProductOrderByInputType = inputObjectType({
+  name: 'ProductOrderByInputType',
+  definition(t) {
+    t.field('createdAt', { type: Sort });
+    t.field('price', { type: Sort });
   },
 });
 
@@ -70,12 +86,14 @@ export const ProductCollectionQuery = extendType({
         productCategory: nonNull(stringArg()),
         skip: intArg(),
         take: intArg(),
+        orderBy: ProductOrderByInputType,
       },
       resolve(_parent, args, ctx) {
         const collections = ctx.prisma.product.findMany({
           where: { productCategory: args.productCategory },
           skip: args.skip,
           take: args.take,
+          orderBy: args.orderBy,
         });
         return collections;
       },

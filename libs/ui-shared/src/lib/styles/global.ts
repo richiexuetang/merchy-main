@@ -1,13 +1,17 @@
 import { createGlobalStyle } from 'styled-components';
-import Suisseintl from '../assets/fonts/SuisseintlRegular.woff2';
-import SuisseintlMedium from '../assets/fonts/SuisseIntl-Medium.woff2';
-import SuisseintlBold from '../assets/fonts/SuisseIntl-Bold.woff2';
 import { chakra, extendTheme, Text as ChakraText } from '@chakra-ui/react';
 import { ButtonStyles as Button } from './buttonStyles';
 import { TextStyles as Text } from './textStyles';
 import { FormStyles as Form } from './formStyles';
 
 export const theme = extendTheme({
+  styles: {
+    global: {
+      ul: {
+        listStyle: 'none',
+      },
+    },
+  },
   components: {
     Button,
     Text,
@@ -68,24 +72,27 @@ export const GlobalStyle = createGlobalStyle`
 
     @font-face {
         font-family: 'Suissintl';
-        font-style: normal;
-        src: url(${Suisseintl});
+        src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Regular-WebM.woff2') format('woff');
         font-display:swap;
     }
 
     @font-face {
       font-family: 'SuisseintlMedium';
-      src: url(${SuisseintlMedium});
-        font-display:swap;
+      src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Medium-WebM.woff2') format('woff');
+      font-display:swap;
     }
 
     @font-face {
       font-family: "SuisseintlBold";
-      src: url(${SuisseintlBold});
-        font-display:swap;
+      src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Bold-WebM.woff2') format('woff');
+      font-display:swap;
     }
 
-    @font-face{font-family:GesturaText-Regular;src:url('https://web-assets.stockx.com/fonts/GesturaText-Regular.woff2') format('woff');font-display:swap;}
+    @font-face {
+      font-family:GesturaText-Regular;
+      src:url('https://web-assets.stockx.com/fonts/GesturaText-Regular.woff2') format('woff');
+      font-display:swap;
+    }
 
     @font-face
     {
@@ -135,11 +142,6 @@ export const GlobalStyle = createGlobalStyle`
 
     ul {
       list-style-type: none;
-    }
-
-    #root{
-        margin: 0 auto;
-        min-height: 100vh;
     }
 `;
 

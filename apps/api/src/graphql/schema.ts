@@ -1,9 +1,10 @@
 import { connectionPlugin, makeSchema } from 'nexus';
 import { join } from 'path';
 import * as types from './types';
+import { GQLDate } from './scalars';
 
 export const schema = makeSchema({
-  types,
+  types: [types, GQLDate],
   plugins: [connectionPlugin()],
   outputs: {
     typegen: join(

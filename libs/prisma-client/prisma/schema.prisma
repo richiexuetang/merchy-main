@@ -25,13 +25,27 @@ model Category {
   description String?
   name        String
   level       Int
-  path        String
-  urlKey      String
+  path        String?
+  urlKey      String      @unique
   breadCrumbs BreadCrumb[]
   products    Product[]
   parentId    String?
   parent      Category?    @relation("ParentChildren", fields: [parentId], references: [id])
   children    Category[]   @relation("ParentChildren")
+  categoryPage CategoryPage?
+}
+
+model CategoryPage {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  headerDescription String? 
+  bottomPageIntro String? 
+  bottomPageParagraph String? 
+  imageUrl  String? 
+  locale  String? 
+  category  Category @relation(fields: [categoryPageId], references: [id])
+  categoryPageId  String @unique
 }
 
 model Product {
@@ -41,10 +55,10 @@ model Product {
   updatedAt       DateTime       @updatedAt
   name            String
   title           String
-  productCategory String
+  productCategory ProductCategory @default(streetwear)
   imageUrl        String
   brand           String
-  price           String
+  price           Int?            
   description     String?
   urlKey          String         @unique
   variants        Product[]      @relation("Variants")
@@ -114,4 +128,12 @@ model ImageGallery {
 enum Condition {
   NEW
   USED
+}
+
+enum ProductCategory {
+  nft 
+  collectibles
+  sneakers
+  streetwear
+  handbags
 }

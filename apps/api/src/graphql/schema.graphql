@@ -14,6 +14,11 @@ type Category {
   urlKey: String
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
 type Edge {
   cursor: String
   node: Product
@@ -34,6 +39,7 @@ type Product {
   brand: String
   categoryId: String
   condition: String
+  createdAt: DateTime
   description: String
   id: String
   imageUrl: String
@@ -69,10 +75,15 @@ type ProductEdge {
   node: Product
 }
 
+input ProductOrderByInputType {
+  createdAt: Sort
+  price: Sort
+}
+
 type Query {
   childrenCategory(id: String): [Category]
   levelCategories(level: Int): [Category]
-  productCollection(productCategory: String!, skip: Int, take: Int): [Product]
+  productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   products(
     """Returns the elements in the list that come after the specified cursor"""
     after: String
@@ -92,6 +103,11 @@ type Query {
 type Response {
   edges: [Edge]
   pageInfo: PageInfo
+}
+
+enum Sort {
+  asc
+  desc
 }
 
 type User {

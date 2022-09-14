@@ -1,7 +1,6 @@
 export {
   LogIn,
   SignUp,
-  Navbar,
   Footer,
   MenuBar,
   ImageSlider,
@@ -10,4 +9,5 @@ export {
   MessageCenterIcon,
   theme,
   GlobalStyle,
+  Fonts,
 } from './lib';

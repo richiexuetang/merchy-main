@@ -1,7 +1,6 @@
 export {
   LogIn,
   SignUp,
-  Navbar,
   Footer,
   MenuBar,
   ImageSlider,
@@ -10,4 +9,4 @@ export {
   MessageCenterIcon,
 } from './components';
 
-export { theme, GlobalStyle } from './styles';
+export { theme, GlobalStyle, Fonts } from './styles';
