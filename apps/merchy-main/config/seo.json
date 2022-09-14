@@ -1,0 +1,26 @@
+{
+  "title": "MerchY | Powered by MerchY Commerce",
+  "titleTemplate": "%s - MerchY Storefront",
+  "description": "MerchY Commerce - https://",
+  "openGraph": {
+    "title": "MerchY Storefront | Powered by MerchY Commerce",
+    "description": "MerchY Commerce - https://",
+    "type": "website",
+    "locale": "en_IE",
+    "url": "https://",
+    "site_name": "MerchY Commerce",
+    "images": [
+      {
+        "url": "/card.png",
+        "width": 800,
+        "height": 600,
+        "alt": "MerchY Commerce"
+      }
+    ]
+  },
+  "twitter": {
+    "handle": "",
+    "site": "",
+    "cardType": "summary_large_image"
+  }
+}

@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.root {
+  @apply sticky top-0;
+  min-height: 48px;
+}
