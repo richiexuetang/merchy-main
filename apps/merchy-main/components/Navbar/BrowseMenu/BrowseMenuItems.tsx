@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Dropdown from './Dropdown';
-import './index.module.css';
-import * as Styled from '../Navbar.styles.module';
+import s from './Dropdown.module.css';
 import { clsx } from 'clsx';
+import NextLink from 'next/link';
+import { chakra, Link } from '@chakra-ui/react';
 
 const BrowseMenuItems = ({ items, depthLevel }) => {
   const [dropdown, setDropdown] = useState(false);
@@ -36,14 +37,28 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
   };
 
   return (
-    <li
-      className={clsx(depthLevel > 0 && 'menu-list')}
+    <chakra.li
+      _hover={{
+        borderRightColor: 'green.700',
+        bg: 'neutral.200',
+      }}
+      className={clsx(depthLevel > 0 && s.menuList)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {items.children && items.urlKey ? (
         <React.Fragment>
-          <Styled.MenuLink href={items.urlKey}>{items.name}</Styled.MenuLink>
+          <NextLink href={items.urlKey}>
+            <Link
+              padding="8px"
+              _hover={{
+                borderStyle: 'solid',
+                borderRight: '1px solid #006340',
+              }}
+            >
+              {items.name}
+            </Link>
+          </NextLink>
           <Dropdown
             depthLevel={depthLevel}
             submenus={items.children}
@@ -51,9 +66,19 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
           />
         </React.Fragment>
       ) : (
-        <Styled.MenuLink href={items.urlKey}>{items.name}</Styled.MenuLink>
+        <NextLink href={items.urlKey}>
+          <Link
+            padding="8px"
+            _hover={{
+              borderStyle: 'solid',
+              borderRight: '1px solid #006340',
+            }}
+          >
+            {items.name}
+          </Link>
+        </NextLink>
       )}
-    </li>
+    </chakra.li>
   );
 };
 export default BrowseMenuItems;

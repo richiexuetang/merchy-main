@@ -1,22 +1,26 @@
 import BrowseMenuItems from './BrowseMenuItems';
+import s from './Dropdown.module.css';
 import { clsx } from 'clsx';
-import './index.module.css';
 
 const Dropdown = ({ submenus, dropdown, depthLevel }) => {
   depthLevel = depthLevel + 1;
-  const dropdownClass = depthLevel > 1;
 
   if (submenus.length > 0) {
     return (
       <ul
         className={clsx(
-          'dropdown',
-          dropdownClass && 'dropdown-submenu category',
-          dropdown && 'show'
+          s.dropdown,
+          depthLevel > 1 && s.dropdownSubmenu,
+          depthLevel > 1 && s.category,
+          dropdown && s.show
         )}
       >
-        <div className={`${depthLevel > 1 ? 'category-container' : ''}`}>
-          {submenus?.map((submenu, index) => (
+        <div
+          className={clsx(
+            depthLevel > 1 && s.categoryContainer && s.categoryContainerScroll
+          )}
+        >
+          {submenus.map((submenu, index) => (
             <BrowseMenuItems
               items={submenu}
               key={index}

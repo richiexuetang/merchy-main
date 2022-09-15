@@ -65,54 +65,6 @@ export const MenuWrapper = styled.ul`
   }
 `;
 
-export const MenuItem = styled.li`
-  position: relative;
-  margin: 0px 4px;
-  white-space: nowrap;
-  font-weight: 500;
-  text-transform: capitalize;
-  list-style: none;
-
-  @media only screen and (min-width: 48em) {
-    margin: 0 2px;
-    &:hover {
-      border: none;
-    }
-  }
-
-  @media only screen and (min-width: 62em) {
-    margin: 0 4px;
-    &:hover {
-      border: none;
-    }
-  }
-
-  > a {
-    display: block;
-    border-style: solid;
-
-    @media only screen and (min-width: 48em) {
-      padding: 8px 1px;
-      font-size: 0.75rem;
-    }
-
-    @media only screen and (min-width: 62em) {
-      font-size: 1rem;
-    }
-
-    @media only screen and (min-width: 80em) {
-      padding: 8px;
-    }
-
-    &:hover {
-      > ul {
-        display: block;
-      }
-      border-right: 2px solid #006340;
-    }
-  }
-`;
-
 export const MenuLink = styled(Link)`
   text-decoration: none;
   font-size: 1rem;
@@ -137,28 +89,6 @@ export const MenuLink = styled(Link)`
 
   > li {
     display: block;
-  }
-`;
-
-export const MenuList = styled.li`
-  font-weight: 400;
-  border-right: 2px solid transparent;
-  cursor: pointer;
-  padding-inline: 8px;
-
-  @media screen and (min-width: 48em) {
-    min-width: 115px;
-    font-size: var(--chakra-fontSizes-sm);
-  }
-
-  @media screen and (min-width: 62em) {
-    min-width: 132px;
-    font-size: var(--chakra-fontSizes-sm);
-  }
-
-  @media screen and (min-width: 80em) {
-    min-width: 160px;
-    font-size: var(--chakra-fontSizes-md);
   }
 `;
 //#endregion

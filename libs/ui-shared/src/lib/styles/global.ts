@@ -10,6 +10,9 @@ export const theme = extendTheme({
       ul: {
         listStyle: 'none',
       },
+      a: {
+        textDecor: 'none !important',
+      },
     },
   },
   components: {

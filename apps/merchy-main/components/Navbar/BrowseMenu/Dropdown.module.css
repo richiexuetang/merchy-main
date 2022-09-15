@@ -1,33 +1,58 @@
-.menu-item-container {
-  max-height: 680px;
-}
-
-.menu-list {
+.menuList {
   font-weight: 400;
   border-right: 2px solid transparent;
   cursor: pointer;
   padding-inline: 8px;
+  padding-inline-end: 0px;
 
   min-width: 160px;
   font-size: 1rem;
+
+  @media screen and (min-width: 48em) {
+    margin: 0 2px;
+  }
+
+  @media screen and (min-width: 62em) {
+    margin: 0 4px;
+  }
 }
 
-.menu-list:hover {
-  border-style: solid;
-  border-right: 2px solid #006340;
+.menuList > a {
+  display: flex;
+  height: 100%;
+  align-items: center;
+
+  @media screen and (min-width: 48em) {
+    padding: 8px 1px;
+    font-size: 0.75rem;
+  }
+
+  @media screen and (min-width: 62em) {
+    font-size: 1rem;
+  }
+
+  @media screen and (min-width: 80em) {
+    padding: 8px;
+  }
 }
 
 .dropdown {
+  position: absolute;
   top: 100%;
+  z-index: 1000;
+  float: left;
   padding: 0px;
   margin: 0px;
   box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px, rgb(0 0 0 / 10%) 0px -2px 4px;
   border: none;
-  font-weight: 600;
   color: var(--chakra-colors-neutral-700);
-  list-style: none;
   background-color: var(--chakra-colors-neutral-white);
   display: none;
+
+  padding: 0px;
+  margin: 0px;
+  display: none;
+  min-width: 160px;
 
   @media screen and (min-width: 48em) {
     left: -78px;
@@ -44,11 +69,11 @@
   }
 }
 
-.dropdown.show {
+.show {
   display: block;
 }
 
-.dropdown .dropdown-submenu {
+.dropdownSubmenu {
   position: absolute;
   top: 0px;
   left: 100%;
@@ -62,15 +87,16 @@
 }
 
 .category {
+  position: absolute;
   top: 0px;
   max-height: 680px;
   min-height: 100%;
   background: var(--chakra-colors-neutral-white);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px, rgba(0, 0, 0, 0.1) 0px -2px 4px;
-  left: 160px !important;
+  left: 100% !important;
 }
 
-.category-container {
+.categoryContainer {
   min-height: 100%;
   max-height: 680px;
   overflow-y: scroll;
@@ -79,27 +105,6 @@
   min-width: 160px;
 }
 
-.category-container::-webkit-scrollbar {
+.categoryContainer::-webkit-scrollbar .categoryContainerScroll {
   display: none;
-}
-
-.category-list:hover {
-  border-style: solid;
-  border-right: 2px solid;
-
-  border-right-color: var(--chakra-colors-green-700) !important;
-  background-color: var(--chakra-colors-neutral-200);
-}
-
-.notification-button {
-  line-height: 1;
-  background: transparent !important;
-  min-width: auto;
-  width: 1.5rem;
-  line-height: 1;
-  text-overflow: clip;
-  margin-right: 0.75rem;
-  max-width: 2.5rem;
-  max-height: 2.5rem;
-  height: 42px;
 }

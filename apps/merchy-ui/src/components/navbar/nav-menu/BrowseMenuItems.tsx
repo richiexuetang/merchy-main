@@ -1,24 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Dropdown from './Dropdown';
 import './index.css';
-import * as Styled from '../navbar.styles';
+import * as Styled from '../Navbar.styles';
 
 const BrowseMenuItems = ({ items, depthLevel }) => {
   const [dropdown, setDropdown] = useState(false);
   const ref = useRef<HTMLDivElement>();
 
   useEffect(() => {
-    const handler = (event: any) => {
-      if (dropdown && ref.current && !ref.current?.contains(event.target)) {
+    const handler = (event: React.SyntheticEvent) => {
+      if (
+        dropdown &&
+        ref.current &&
+        !ref.current?.contains(event.target as HTMLInputElement)
+      ) {
         setDropdown(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    document.addEventListener('touchstart', handler);
+    document.addEventListener('mousedown', () => handler);
+    document.addEventListener('touchstart', () => handler);
     return () => {
       // Cleanup the event listener
-      document.removeEventListener('mousedown', handler);
-      document.removeEventListener('touchstart', handler);
+      document.removeEventListener('mousedown', () => handler);
+      document.removeEventListener('touchstart', () => handler);
     };
   }, [dropdown]);
 

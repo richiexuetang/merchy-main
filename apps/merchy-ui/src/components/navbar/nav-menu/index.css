@@ -9,10 +9,6 @@ header {
   color: #212529;
 }
 
-.menu-item-container {
-  max-height: 680px;
-}
-
 .menu-list {
   font-weight: 400;
   border-right: 2px solid transparent;
