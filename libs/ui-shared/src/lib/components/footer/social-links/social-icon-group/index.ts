@@ -1,1 +1,1 @@
-export { default as SocialIconGroup } from './SocialIconGroup.component';
+export { default } from './SocialIconGroup.component';

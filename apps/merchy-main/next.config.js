@@ -13,6 +13,7 @@ const nextConfig = {
     svgr: true,
   },
   compiler: {
+    emotion: true,
     styledComponents: {
       displayName: true,
     },

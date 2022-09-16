@@ -4,19 +4,19 @@ const Fonts = () => (
   <Global
     styles={`
       @font-face {
-        font-family: 'Suissintl';
+        font-family: 'Suissintl-Regular';
         src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Regular-WebM.woff2') format('woff');
         font-display:swap;
     }
 
     @font-face {
-      font-family: 'SuisseintlMedium';
+      font-family: 'Suisseintl-Medium';
       src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Medium-WebM.woff2') format('woff');
       font-display:swap;
     }
 
     @font-face {
-      font-family: "SuisseintlBold";
+      font-family: "Suisseintl-Bold";
       src:url('https://web-assets.stockx.com/fonts/SuisseIntl-Bold-WebM.woff2') format('woff');
       font-display:swap;
     }

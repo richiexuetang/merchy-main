@@ -1,5 +1,5 @@
 export { LogIn, SignUp } from './authenticate';
-export { Footer } from './footer';
+export { Footer, SocialIconGroup, SubFooterLinks } from './footer';
 export { MenuBar } from './menubar';
 export { ImageSlider } from './image-slider';
 export { ProductRow } from './product-row';

@@ -1,8 +1,10 @@
-import { getLayout } from '../components';
+import { getLayout, ProductRowHeader } from '../components';
 import type { NextPageWithLayout } from './_app';
 import { gql } from '@apollo/client';
 import { getStandaloneApolloClient } from '../utils';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { ProductCard } from '../components';
+import { Box, Grid, Container } from '@chakra-ui/react';
 
 const ProductCollection = gql`
   query (
@@ -22,6 +24,23 @@ const ProductCollection = gql`
   }
 `;
 
+const BrowseCategories = gql`
+  query allBrowseCategoriesQuery($level: Int) {
+    levelCategories(level: $level) {
+      name
+      urlKey
+      children {
+        name
+        urlKey
+        children {
+          name
+          urlKey
+        }
+      }
+    }
+  }
+`;
+
 export const getStaticProps: GetStaticProps = async (context) => {
   const client = await getStandaloneApolloClient();
 
@@ -30,34 +49,54 @@ export const getStaticProps: GetStaticProps = async (context) => {
     variables: {
       productCategory: 'sneakers',
       take: 6,
-      orderBy: { price: 'asc' },
+      orderBy: { createdAt: 'desc' },
     },
   });
 
+  const allCategories = await client.query({
+    query: BrowseCategories,
+    variables: {
+      level: 1,
+    },
+  });
+
+  const browseCategories = allCategories.data.levelCategories;
+
   return {
-    props: { products: products },
+    props: { products, browseCategories },
     revalidate: 60,
   };
 };
 
 const Home: NextPageWithLayout = ({
   products,
+  browseCategories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const productCollection = products?.data.productCollection;
 
-  console.log('products from getStatic Props:', productCollection);
-
   return (
-    <div className="wrapper">
-      <div className="container">
-        <div id="welcome">
-          <h1>
-            <span> Hello there, </span>
-            Welcome merchy-main 👋
-          </h1>
-        </div>
-      </div>
-    </div>
+    <Container maxW="1296px">
+      {/* Product Collections */}
+      <Box>
+        <ProductRowHeader />
+        <Grid
+          data-component="SmartGridRow"
+          as="ul"
+          templateColumns="repeat(6, 1fr)"
+          gridGap={{ base: 2, lg: 6 }}
+          marginBottom={6}
+          overflow="auto"
+        >
+          {productCollection.map((product, index: number) => {
+            return (
+              <li data-component="product-card" key={index}>
+                <ProductCard product={product} />
+              </li>
+            );
+          })}
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

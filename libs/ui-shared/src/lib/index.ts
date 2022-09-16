@@ -7,6 +7,8 @@ export {
   ProductRow,
   ProductPage,
   MessageCenterIcon,
+  SocialIconGroup,
+  SubFooterLinks,
 } from './components';
 
 export { theme, GlobalStyle, Fonts } from './styles';

@@ -15,12 +15,10 @@ const SocialIconGroup: React.FC<SocialIconGroupProps> = ({ text, icons }) => {
         fontSize="sm"
         letterSpacing="0.0004rem"
         lineHeight="md"
-        textAlign={{ base: 'center', lg: 'inherit' }}
       >
         {text}
       </Text>
       <List
-        justifyContent={{ base: 'center', lg: 'inherit' }}
         display="flex"
         flexDirection="row"
         lineHeight="1.5rem"
@@ -31,6 +29,7 @@ const SocialIconGroup: React.FC<SocialIconGroupProps> = ({ text, icons }) => {
         {icons.map((icon, index) => {
           return (
             <ListItem
+              key={index}
               width="auto"
               paddingInlineStart={2}
               paddingInlineEnd={2}
@@ -38,13 +37,12 @@ const SocialIconGroup: React.FC<SocialIconGroupProps> = ({ text, icons }) => {
               sx={{
                 '>a': {
                   bg: 'transparent',
-                  color: 'inherit',
-                  textDecoration: 'inherit',
+                  color: 'white',
                 },
               }}
             >
-              <ChakraLink as={Link} href="/">
-                <Icon as={icon} color="white" />
+              <ChakraLink as="a" href="/">
+                {icon}
               </ChakraLink>
             </ListItem>
           );

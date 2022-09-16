@@ -2,30 +2,8 @@
 import BrowseMenuItems from './BrowseMenuItems';
 import { useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
-import { gql, useQuery } from '@apollo/client';
 
-const BrowseCategories = gql`
-  query allBrowseCategoriesQuery($level: Int) {
-    levelCategories(level: $level) {
-      name
-      urlKey
-      children {
-        name
-        urlKey
-        children {
-          name
-          urlKey
-        }
-      }
-    }
-  }
-`;
-
-const BrowseMenu = ({ isOpen }) => {
-  const { data, loading, error } = useQuery(BrowseCategories, {
-    variables: { level: 1 },
-  });
-
+const BrowseMenu = ({ isOpen, browseCategories }) => {
   const [dropdown, setDropdown] = useState(false);
   const ref = useRef<HTMLDivElement>();
 
@@ -56,7 +34,7 @@ const BrowseMenu = ({ isOpen }) => {
     window.innerWidth > 960 && setDropdown(false);
   };
 
-  if (isOpen && data && !error && !loading) {
+  if (isOpen && browseCategories) {
     return (
       <chakra.ul
         pos="absolute"
@@ -73,7 +51,7 @@ const BrowseMenu = ({ isOpen }) => {
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {data?.levelCategories.map((category, index) => {
+        {browseCategories?.map((category, index) => {
           const depthLevel = 1;
 
           return (

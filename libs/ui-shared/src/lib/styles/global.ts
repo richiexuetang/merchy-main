@@ -37,11 +37,11 @@ export const theme = extendTheme({
     md: 1.375,
   },
   fonts: {
-    suisseIntlRegular: `'SuisseIntl', sans-serif`,
-    suisseIntlMedium: `'SuisseIntlMedium', sans-serif`,
-    suisseIntlBold: `'SuisseIntlBold', sans-serif`,
-    body: `'SuisseIntl', sans-serif`,
-    gesturaText: `'GesturaText', sans-serif`,
+    suisseIntlRegular: `'SuisseIntl-Regular', sans-serif`,
+    suisseIntlMedium: `'SuisseIntl-Medium', sans-serif`,
+    suisseIntlBold: `'SuisseIntl-Bold', sans-serif`,
+    body: `'SuisseIntl-Regular', sans-serif`,
+    gesturaText: `'GesturaText-Regular', sans-serif`,
     proximaNova: `proxima-nova, sans-serif`,
   },
 });

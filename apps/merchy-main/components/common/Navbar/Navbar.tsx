@@ -7,6 +7,7 @@ import { useRef, useState, useEffect } from 'react';
 import { MessageCenterIcon } from '@merchy/ui-shared';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
+import { BrowseCategory } from 'apps/merchy-main/types';
 
 const navListStyle = {
   pos: 'relative',
@@ -15,7 +16,11 @@ const navListStyle = {
   whiteSpace: 'nowrap',
 } as const;
 
-const Navbar = () => {
+interface NavbarProps {
+  browseCategories: BrowseCategory[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -94,7 +99,7 @@ const Navbar = () => {
                   Browse
                 </Link>
               </NextLink>
-              <BrowseMenu isOpen={isOpen} />
+              <BrowseMenu isOpen={isOpen} browseCategories={browseCategories} />
             </chakra.li>
 
             <chakra.li {...navListStyle}>

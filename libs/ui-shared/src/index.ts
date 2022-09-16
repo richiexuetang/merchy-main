@@ -10,4 +10,6 @@ export {
   theme,
   GlobalStyle,
   Fonts,
+  SocialIconGroup,
+  SubFooterLinks,
 } from './lib';
