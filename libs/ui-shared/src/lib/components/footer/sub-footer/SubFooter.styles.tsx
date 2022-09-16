@@ -1,4 +1,4 @@
-import { Link, List, ListItem } from '@chakra-ui/react';
+import { Link as ChakraLink, List, ListItem } from '@chakra-ui/react';
 import styled from 'styled-components';
 
 export const SubFooterList = styled(List)`
@@ -26,7 +26,7 @@ export const SubFooterListItem = styled(ListItem)`
   }
 `;
 
-export const SubFooterLink = styled(Link)`
+export const SubFooterLink = styled(ChakraLink)`
   color: var(--chakra-colors-neutral-white);
   text-transform: uppercase;
   font-size: var(--chakra-fontSizes-xs);

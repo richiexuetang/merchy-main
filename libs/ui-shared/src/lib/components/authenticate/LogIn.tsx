@@ -10,13 +10,13 @@ import {
   Flex,
   Stack,
   FormControl,
-  Link,
   FormLabel,
   InputRightElement,
   InputGroup,
   IconButton,
 } from '@chakra-ui/react';
-import { Link as ReachLink } from 'react-router-dom';
+import { Link as ChakraLink } from '@chakra-ui/react';
+import Link from 'next/link';
 import {
   Twitter,
   Facebook,
@@ -25,11 +25,11 @@ import {
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const LogIn = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const handleVisibility = () => {
@@ -38,101 +38,101 @@ const LogIn = () => {
 
   return (
     <Box
-      data-component='page-container'
-      bg='#fafafa'
-      w='full'
-      paddingTop='90px'
-      minH='100vh'
-      overflowY='hidden'
+      data-component="page-container"
+      bg="#fafafa"
+      w="full"
+      paddingTop="90px"
+      minH="100vh"
+      overflowY="hidden"
     >
-      <Box data-compnent='login-body' w='full' paddingBottom='0px'>
+      <Box data-compnent="login-body" w="full" paddingBottom="0px">
         <Container
-          padding='0'
-          bg='white'
-          maxW='400px'
-          border='solid 1px #e0e0e0'
-          borderRadius='4.5px'
-          h='605px'
+          padding="0"
+          bg="white"
+          maxW="400px"
+          border="solid 1px #e0e0e0"
+          borderRadius="4.5px"
+          h="605px"
         >
           <HStack
-            data-component='toggle-buttons'
-            flexWrap='wrap'
-            h='50px'
-            margin='6px 16px 0px 16px'
+            data-component="toggle-buttons"
+            flexWrap="wrap"
+            h="50px"
+            margin="6px 16px 0px 16px"
           >
             <Button
-              variant='accessToggle'
-              flex='1'
-              onClick={() => navigate('/signup')}
+              variant="accessToggle"
+              flex="1"
+              onClick={() => router.push('/signup')}
             >
               Sign Up
             </Button>
             <Button
-              borderBottom='2px solid #010101'
-              variant='accessToggle'
-              flex='1'
+              borderBottom="2px solid #010101"
+              variant="accessToggle"
+              flex="1"
             >
               Log In
             </Button>
           </HStack>
 
-          <Box data-component='tab-container' padding='16px'>
+          <Box data-component="tab-container" padding="16px">
             <VStack>
-              <Button leftIcon={<Google />} variant='continue'>
+              <Button leftIcon={<Google />} variant="continue">
                 Continue With Google
               </Button>
-              <Button leftIcon={<Facebook />} variant='continue'>
+              <Button leftIcon={<Facebook />} variant="continue">
                 Continue With Facebook
               </Button>
-              <Button leftIcon={<Apple />} variant='continue'>
+              <Button leftIcon={<Apple />} variant="continue">
                 Continue With Apple
               </Button>
-              <Button leftIcon={<Twitter />} variant='continue'>
+              <Button leftIcon={<Twitter />} variant="continue">
                 Continue With Twitter
               </Button>
 
               <Stack
-                direction='row'
-                w='full'
-                alignItems='center'
-                marginTop='8px'
+                direction="row"
+                w="full"
+                alignItems="center"
+                marginTop="8px"
               >
                 <Divider
-                  orientation='horizontal'
-                  opacity='1'
-                  w='100%'
-                  borderWidth='0px 0px 1px'
+                  orientation="horizontal"
+                  opacity="1"
+                  w="100%"
+                  borderWidth="0px 0px 1px"
                 />
-                <Text variant='authentication'>OR</Text>
+                <Text variant="authentication">OR</Text>
                 <Divider
-                  orientation='horizontal'
-                  opacity='1'
-                  w='100%'
-                  borderWidth='0px 0px 1px'
+                  orientation="horizontal"
+                  opacity="1"
+                  w="100%"
+                  borderWidth="0px 0px 1px"
                 />
               </Stack>
 
-              <Stack w='full'>
+              <Stack w="full">
                 {/* Email Address Form Field */}
-                <FormControl variant='floating'>
-                  <Input placeholder=' ' autoComplete='off' />
+                <FormControl variant="floating">
+                  <Input placeholder=" " autoComplete="off" />
                   <FormLabel>Email Address</FormLabel>
                 </FormControl>
 
                 {/* Password Form Field */}
-                <FormControl variant='floating'>
+                <FormControl variant="floating">
                   <InputGroup>
                     <Input
                       type={passwordVisible ? 'text' : 'password'}
-                      placeholder=' '
-                      autoComplete='off'
+                      placeholder=" "
+                      autoComplete="off"
                       pr={8}
                     />
                     <InputRightElement>
                       <IconButton
-                        mt='12px'
-                        mr='5px'
-                        bg='none'
+                        mt="12px"
+                        mr="5px"
+                        bg="none"
                         _hover={{
                           bg: 'none',
                         }}
@@ -140,7 +140,7 @@ const LogIn = () => {
                           bg: 'none',
                         }}
                         onClick={handleVisibility}
-                        aria-label='show password icon'
+                        aria-label="show password icon"
                         icon={
                           passwordVisible ? <Visibility /> : <VisibilityOff />
                         }
@@ -150,26 +150,26 @@ const LogIn = () => {
                   </InputGroup>
                 </FormControl>
 
-                <Flex justifyContent='flex-end'>
+                <Flex justifyContent="flex-end">
                   <Text
-                    variant='authentication'
-                    fontSize='12px'
-                    marginBottom='24px'
+                    variant="authentication"
+                    fontSize="12px"
+                    marginBottom="24px"
                   >
-                    <Link as={ReachLink} to='/'>
+                    <ChakraLink as={Link} href="/">
                       Forgot Password?
-                    </Link>
+                    </ChakraLink>
                   </Text>
                 </Flex>
               </Stack>
 
-              <VStack w='full'>
-                <Button variant='authentication'>Log In</Button>
-                <Flex margin='8px 0 12px 0'>
+              <VStack w="full">
+                <Button variant="authentication">Log In</Button>
+                <Flex margin="8px 0 12px 0">
                   <Text
-                    variant='authentication'
-                    fontSize='12px'
-                    marginBottom='24px'
+                    variant="authentication"
+                    fontSize="12px"
+                    marginBottom="24px"
                   >
                     By logging in, you agree to the Terms of Service and Privacy
                     Policy

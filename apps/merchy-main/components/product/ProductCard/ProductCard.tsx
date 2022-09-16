@@ -1,10 +1,8 @@
 import { Box, Text, Flex, Image } from '@chakra-ui/react';
 import Link from 'next/link';
-import { DefaultText } from '../../../styles/global';
-import { Product } from '../../../data';
 
 interface ProductCardProps {
-  product: Product;
+  product: any;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -49,29 +47,29 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             textAlign="left"
             position="relative"
           >
-            <DefaultText
+            <Text
               fontSize={{ base: 'xs', md: 'sm' }}
               height={{ base: '34px', md: '40px' }}
             >
               {product.name}
-            </DefaultText>
+            </Text>
             <Flex
               flexDirection="column"
               justifyContent="space-between"
               height="100%"
             >
               <Box>
-                <DefaultText textTransform="capitalize" marginTop={1} h="auto">
+                <Text textTransform="capitalize" marginTop={1} h="auto">
                   Lowest Ask
-                </DefaultText>
-                <DefaultText
+                </Text>
+                <Text
                   fontSize={{ base: 'md', sm: 'xl' }}
                   fontWeight="700"
                   whiteSpace="nowrap"
                   marginTop={1}
                 >
                   ${product.lowest}
-                </DefaultText>
+                </Text>
               </Box>
             </Flex>
 

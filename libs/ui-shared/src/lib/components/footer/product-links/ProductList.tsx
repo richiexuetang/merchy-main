@@ -1,5 +1,4 @@
 import { productLinkData } from '../../../data';
-import { Outlet } from 'react-router-dom';
 import ProductListItem from './ProductListItem';
 import * as Styled from './ProductLinks.styles';
 
@@ -15,7 +14,6 @@ const ProductList = () => {
           );
         })}
       </Styled.ListGrid>
-      <Outlet />
     </>
   );
 };

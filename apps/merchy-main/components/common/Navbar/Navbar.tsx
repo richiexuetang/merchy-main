@@ -1,8 +1,8 @@
-import { Logo } from '../icons';
+import { Logo } from '../../icons';
 import { useRouter } from 'next/router';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
-import { chakra, Flex, Icon, Button, Link } from '@chakra-ui/react';
+import { chakra, Flex, Icon, Link, Button } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
 import { MessageCenterIcon } from '@merchy/ui-shared';
 import NavbarRoot from './NavbarRoot';

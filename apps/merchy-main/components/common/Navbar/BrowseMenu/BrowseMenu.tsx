@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import BrowseMenuItems from './BrowseMenuItems';
-import { gql, useQuery } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
+import { gql, useQuery } from '@apollo/client';
 
 const BrowseCategories = gql`
   query allBrowseCategoriesQuery($level: Int) {

@@ -1,6 +1,6 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ProductRowButton } from '../../data';
 
 interface ProductButtonProps {
@@ -9,19 +9,19 @@ interface ProductButtonProps {
 
 const ProductButton: React.FC<ProductButtonProps> = ({ button }) => {
   return (
-    <Link to={button.href}>
+    <Link href={button.href}>
       <Button
-        padding='0.375rem !important'
-        fontStyle='normal'
-        color='green.700'
-        bg='transparent'
-        fontSize='sm'
-        fontFamily='var(--chakra-fonts-suisseIntlRegular)'
+        padding="0.375rem !important"
+        fontStyle="normal"
+        color="green.700"
+        bg="transparent"
+        fontSize="sm"
+        fontFamily="var(--chakra-fonts-suisseIntlRegular)"
         rightIcon={<ArrowForwardIcon />}
         borderRadius={0}
-        h='34px !important'
+        h="34px !important"
         tabIndex={-1}
-        lineHeight='10rem'
+        lineHeight="10rem"
         _hover={{
           bg: 'neutral.200',
           color: 'green.700',

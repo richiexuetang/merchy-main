@@ -1,6 +1,7 @@
-import { Link as ReachLink } from 'react-router-dom';
+import Link from 'next/link';
 import { subFooterLinkData } from '../../../data';
 import * as Styled from './SubFooter.styles';
+import { Link as ChakraLink } from '@chakra-ui/react';
 
 interface SubFooterLinksProps {
   category: string;
@@ -13,19 +14,17 @@ const SubFooterLinks: React.FC<SubFooterLinksProps> = ({ category }) => {
   }
 
   return (
-    <>
-      <Styled.SubFooterList>
-        {categoryData.map((data, index) => {
-          return (
-            <Styled.SubFooterListItem key={index}>
-              <Styled.SubFooterLink as={ReachLink} to={data.url}>
-                {data.title}
-              </Styled.SubFooterLink>
-            </Styled.SubFooterListItem>
-          );
-        })}
-      </Styled.SubFooterList>
-    </>
+    <Styled.SubFooterList>
+      {categoryData.map((data, index) => {
+        return (
+          <Styled.SubFooterListItem key={index}>
+            <ChakraLink as={Link} href={data.url}>
+              {data.title}
+            </ChakraLink>
+          </Styled.SubFooterListItem>
+        );
+      })}
+    </Styled.SubFooterList>
   );
 };
 

@@ -1,6 +1,6 @@
-import { Link } from '@chakra-ui/react';
+import { Link as ChakraLink } from '@chakra-ui/react';
 import * as Styled from './ProductLinks.styles';
-import { Link as ReachLink } from 'react-router-dom';
+import Link from 'next/link';
 
 interface ProductListItems {
   title: string;
@@ -20,14 +20,14 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ items }) => {
           return (
             <li>
               <Styled.TopListItem>
-                <Link
+                <ChakraLink
                   key={index}
                   color="neutral.white"
-                  as={ReachLink}
-                  to={item.url}
+                  as={Link}
+                  href={item.url}
                 >
                   {item.title}
-                </Link>
+                </ChakraLink>
               </Styled.TopListItem>
             </li>
           );
@@ -39,13 +39,13 @@ const ProductListItem: React.FC<ProductListItemProps> = ({ items }) => {
               marginInlineStart="1em"
               margin={0}
             >
-              <Link
+              <ChakraLink
                 color="var(--chakra-colors-neutral-white)"
-                as={ReachLink}
-                to={item.url}
+                as={Link}
+                href={item.url}
               >
                 {item.title}
-              </Link>
+              </ChakraLink>
             </Styled.ProductListItem>
           );
         }

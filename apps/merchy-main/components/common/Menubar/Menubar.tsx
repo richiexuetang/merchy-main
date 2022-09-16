@@ -16,36 +16,36 @@ const Menubar = () => {
               Sneakers
             </ChakraLink>
           </Styled.MenuBarListItem>
-          {/* <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/apparel">
+          <Styled.MenuBarListItem>
+            <ChakraLink as={Link} href="/apparel">
               Apparel
-            </Link>
+            </ChakraLink>
           </Styled.MenuBarListItem>
           <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/sneakers">
+            <ChakraLink as={Link} href="/sneakers">
               Electronics
-            </Link>
+            </ChakraLink>
           </Styled.MenuBarListItem>
           <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/sneakers">
+            <ChakraLink as={Link} href="/sneakers">
               Trading Cards
-            </Link>
+            </ChakraLink>
           </Styled.MenuBarListItem>
           <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/sneakers">
+            <ChakraLink as={Link} href="/sneakers">
               Collectibles
-            </Link>
+            </ChakraLink>
           </Styled.MenuBarListItem>
           <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/sneakers">
+            <ChakraLink as={Link} href="/sneakers">
               Accessories
-            </Link>
+            </ChakraLink>
           </Styled.MenuBarListItem>
           <Styled.MenuBarListItem>
-            <Link as={ReachLink} to="/sneakers">
+            <ChakraLink as={Link} href="/sneakers">
               NFTs
-            </Link>
-          </Styled.MenuBarListItem> */}
+            </ChakraLink>
+          </Styled.MenuBarListItem>
         </Styled.MenuBarList>
       </Styled.MenuBarContainer>
     </Styled.MenuBarNav>
