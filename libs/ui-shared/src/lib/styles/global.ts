@@ -7,6 +7,9 @@ import { FormStyles as Form } from './formStyles';
 export const theme = extendTheme({
   styles: {
     global: {
+      body: {
+        overflow: 'hidden',
+      },
       ul: {
         listStyle: 'none',
       },

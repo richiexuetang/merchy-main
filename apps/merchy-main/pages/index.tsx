@@ -1,10 +1,11 @@
-import { getLayout, ProductRowHeader } from '../components';
+import { getLayout, MenuBar, ProductRowHeader } from '../components';
 import type { NextPageWithLayout } from './_app';
 import { gql } from '@apollo/client';
 import { getStandaloneApolloClient } from '../utils';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ProductCard } from '../components';
 import { Box, Grid, Container } from '@chakra-ui/react';
+import { Carousel } from '../components';
 
 const ProductCollection = gql`
   query (
@@ -74,29 +75,44 @@ const Home: NextPageWithLayout = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const productCollection = products?.data.productCollection;
 
+  const levelOneCategories = [];
+
+  browseCategories?.map(({ name, urlKey }) => {
+    levelOneCategories.push({ name: name, urlKey: urlKey });
+  });
+
   return (
-    <Container maxW="1296px">
-      {/* Product Collections */}
-      <Box>
-        <ProductRowHeader />
-        <Grid
-          data-component="SmartGridRow"
-          as="ul"
-          templateColumns="repeat(6, 1fr)"
-          gridGap={{ base: 2, lg: 6 }}
-          marginBottom={6}
-          overflow="auto"
-        >
-          {productCollection.map((product, index: number) => {
-            return (
-              <li data-component="product-card" key={index}>
-                <ProductCard product={product} />
-              </li>
-            );
-          })}
-        </Grid>
-      </Box>
-    </Container>
+    <>
+      <MenuBar levelOneCategories={levelOneCategories} />
+      <Container
+        w="100%"
+        marginInline="auto"
+        maxW="1296px"
+        paddingInline="1rem"
+      >
+        <Carousel />
+        {/* Product Collections */}
+        <Box>
+          <ProductRowHeader />
+          <Grid
+            data-component="SmartGridRow"
+            as="ul"
+            templateColumns="repeat(6, 1fr)"
+            gridGap={{ base: 2, lg: 6 }}
+            marginBottom={6}
+            overflow="auto"
+          >
+            {productCollection.map((product, index: number) => {
+              return (
+                <li data-component="product-card" key={index}>
+                  <ProductCard product={product} />
+                </li>
+              );
+            })}
+          </Grid>
+        </Box>
+      </Container>
+    </>
   );
 };
 

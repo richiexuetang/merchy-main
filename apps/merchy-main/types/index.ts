@@ -1,1 +1,1 @@
-export type { BrowseCategory, Category } from './site';
+export type { BrowseCategory, Category, Page } from './site';

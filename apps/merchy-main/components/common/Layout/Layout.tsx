@@ -1,5 +1,5 @@
 // import dynamic from 'next/dynamic';
-import { Footer, MenuBar, Navbar } from '../..';
+import { Footer, Navbar } from '../..';
 import { chakra } from '@chakra-ui/react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowseCategory } from 'apps/merchy-main/types';
@@ -27,18 +27,19 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children, pageProps }) => {
-  const levelOneCategories = [];
-
-  pageProps.browseCategories?.map(({ name, urlKey }) => {
-    levelOneCategories.push({ name: name, urlKey: urlKey });
-  });
-
   return (
     <ApolloProvider client={client}>
       <chakra.div minH="100vh">
         <Navbar browseCategories={pageProps.browseCategories} />
-        <MenuBar levelOneCategories={levelOneCategories} />
-        <main>{children}</main>
+        <chakra.main
+          minH="100vh"
+          mt="0px"
+          display="block"
+          role="main"
+          data-component="Main"
+        >
+          <chakra.div pt={{ base: 'initial', md: '0' }}>{children}</chakra.div>
+        </chakra.main>
         <Footer />
       </chakra.div>
     </ApolloProvider>

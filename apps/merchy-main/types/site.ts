@@ -8,3 +8,11 @@ export type BrowseCategory = {
   urlKey: string;
   children?: Category[];
 };
+
+export type Page = {
+  name: string | undefined;
+  url?: string | undefined;
+  body?: string | undefined;
+  is_visible?: boolean | undefined;
+  sort_order?: number | undefined;
+};

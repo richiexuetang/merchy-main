@@ -1,4 +1,4 @@
-import { Layout } from '../components';
+import { getLayout } from '../components';
 import { useRouter } from 'next/router';
 
 export default function Pages() {
@@ -11,4 +11,4 @@ export default function Pages() {
   );
 }
 
-Pages.Layout = Layout;
+Pages.getLayout = getLayout;
