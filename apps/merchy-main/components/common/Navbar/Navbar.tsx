@@ -4,10 +4,10 @@ import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
 import { chakra, Flex, Icon, Link, Button } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
-import { MessageCenterIcon } from '@merchy/ui-shared';
+// import { MessageCenterIcon } from '@merchy/ui-shared';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
-import { BrowseCategory } from 'apps/merchy-main/types';
+import { BrowseCategory } from '../../../types';
 
 const navListStyle = {
   pos: 'relative',
@@ -144,7 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
             </chakra.li>
 
             <chakra.li {...navListStyle}>
-              <MessageCenterIcon />
+              {/* <MessageCenterIcon /> */}
             </chakra.li>
             <chakra.li {...navListStyle}>
               <Button onClick={() => router.push('/login')} variant="login">

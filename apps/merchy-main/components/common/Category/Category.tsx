@@ -1,12 +1,23 @@
-import { Box, VStack, chakra, Container, Grid } from '@chakra-ui/react';
+import {
+  Box,
+  VStack,
+  chakra,
+  Container,
+  Grid,
+  Image,
+  Text,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { gql, useQuery } from '@apollo/client';
+import Link from 'next/link';
 
 const LeafCategories = gql`
   query ($categoryUrlKey: String) {
     leafCategories(categoryUrlKey: $categoryUrlKey) {
       name
+      imageUrl
+      price
     }
   }
 `;
@@ -15,7 +26,6 @@ const Category = () => {
   const router = useRouter();
 
   const { category } = router.query;
-  console.log('category', category);
 
   const { data, loading, error } = useQuery(LeafCategories, {
     variables: { categoryUrlKey: category },
@@ -27,9 +37,7 @@ const Category = () => {
   if (error) {
     return <div>ops</div>;
   }
-
   console.log('data', data);
-
   const h1Styles = {
     marginBottom: 1,
     fontSize: {
@@ -86,7 +94,7 @@ const Category = () => {
       >
         <Grid templateColumns="repeat(5, 1fr)" gap={6} marginTop={10}>
           {/* Left Nav Menu */}
-          <Container display="block" paddingLeft={4}>
+          <Container display="block" paddingLeft={4} gridColumn="span 1/span 1">
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
@@ -114,6 +122,137 @@ const Category = () => {
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
+
+          {/* Product Section */}
+          <Container gridColumn="span 4/span 4" maxW="100%">
+            <Box
+              data-component="category-breadcrumb"
+              display={{ base: 'none', lg: 'block' }}
+            >
+              <Box
+                display="flex"
+                paddingRight="2"
+                mb="6"
+                flexDir="row"
+                justifyContent="space-between"
+              >
+                <Box>
+                  <Box paddingBottom="2">
+                    <chakra.nav aria-label="breadcrumb">
+                      <chakra.ol>
+                        <chakra.li display="inline-flex" alignItems="center">
+                          <chakra.a>Home</chakra.a>
+                        </chakra.li>
+                        <chakra.li display="inline-flex" alignItems="center">
+                          <chakra.a>Sneakers</chakra.a>
+                        </chakra.li>
+                      </chakra.ol>
+                    </chakra.nav>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              data-component="category-products"
+              display="flex"
+              justifyContent="flex-start"
+              flexWrap="wrap"
+              w="100%"
+            >
+              <Box
+                id="browse-grid"
+                display="flex"
+                justifyContent="flex-start"
+                flexWrap="wrap"
+                w="100%"
+              >
+                {data?.leafCategories.map(
+                  ({ name, imageUrl, price }, index) => {
+                    return (
+                      <Box w="25%" padding="0 8px 16px" key={index}>
+                        <Box
+                          borderRadius="3px"
+                          minW="141px"
+                          h="auto"
+                          pos="relative"
+                          mr="0"
+                        >
+                          <Link href="/">
+                            <Box
+                              display="flex"
+                              flexDir="column"
+                              border="1"
+                              borderColor="neutral.200"
+                            >
+                              <Box margin={{ base: '2', lg: '4' }}>
+                                <Box
+                                  display="flex"
+                                  justifyContent="center"
+                                  w="140px"
+                                  h="75px"
+                                  maxW="100%"
+                                  m="0px auto"
+                                >
+                                  <Image
+                                    objectFit="contain"
+                                    maxW="100%"
+                                    src={imageUrl}
+                                    alt={name}
+                                  />
+                                </Box>
+                              </Box>
+                              <Box
+                                display="flex"
+                                flexDir="column"
+                                h="100%"
+                                padding="2"
+                                textAlign="left"
+                                pos="relative"
+                              >
+                                <Text
+                                  overflow="hidden"
+                                  fontWeight="md"
+                                  fontSize={{ base: 'xs', md: 'sm' }}
+                                  h={{ base: '34px', md: '40px' }}
+                                >
+                                  {name}
+                                </Text>
+                                <Box
+                                  display="flex"
+                                  flexDir="column"
+                                  justifyContent="space-between"
+                                  h="100%"
+                                >
+                                  <Box>
+                                    <Text
+                                      lineHeight="md"
+                                      fontSize="xs"
+                                      fontWeight="medium"
+                                      mt="1"
+                                    >
+                                      Lowest Ask
+                                    </Text>
+                                    <Text
+                                      fontWeight="bold"
+                                      lineHeight="1.3"
+                                      mt="1"
+                                    >
+                                      {price}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Link>
+                        </Box>
+                      </Box>
+                    );
+                  }
+                )}
+              </Box>
+            </Box>
+          </Container>
         </Grid>
       </Container>
     </Box>

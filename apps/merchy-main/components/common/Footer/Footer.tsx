@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { SocialIconGroup } from '@merchy/ui-shared';
+// import { SocialIconGroup } from '@merchy/ui-shared';
 import {
   Twitter,
   Facebook,
@@ -118,7 +118,7 @@ const Footer = () => {
             </Box>
             <Spacer />
 
-            <SocialIconGroup
+            {/* <SocialIconGroup
               text="Find Us On Social"
               icons={[
                 <Twitter key="twitter-icon" />,
@@ -138,7 +138,7 @@ const Footer = () => {
             <Spacer />
             <SocialIconGroup text="Use Assistive Technology" icons={[]} />
             <Spacer />
-            <SocialIconGroup text="Proudly Built in Detroit" icons={[]} />
+            <SocialIconGroup text="Proudly Built in Detroit" icons={[]} /> */}
           </Flex>
         </Box>
         {/* End of SocialLinksUtility */}

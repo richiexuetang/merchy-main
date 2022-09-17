@@ -1,12 +1,14 @@
-export async function getStandaloneApolloClient() {
-  const { ApolloClient, InMemoryCache, HttpLink } = await import(
-    '@apollo/client'
-  );
+import { HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
+
+export const getStandaloneApolloClient = (
+  initialState = {}
+): ApolloClient<NormalizedCacheObject> => {
   return new ApolloClient({
     link: new HttpLink({
       uri: 'http://localhost:3333/api/graphql',
       fetch,
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache().restore(initialState || {}),
   });
-}
+};

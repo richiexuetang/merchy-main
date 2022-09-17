@@ -1,7 +1,8 @@
 import { AppProps } from 'next/app';
 import { Head } from '../components';
 import { ChakraProvider } from '@chakra-ui/react';
-import { theme, Fonts } from '@merchy/ui-shared';
+import { theme, Fonts } from '../styles';
+// import { theme, Fonts } from '@merchy/ui-shared';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { NextPage } from 'next';
 
