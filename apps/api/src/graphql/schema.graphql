@@ -82,6 +82,7 @@ input ProductOrderByInputType {
 
 type Query {
   childrenCategory(id: String): [Category]
+  leafCategories(categoryUrlKey: String, skip: Int, take: Int): [Product]
   levelCategories(level: Int): [Category]
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   products(

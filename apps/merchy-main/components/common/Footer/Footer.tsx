@@ -40,11 +40,13 @@ const ListElement = ({ children }: { children: string }) => {
 const Footer = () => {
   return (
     <chakra.footer
+      pos="relative"
       paddingInline={{ base: '4', md: '6', lg: '8' }}
       pt={{ base: '6', lg: '8' }}
       paddingBottom="0"
       zIndex="2"
       bg="neutral.700"
+      overflowX="hidden"
     >
       <Box maxW="1296px" textColor="white" marginInline="auto">
         <Heading
@@ -80,93 +82,101 @@ const Footer = () => {
           borderColor="neutral.300"
           orientation="horizontal"
         />
-      </Box>
 
-      <Box mb="4" marginInline="auto" px="50px">
-        <Flex
-          flexDirection={{ md: 'row' }}
-          flexFlow="column wrap"
-          justifyContent="space-between"
-        >
-          <Box
-            display="flex"
-            justifyContent={{ base: 'center', lg: 'flex-start' }}
-            mb={{ base: '4', lg: 'inherit' }}
-            flex={{ base: 'inherit', md: '1 1 100%', lg: 'inherit' }}
+        {/* SocialLinksUtility */}
+        <Box mb="4" marginInline="auto" px="50px">
+          <Flex
+            flexDirection={{ md: 'row' }}
+            flexFlow="column wrap"
+            justifyContent="space-between"
           >
-            <Button
-              borderRadius={0}
-              color="white"
-              _hover={{
-                bg: 'white',
-                color: 'neutral.600',
-              }}
-              py="2\.5"
-              aria-label="United States | English | $ USD"
-              bg="transparent"
-              border="1px solid rgb(255, 255, 255)"
-              fontWeight="semibold"
-              fontSize="md"
-              h="42px"
+            <Box
+              display="flex"
+              justifyContent={{ base: 'center', lg: 'flex-start' }}
+              mb={{ base: '4', lg: 'inherit' }}
+              flex={{ base: 'inherit', md: '1 1 100%', lg: 'inherit' }}
             >
-              <span>
-                United States&nbsp;|&nbsp;English&nbsp;|&nbsp;$USD&nbsp;
-              </span>
-            </Button>
-          </Box>
-          <Spacer />
+              <Button
+                borderRadius={0}
+                color="white"
+                _hover={{
+                  bg: 'white',
+                  color: 'neutral.600',
+                }}
+                py="2\.5"
+                aria-label="United States | English | $ USD"
+                bg="transparent"
+                border="1px solid rgb(255, 255, 255)"
+                fontWeight="semibold"
+                fontSize="md"
+                h="42px"
+              >
+                <span>
+                  United States&nbsp;|&nbsp;English&nbsp;|&nbsp;$USD&nbsp;
+                </span>
+              </Button>
+            </Box>
+            <Spacer />
 
-          <SocialIconGroup
-            text="Find Us On Social"
-            icons={[
-              <Twitter key="twitter-icon" />,
-              <Facebook key="facebook-icon" />,
-              <Instagram key="instagram-icon" />,
-              <YouTube key="youtube-icon" />,
-            ]}
-          />
-          <Spacer />
-          <SocialIconGroup
-            text="Download Our App"
-            icons={[<Apple key="apple-icon" />, <Android key="andriod-icon" />]}
-          />
-          <Spacer />
-          <SocialIconGroup text="Use Assistive Technology" icons={[]} />
-          <Spacer />
-          <SocialIconGroup text="Proudly Built in Detroit" icons={[]} />
-        </Flex>
-      </Box>
-      <Box
-        bg="neutral.black"
-        pos="relative"
-        w="100vw"
-        marginInline="-50vw"
-        left="50%"
-        right="50%"
-        textColor="white"
-      >
-        <Flex
-          padding="2rem 0"
-          justifyContent="space-between"
-          marginInline="auto"
-          maxWidth="1296px"
+            <SocialIconGroup
+              text="Find Us On Social"
+              icons={[
+                <Twitter key="twitter-icon" />,
+                <Facebook key="facebook-icon" />,
+                <Instagram key="instagram-icon" />,
+                <YouTube key="youtube-icon" />,
+              ]}
+            />
+            <Spacer />
+            <SocialIconGroup
+              text="Download Our App"
+              icons={[
+                <Apple key="apple-icon" />,
+                <Android key="andriod-icon" />,
+              ]}
+            />
+            <Spacer />
+            <SocialIconGroup text="Use Assistive Technology" icons={[]} />
+            <Spacer />
+            <SocialIconGroup text="Proudly Built in Detroit" icons={[]} />
+          </Flex>
+        </Box>
+        {/* End of SocialLinksUtility */}
+
+        {/* SubFooter */}
+        <Box
+          bg="neutral.black"
+          pos="relative"
+          w="100vw"
+          marginInline="-50vw"
+          left="50%"
+          right="50%"
+          textColor="white"
         >
-          <VStack></VStack>
-
-          <Spacer />
-          <chakra.address
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            fontSize="xs"
-            mt={4}
-            mb={0}
-            minW="195px"
+          <Flex
+            padding="2rem 0"
+            justifyContent="space-between"
+            marginInline="auto"
+            maxWidth="1296px"
           >
-            @2022 MerchY. All Rights Reserved.
-          </chakra.address>
-        </Flex>
+            <VStack></VStack>
+
+            <Spacer />
+            <chakra.address
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontSize="xs"
+              mt={4}
+              mb={0}
+              minW="195px"
+            >
+              @2022 MerchY. All Rights Reserved.
+            </chakra.address>
+          </Flex>
+        </Box>
       </Box>
+      {/* End SubFooter */}
     </chakra.footer>
   );
 };

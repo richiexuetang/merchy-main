@@ -1,0 +1,16 @@
+{
+  "name": "MerchY",
+  "short_name": "MerchY",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#90cdf4",
+  "theme_color": "#90cdf4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-72x72.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    }
+  ]
+}

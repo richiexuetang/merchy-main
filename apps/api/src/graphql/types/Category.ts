@@ -1,3 +1,4 @@
+import { prisma } from './../prisma';
 import {
   arg,
   extendType,
@@ -63,6 +64,69 @@ export const CategoryLevelQuery = extendType({
             level: args.level,
           },
         });
+      },
+    });
+  },
+});
+
+// Get category
+export const LeafCategoriesQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('leafCategories', {
+      type: Product,
+      args: {
+        categoryUrlKey: stringArg(),
+        skip: intArg(),
+        take: intArg(),
+      },
+      async resolve(_, args, ctx) {
+        const category = await ctx.prisma.category.findUnique({
+          where: {
+            urlKey: args.categoryUrlKey,
+          },
+        });
+
+        let leafCategories = [category];
+        let currentLevel = category.level;
+
+        while (currentLevel < 3) {
+          let next = [];
+
+          for (let i = 0; i < leafCategories.length; i++) {
+            const children = await ctx.prisma.category.findMany({
+              where: {
+                parentId: leafCategories[i].id,
+              },
+            });
+
+            if (children) {
+              next = [...children, ...next];
+            }
+          }
+
+          if (next.length === 0) {
+            break;
+          }
+          leafCategories = next.slice();
+          currentLevel++;
+        }
+
+        let result = [];
+
+        for (let i = 0; i < leafCategories.length; i++) {
+          const products = await ctx.prisma.product.findMany({
+            where: {
+              categoryId: leafCategories[i].id,
+            },
+          });
+
+          if (products) {
+            result = [...result, ...products];
+          }
+        }
+
+        return result;
       },
     });
   },

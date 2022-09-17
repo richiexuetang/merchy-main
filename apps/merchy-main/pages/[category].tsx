@@ -16,7 +16,8 @@ const CategoryUrls = gql`
   }
 `;
 
-export async function getStaticProps() {
+export async function getStaticProps({ params }) {
+  console.log('params', params);
   const client = await getStandaloneApolloClient();
 
   const allCategory = await client.query({
@@ -25,7 +26,6 @@ export async function getStaticProps() {
       level: 1,
     },
   });
-
   const category = [];
 
   allCategory?.data.levelCategories.map(({ urlKey, children }) => {

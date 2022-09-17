@@ -10,7 +10,7 @@ const Head: FC = () => {
       <NextHead>
         <title>MerchY</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/site.webmanifest" key="site-manifest" />
+        <link rel="manifest" href="/manifest.json" key="site-manifest" />
       </NextHead>
     </>
   );

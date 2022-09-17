@@ -1,7 +1,35 @@
 import { Box, VStack, chakra, Container, Grid } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
+import { gql, useQuery } from '@apollo/client';
+
+const LeafCategories = gql`
+  query ($categoryUrlKey: String) {
+    leafCategories(categoryUrlKey: $categoryUrlKey) {
+      name
+    }
+  }
+`;
 
 const Category = () => {
+  const router = useRouter();
+
+  const { category } = router.query;
+  console.log('category', category);
+
+  const { data, loading, error } = useQuery(LeafCategories, {
+    variables: { categoryUrlKey: category },
+  });
+
+  if (loading) {
+    return <div>loading</div>;
+  }
+  if (error) {
+    return <div>ops</div>;
+  }
+
+  console.log('data', data);
+
   const h1Styles = {
     marginBottom: 1,
     fontSize: {
