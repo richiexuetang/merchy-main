@@ -16,8 +16,7 @@ const CategoryUrls = gql`
   }
 `;
 
-export async function getStaticProps({ params }) {
-  console.log('params', params);
+export async function getStaticProps() {
   const client = await getStandaloneApolloClient();
 
   const allCategory = await client.query({

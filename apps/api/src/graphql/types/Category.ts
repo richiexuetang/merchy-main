@@ -1,13 +1,5 @@
-import { prisma } from './../prisma';
-import {
-  arg,
-  extendType,
-  intArg,
-  list,
-  nonNull,
-  objectType,
-  stringArg,
-} from 'nexus';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { BreadCrumb } from './BreadCrumb';
 import { Product } from './Product';
 
 export const Category = objectType({
@@ -20,6 +12,7 @@ export const Category = objectType({
     t.string('path');
     t.string('urlKey');
     t.string('categoryId');
+    t.string('parentId');
     t.list.field('children', {
       type: Category,
       async resolve(_parent, _args, ctx) {
@@ -46,6 +39,19 @@ export const Category = objectType({
         return products;
       },
     });
+    t.list.field('breadCrumbs', {
+      type: BreadCrumb,
+      async resolve(_parent, _args, ctx) {
+        const breadCrumbs = await ctx.prisma.category
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .breadCrumbs();
+        return breadCrumbs;
+      },
+    });
   },
 });
 
@@ -70,10 +76,10 @@ export const CategoryLevelQuery = extendType({
 });
 
 // Get category
-export const LeafCategoriesQuery = extendType({
+export const LeafCategoriesProductQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.list.field('leafCategories', {
+    t.list.field('categoryProducts', {
       type: Product,
       args: {
         categoryUrlKey: stringArg(),
@@ -127,6 +133,82 @@ export const LeafCategoriesQuery = extendType({
         }
 
         return result;
+      },
+    });
+  },
+});
+
+export const CategoryBrowseInfo = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('categoryBrowse', {
+      type: Category,
+      args: {
+        categoryUrl: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        const category = await ctx.prisma.category.findUnique({
+          where: {
+            urlKey: args.categoryUrl,
+          },
+        });
+        return category;
+      },
+    });
+  },
+});
+
+export const BrowseVerticalCategory = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('verticalBrowseCategory', {
+      type: Category,
+      args: {
+        category: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        const category = await ctx.prisma.category.findUnique({
+          where: {
+            urlKey: args.category,
+          },
+        });
+
+        let rootCategory = category;
+        while (rootCategory.parentId !== null) {
+          rootCategory = await ctx.prisma.category.findUnique({
+            where: {
+              id: rootCategory.parentId,
+            },
+          });
+        }
+
+        const levelOneCategories = await ctx.prisma.category.findMany({
+          where: {
+            level: 1,
+          },
+        });
+
+        const levelTwoCategories = await ctx.prisma.category.findMany({
+          where: {
+            parentId: rootCategory.id,
+          },
+        });
+
+        if (category.level === 2) {
+          const levelThreeCategories = await ctx.prisma.category.findMany({
+            where: {
+              parentId: category.id,
+            },
+          });
+
+          return [
+            ...levelOneCategories,
+            ...levelTwoCategories,
+            ...levelThreeCategories,
+          ];
+        }
+
+        return [...levelOneCategories, ...levelTwoCategories];
       },
     });
   },

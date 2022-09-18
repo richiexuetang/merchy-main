@@ -42,7 +42,7 @@ const BrowseCategories = gql`
   }
 `;
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   const client = await getStandaloneApolloClient();
 
   const products = await client.query({

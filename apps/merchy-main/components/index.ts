@@ -10,4 +10,4 @@ export {
 export { Logo } from './icons';
 export { ProductCard, ProductRowHeader } from './product';
 export { YouTube, Facebook, Instagram, Twitter, Apple, Android } from './icons';
-export { Text } from './ui';
+export { Text, BrowseNavbar } from './ui';

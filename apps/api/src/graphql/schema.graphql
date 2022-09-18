@@ -2,13 +2,22 @@
 ### Do not make changes to this file directly
 
 
+type BreadCrumb {
+  id: ID
+  level: Int
+  name: String
+  url: String
+}
+
 type Category {
+  breadCrumbs: [BreadCrumb]
   categoryId: String
   children: [Category]
   description: String
   id: ID
   level: Int
   name: String
+  parentId: String
   path: String
   products: [Product]
   urlKey: String
@@ -81,8 +90,9 @@ input ProductOrderByInputType {
 }
 
 type Query {
+  categoryBrowse(categoryUrl: String!): Category
+  categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
   childrenCategory(id: String): [Category]
-  leafCategories(categoryUrlKey: String, skip: Int, take: Int): [Product]
   levelCategories(level: Int): [Category]
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   products(
@@ -99,6 +109,7 @@ type Query {
     last: Int
   ): ProductConnection
   users: [User]
+  verticalBrowseCategory(category: String!): [Category]
 }
 
 type Response {

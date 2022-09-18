@@ -1,23 +1,40 @@
-import {
-  Box,
-  VStack,
-  chakra,
-  Container,
-  Grid,
-  Image,
-  Text,
-} from '@chakra-ui/react';
+import { Box, VStack, chakra, Container, Grid, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { gql, useQuery } from '@apollo/client';
 import Link from 'next/link';
+import Image from 'next/image';
+import { BrowseNavbar } from '../../ui';
 
-const LeafCategories = gql`
+const LeafCategoriesProduct = gql`
   query ($categoryUrlKey: String) {
-    leafCategories(categoryUrlKey: $categoryUrlKey) {
+    categoryProducts(categoryUrlKey: $categoryUrlKey) {
       name
       imageUrl
       price
+    }
+  }
+`;
+
+const CategoryBrowse = gql`
+  query ($categoryUrl: String!) {
+    categoryBrowse(categoryUrl: $categoryUrl) {
+      description
+      breadCrumbs {
+        name
+        level
+        url
+      }
+    }
+  }
+`;
+
+const VerticalBrowseCategory = gql`
+  query ($category: String!) {
+    verticalBrowseCategory(category: $category) {
+      name
+      level
+      urlKey
     }
   }
 `;
@@ -27,9 +44,17 @@ const Category = () => {
 
   const { category } = router.query;
 
-  const { data, loading, error } = useQuery(LeafCategories, {
+  const { data, loading, error } = useQuery(LeafCategoriesProduct, {
     variables: { categoryUrlKey: category },
   });
+
+  const browseData = useQuery(CategoryBrowse, {
+    variables: { categoryUrl: category },
+  }).data;
+
+  const verticalBrowse = useQuery(VerticalBrowseCategory, {
+    variables: { category: category },
+  }).data;
 
   if (loading) {
     return <div>loading</div>;
@@ -37,7 +62,7 @@ const Category = () => {
   if (error) {
     return <div>ops</div>;
   }
-  console.log('data', data);
+
   const h1Styles = {
     marginBottom: 1,
     fontSize: {
@@ -56,7 +81,6 @@ const Category = () => {
   };
 
   const h2Styles = {
-    // textTransform: 'uppercase',
     fontWeight: 600,
     fontSize: '16px',
     marginBottom: 2,
@@ -78,11 +102,9 @@ const Category = () => {
         justifyContent="center"
         margin="auto"
       >
-        <chakra.h1 {...h1Styles}>Sneakers</chakra.h1>
+        <chakra.h1 {...h1Styles}>{category}</chakra.h1>
         <chakra.p {...paragraphStyles}>
-          On MerchY, every sneaker you want is always available and authentic.
-          Buy and sell new sneakers &apos; shoes from Air Jordan, adidas, Nike,
-          Yeezy and more!{' '}
+          {browseData?.categoryBrowse.description}
         </chakra.p>
       </VStack>
 
@@ -98,17 +120,20 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                <Box marginBottom="7px" role="button">
-                  <chakra.h2 {...h2Styles}> SNEAKERS </chakra.h2>
-                </Box>
-
-                <Box marginBottom="7px" role="button">
-                  <chakra.h2 {...h2Styles}> APPAREL </chakra.h2>
-                </Box>
-
-                <Box marginBottom="7px" role="button">
-                  <chakra.h2 {...h2Styles}> ELECTRONICS </chakra.h2>
-                </Box>
+                {verticalBrowse?.verticalBrowseCategory.map(
+                  ({ name, level, urlKey }, index) => {
+                    return (
+                      level === 1 && (
+                        <BrowseNavbar
+                          key={index}
+                          name={name}
+                          urlKey={urlKey}
+                          category={category}
+                        />
+                      )
+                    );
+                  }
+                )}
               </Box>
               {/* End of Left Top Nav Menu */}
 
@@ -119,6 +144,23 @@ const Category = () => {
                 </Box>
               </Box>
               {/* End of Below Retail */}
+
+              <Box marginBottom={8}>
+                {verticalBrowse?.verticalBrowseCategory.map(
+                  ({ name, level, urlKey }, index) => {
+                    return (
+                      level === 2 && (
+                        <BrowseNavbar
+                          key={index}
+                          name={name}
+                          urlKey={urlKey}
+                          category={category}
+                        />
+                      )
+                    );
+                  }
+                )}
+              </Box>
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
@@ -140,12 +182,35 @@ const Category = () => {
                   <Box paddingBottom="2">
                     <chakra.nav aria-label="breadcrumb">
                       <chakra.ol>
-                        <chakra.li display="inline-flex" alignItems="center">
-                          <chakra.a>Home</chakra.a>
-                        </chakra.li>
-                        <chakra.li display="inline-flex" alignItems="center">
-                          <chakra.a>Sneakers</chakra.a>
-                        </chakra.li>
+                        {browseData?.categoryBrowse.breadCrumbs.map(
+                          ({ name, url }, index) => {
+                            return (
+                              <chakra.li
+                                key={index}
+                                display="inline-flex"
+                                alignItems="center"
+                              >
+                                <chakra.a
+                                  href={url}
+                                  fontSize="sm"
+                                  color="neurtral.500"
+                                  outlineOffset="2px"
+                                  outline="2px solid transparent"
+                                  cursor="pointer"
+                                >
+                                  {name}
+                                </chakra.a>
+                                <chakra.span
+                                  marginInline="1\.5"
+                                  color="neurtral.500"
+                                  fontSize="sm"
+                                >
+                                  /
+                                </chakra.span>
+                              </chakra.li>
+                            );
+                          }
+                        )}
                       </chakra.ol>
                     </chakra.nav>
                   </Box>
@@ -167,7 +232,7 @@ const Category = () => {
                 flexWrap="wrap"
                 w="100%"
               >
-                {data?.leafCategories.map(
+                {data?.categoryProducts.map(
                   ({ name, imageUrl, price }, index) => {
                     return (
                       <Box w="25%" padding="0 8px 16px" key={index}>
@@ -195,8 +260,9 @@ const Category = () => {
                                   m="0px auto"
                                 >
                                   <Image
-                                    objectFit="contain"
-                                    maxW="100%"
+                                    layout="fixed"
+                                    width={140}
+                                    height={75}
                                     src={imageUrl}
                                     alt={name}
                                   />
