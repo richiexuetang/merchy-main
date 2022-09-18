@@ -46,8 +46,28 @@ export async function getStaticProps() {
 }
 
 export async function getStaticPaths() {
+  const client = await getStandaloneApolloClient();
+
+  const allCategory = await client.query({
+    query: CategoryUrls,
+    variables: {
+      level: 1,
+    },
+  });
+  const category = [];
+
+  allCategory?.data.levelCategories.map(({ urlKey, children }) => {
+    category.push({ params: { category: urlKey } });
+    children?.map(({ urlKey, children }) => {
+      category.push({ params: { category: urlKey } });
+      children?.map(({ urlKey }) => {
+        category.push({ params: { category: urlKey } });
+      });
+    });
+  });
+
   return {
-    paths: [],
+    paths: category,
     fallback: false,
   };
 }

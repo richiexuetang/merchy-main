@@ -12,6 +12,7 @@ const LeafCategoriesProduct = gql`
       name
       imageUrl
       price
+      urlKey
     }
   }
 `;
@@ -233,7 +234,7 @@ const Category = () => {
                 w="100%"
               >
                 {data?.categoryProducts.map(
-                  ({ name, imageUrl, price }, index) => {
+                  ({ name, imageUrl, price, urlKey }, index) => {
                     return (
                       <Box w="25%" padding="0 8px 16px" key={index}>
                         <Box
@@ -243,7 +244,7 @@ const Category = () => {
                           pos="relative"
                           mr="0"
                         >
-                          <Link href="/">
+                          <Link href={`/product/${urlKey}`}>
                             <Box
                               display="flex"
                               flexDir="column"

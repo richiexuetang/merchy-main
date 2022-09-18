@@ -101,6 +101,20 @@ export const ProductCollectionQuery = extendType({
   },
 });
 
+// Get all products
+export const ProductUrlsQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('products', {
+      type: Product,
+      resolve(_parent, args, ctx) {
+        const products = ctx.prisma.product.findMany({});
+        return products;
+      },
+    });
+  },
+});
+
 // create product
 export const AddProductMutation = extendType({
   type: 'Mutation',

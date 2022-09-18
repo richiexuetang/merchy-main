@@ -6,6 +6,7 @@ export {
   MenuBar,
   Footer,
   Carousel,
+  Product,
 } from './common';
 export { Logo } from './icons';
 export { ProductCard, ProductRowHeader } from './product';

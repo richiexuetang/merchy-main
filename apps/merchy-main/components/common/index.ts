@@ -4,3 +4,4 @@ export { default as Head } from './Head';
 export { default as MenuBar } from './Menubar';
 export { default as Footer } from './Footer';
 export { default as Carousel } from './Carousel';
+export { default as Product } from './Product';
