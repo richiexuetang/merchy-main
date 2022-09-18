@@ -1,8 +1,6 @@
 import {
-  arg,
   extendType,
   intArg,
-  list,
   nonNull,
   inputObjectType,
   objectType,
@@ -10,6 +8,7 @@ import {
   enumType,
 } from 'nexus';
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
+import { BreadCrumb } from './BreadCrumb';
 
 export const Product = objectType({
   name: 'Product',
@@ -31,6 +30,19 @@ export const Product = objectType({
     t.string('primaryCategory');
     t.string('productCategory');
     t.string('categoryId');
+    t.list.field('breadCrumbs', {
+      type: BreadCrumb,
+      async resolve(_parent, _args, ctx) {
+        const breadCrumbs = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .breadCrumbs();
+        return breadCrumbs;
+      },
+    });
   },
 });
 
@@ -102,14 +114,35 @@ export const ProductCollectionQuery = extendType({
 });
 
 // Get all products
-export const ProductUrlsQuery = extendType({
+export const ProductQuery = extendType({
   type: 'Query',
   definition(t) {
     t.list.field('products', {
       type: Product,
-      resolve(_parent, args, ctx) {
+      resolve(_parent, _, ctx) {
         const products = ctx.prisma.product.findMany({});
         return products;
+      },
+    });
+  },
+});
+
+// Get product page info using product's url
+export const ProductUrlQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('product', {
+      type: Product,
+      args: {
+        productUrl: nonNull(stringArg()),
+      },
+      resolve(_parent, args, ctx) {
+        const product = ctx.prisma.product.findUnique({
+          where: {
+            urlKey: args.productUrl,
+          },
+        });
+        return product;
       },
     });
   },

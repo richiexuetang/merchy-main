@@ -21,6 +21,7 @@ const ProductCollection = gql`
       name
       imageUrl
       price
+      urlKey
     }
   }
 `;

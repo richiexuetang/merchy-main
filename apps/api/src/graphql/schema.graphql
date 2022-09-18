@@ -46,6 +46,7 @@ type PageInfo {
 
 type Product {
   brand: String
+  breadCrumbs: [BreadCrumb]
   categoryId: String
   condition: String
   createdAt: DateTime
@@ -94,6 +95,7 @@ type Query {
   categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
   childrenCategory(id: String): [Category]
   levelCategories(level: Int): [Category]
+  product(productUrl: String!): Product
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   products: [Product]
   users: [User]
