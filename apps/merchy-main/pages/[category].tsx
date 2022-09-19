@@ -16,6 +16,23 @@ const CategoryUrls = gql`
   }
 `;
 
+const BrowseCategories = gql`
+  query allBrowseCategoriesQuery($level: Int) {
+    levelCategories(level: $level) {
+      name
+      urlKey
+      children {
+        name
+        urlKey
+        children {
+          name
+          urlKey
+        }
+      }
+    }
+  }
+`;
+
 export async function getStaticProps() {
   const client = await getStandaloneApolloClient();
 
@@ -25,6 +42,15 @@ export async function getStaticProps() {
       level: 1,
     },
   });
+  const allCategories = await client.query({
+    query: BrowseCategories,
+    variables: {
+      level: 1,
+    },
+  });
+
+  const browseCategories = allCategories.data.levelCategories;
+
   const category = [];
 
   allCategory?.data.levelCategories.map(({ urlKey, children }) => {
@@ -40,6 +66,7 @@ export async function getStaticProps() {
   return {
     props: {
       category,
+      browseCategories,
     },
     revalidate: 200,
   };

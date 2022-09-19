@@ -10,6 +10,16 @@ import {
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 import { BreadCrumb } from './BreadCrumb';
 
+export const Traits = objectType({
+  name: 'Traits',
+  definition(t) {
+    t.id('id');
+    t.string('name');
+    t.string('value');
+    t.string('visible');
+  },
+});
+
 export const Product = objectType({
   name: 'Product',
   definition(t) {
@@ -30,6 +40,32 @@ export const Product = objectType({
     t.string('primaryCategory');
     t.string('productCategory');
     t.string('categoryId');
+    t.list.field('variants', {
+      type: Product,
+      async resolve(_parent, _args, ctx) {
+        const variants = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .variants();
+        return variants;
+      },
+    });
+    t.list.field('traits', {
+      type: Traits,
+      async resolve(_parent, _args, ctx) {
+        const traits = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .traits();
+        return traits;
+      },
+    });
     t.list.field('breadCrumbs', {
       type: BreadCrumb,
       async resolve(_parent, _args, ctx) {

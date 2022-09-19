@@ -6,20 +6,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BrowseNavbar } from '../../ui';
 
-const LeafCategoriesProduct = gql`
-  query ($categoryUrlKey: String) {
+const BrowseCategoryInfo = gql`
+  query ($categoryUrlKey: String!) {
     categoryProducts(categoryUrlKey: $categoryUrlKey) {
       name
       imageUrl
       price
       urlKey
     }
-  }
-`;
 
-const CategoryBrowse = gql`
-  query ($categoryUrl: String!) {
-    categoryBrowse(categoryUrl: $categoryUrl) {
+    categoryBrowse(categoryUrl: $categoryUrlKey) {
       description
       breadCrumbs {
         name
@@ -27,12 +23,8 @@ const CategoryBrowse = gql`
         url
       }
     }
-  }
-`;
 
-const VerticalBrowseCategory = gql`
-  query ($category: String!) {
-    verticalBrowseCategory(category: $category) {
+    verticalBrowseCategory(category: $categoryUrlKey) {
       name
       level
       urlKey
@@ -45,17 +37,9 @@ const Category = () => {
 
   const { category } = router.query;
 
-  const { data, loading, error } = useQuery(LeafCategoriesProduct, {
+  const { data, loading, error } = useQuery(BrowseCategoryInfo, {
     variables: { categoryUrlKey: category },
   });
-
-  const browseData = useQuery(CategoryBrowse, {
-    variables: { categoryUrl: category },
-  }).data;
-
-  const verticalBrowse = useQuery(VerticalBrowseCategory, {
-    variables: { category: category },
-  }).data;
 
   if (loading) {
     return <div>loading</div>;
@@ -105,7 +89,7 @@ const Category = () => {
       >
         <chakra.h1 {...h1Styles}>{category}</chakra.h1>
         <chakra.p {...paragraphStyles}>
-          {browseData?.categoryBrowse.description}
+          {data?.categoryBrowse.description}
         </chakra.p>
       </VStack>
 
@@ -121,7 +105,7 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {verticalBrowse?.verticalBrowseCategory.map(
+                {data?.verticalBrowseCategory.map(
                   ({ name, level, urlKey }, index) => {
                     return (
                       level === 1 && (
@@ -147,7 +131,7 @@ const Category = () => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {verticalBrowse?.verticalBrowseCategory.map(
+                {data?.verticalBrowseCategory.map(
                   ({ name, level, urlKey }, index) => {
                     return (
                       level === 2 && (
@@ -183,7 +167,7 @@ const Category = () => {
                   <Box paddingBottom="2">
                     <chakra.nav aria-label="breadcrumb">
                       <chakra.ol>
-                        {browseData?.categoryBrowse.breadCrumbs.map(
+                        {data?.categoryBrowse.breadCrumbs.map(
                           ({ name, url }, index) => {
                             return (
                               <chakra.li

@@ -12,9 +12,19 @@ import {
   VStack,
   Divider,
   Container,
+  Stat,
+  StatLabel,
+  StatNumber,
+  Grid,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  IconButton,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import { ProductCard } from '../../product';
+import { AddCircleOutline, Favorite, IosShare } from '@mui/icons-material';
 
 const GetProduct = gql`
   query ($productUrl: String!) {
@@ -25,6 +35,21 @@ const GetProduct = gql`
       condition
       price
       description
+      traits {
+        name
+        value
+        visible
+      }
+      variants {
+        name
+        price
+        imageUrl
+      }
+      breadCrumbs {
+        level
+        name
+        url
+      }
     }
   }
 `;
@@ -38,8 +63,12 @@ const Product = () => {
     variables: { productUrl: product },
   });
 
+  console.log('product data', data);
   if (loading) {
     return <div>loading...</div>;
+  }
+  if (error) {
+    return <div>ops</div>;
   }
 
   return (
@@ -47,6 +76,49 @@ const Product = () => {
       <chakra.section mt="2">
         <Box>
           <Box>
+            <Box display="flex" justifyContent="space-between">
+              <chakra.div data-component="BreadCrumbs">
+                <Breadcrumb>
+                  {data?.product.breadCrumbs.map(({ name, url }, index) => {
+                    return (
+                      <BreadcrumbItem key={index}>
+                        <BreadcrumbLink href={url}>{name}</BreadcrumbLink>
+                      </BreadcrumbItem>
+                    );
+                  })}
+                </Breadcrumb>
+              </chakra.div>
+
+              <Box
+                data-component="utility-wrapper"
+                float={{ base: 'left', sm: 'left', lg: 'right' }}
+                mb={{ base: '4', sm: '4', lg: '0' }}
+              >
+                <chakra.ul display="flex">
+                  <li>
+                    <IconButton
+                      aria-label="Add To Portfolio"
+                      bg="transparent"
+                      icon={<AddCircleOutline />}
+                    />
+                  </li>
+                  <li>
+                    <IconButton
+                      aria-label="Follow"
+                      bg="transparent"
+                      icon={<Favorite />}
+                    />
+                  </li>
+                  <li>
+                    <IconButton
+                      aria-label="Share"
+                      bg="transparent"
+                      icon={<IosShare />}
+                    />
+                  </li>
+                </chakra.ul>
+              </Box>
+            </Box>
             <Box data-component="Header" display="flex" flexDir="column">
               <Box>
                 <chakra.h1
@@ -287,6 +359,27 @@ const Product = () => {
           <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
             Related Products
           </chakra.h3>
+          <Grid
+            data-component="SmartGridRow"
+            as="ul"
+            templateColumns="repeat(6, 1fr)"
+            gridGap={{ base: 2, lg: 6 }}
+            marginBottom={6}
+            overflow="auto"
+          >
+            {data?.product.variants?.map(({ name, price, imageUrl }, index) => {
+              const product = {
+                name: name,
+                price: price,
+                imageUrl: imageUrl,
+              };
+              return (
+                <li data-component="product-card" key={index}>
+                  <ProductCard product={product} />
+                </li>
+              );
+            })}
+          </Grid>
         </Box>
       </chakra.section>
 
@@ -303,26 +396,157 @@ const Product = () => {
             w="100%"
           >
             <Box w={{ base: '100%', md: '40%' }}>
-              <Box
-                data-component="ProductTraits"
-                display="flex"
-                flexDir="column"
-                w="100%"
-              ></Box>
+              {data?.product.traits && (
+                <Box
+                  data-component="ProductTraits"
+                  display="flex"
+                  flexDir="column"
+                  w="100%"
+                  justifyContent="space-between"
+                  flexWrap={{ md: 'wrap' }}
+                >
+                  {data?.product.traits &&
+                    data?.product.traits.map(
+                      ({ name, value, visible }, index) =>
+                        visible !== 'false' && (
+                          <Box
+                            key={index}
+                            data-component="product-trait"
+                            display="flex"
+                            justifyContent={{
+                              base: 'space-between',
+                              md: 'flex-start',
+                            }}
+                            // w={{ base: '100%', md: '40%' }}
+                            mb="1"
+                          >
+                            <chakra.span flexBasis="50%">{name}</chakra.span>
+                            <chakra.p
+                              textAlign={{ base: 'right', md: 'left' }}
+                              w="100%"
+                            >
+                              {value}
+                            </chakra.p>
+                          </Box>
+                        )
+                    )}
+                </Box>
+              )}
             </Box>
+            {data?.product.description && (
+              <Box data-component="ProductDescription">
+                <chakra.h2>Product Description</chakra.h2>
+                <Text>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: data?.product.description,
+                    }}
+                  />
+                  {/* {data?.product.description} */}
+                </Text>
+              </Box>
+            )}
           </Box>
-        </Box>
-        <Box data-component="ProductDescription">
-          <chakra.h2>Product Description</chakra.h2>
-          <Text>{data?.product.description}</Text>
         </Box>
       </chakra.section>
 
       <chakra.section data-component="MarketHistory" mt="6">
         <Divider orientation="horizontal" borderWidth="0 0 1px" />
-        <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
-          12-Month Historical
-        </chakra.h3>
+        <Box minH="auto">
+          <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
+            12-Month Historical
+          </chakra.h3>
+          <Box pos="relative">
+            <Box data-component="Grid" marginInline="auto">
+              <Box
+                display="grid"
+                gridGap="4"
+                gridTemplateColumns="repeat(3, minmax(0px, 1fr));"
+              >
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    $-- - $--
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    12-Month-Trade-Range
+                  </StatLabel>
+                </Stat>
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    $-- - $--
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    All-Time Trade Range
+                  </StatLabel>
+                </Stat>
+
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    --
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    Volatility
+                  </StatLabel>
+                </Stat>
+
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    0
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    Number of Sales
+                  </StatLabel>
+                </Stat>
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    --
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    Price Premium
+                  </StatLabel>
+                </Stat>
+                <Stat bg="beige.100" paddingInline="6" py="4">
+                  <StatNumber
+                    textAlign="left"
+                    margin="0"
+                    fontFamily="suisseIntlMedium"
+                    fontSize={{ base: 'lg', sm: 'xl' }}
+                  >
+                    --
+                  </StatNumber>
+                  <StatLabel textAlign="left" margin="0">
+                    Average Sale Price
+                  </StatLabel>
+                </Stat>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       </chakra.section>
     </Container>
   );

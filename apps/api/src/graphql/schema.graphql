@@ -62,7 +62,9 @@ type Product {
   productCategory: String
   secondaryTitle: String
   title: String
+  traits: [Traits]
   urlKey: String
+  variants: [Product]
 }
 
 type ProductConnection {
@@ -110,6 +112,13 @@ type Response {
 enum Sort {
   asc
   desc
+}
+
+type Traits {
+  id: ID
+  name: String
+  value: String
+  visible: String
 }
 
 type User {

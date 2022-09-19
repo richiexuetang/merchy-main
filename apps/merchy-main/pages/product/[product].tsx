@@ -10,12 +10,38 @@ const Products = gql`
   }
 `;
 
+const BrowseCategories = gql`
+  query allBrowseCategoriesQuery($level: Int) {
+    levelCategories(level: $level) {
+      name
+      urlKey
+      children {
+        name
+        urlKey
+        children {
+          name
+          urlKey
+        }
+      }
+    }
+  }
+`;
+
 export async function getStaticProps() {
   const client = await getStandaloneApolloClient();
 
   const allProducts = await client.query({
     query: Products,
   });
+
+  const allCategories = await client.query({
+    query: BrowseCategories,
+    variables: {
+      level: 1,
+    },
+  });
+
+  const browseCategories = allCategories.data.levelCategories;
 
   const product = [];
 
@@ -26,6 +52,7 @@ export async function getStaticProps() {
   return {
     props: {
       product,
+      browseCategories,
     },
     revalidate: 200,
   };
