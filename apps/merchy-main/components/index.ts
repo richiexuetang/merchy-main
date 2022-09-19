@@ -8,7 +8,18 @@ export {
   Carousel,
   Product,
 } from './common';
-export { Logo } from './icons';
 export { ProductCard, ProductRowHeader } from './product';
-export { YouTube, Facebook, Instagram, Twitter, Apple, Android } from './icons';
+export {
+  Logo,
+  YouTube,
+  Facebook,
+  Instagram,
+  Twitter,
+  Apple,
+  Android,
+  DownArrow,
+  Share,
+  Favorite,
+  Add,
+} from './icons';
 export { Text, BrowseNavbar } from './ui';

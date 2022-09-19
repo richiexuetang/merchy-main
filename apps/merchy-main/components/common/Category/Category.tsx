@@ -1,4 +1,14 @@
-import { Box, VStack, chakra, Container, Grid, Text } from '@chakra-ui/react';
+import {
+  Box,
+  VStack,
+  chakra,
+  Container,
+  Grid,
+  Text,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { gql, useQuery } from '@apollo/client';
@@ -165,39 +175,26 @@ const Category = () => {
               >
                 <Box>
                   <Box paddingBottom="2">
-                    <chakra.nav aria-label="breadcrumb">
-                      <chakra.ol>
-                        {data?.categoryBrowse.breadCrumbs.map(
-                          ({ name, url }, index) => {
-                            return (
-                              <chakra.li
-                                key={index}
-                                display="inline-flex"
-                                alignItems="center"
+                    <Breadcrumb>
+                      {data?.categoryBrowse.breadCrumbs.map(
+                        ({ name, url }, index) => {
+                          return (
+                            <BreadcrumbItem key={index}>
+                              <BreadcrumbLink
+                                href={url}
+                                fontSize="sm"
+                                color="neurtral.500"
+                                outlineOffset="2px"
+                                outline="2px solid transparent"
+                                cursor="pointer"
                               >
-                                <chakra.a
-                                  href={url}
-                                  fontSize="sm"
-                                  color="neurtral.500"
-                                  outlineOffset="2px"
-                                  outline="2px solid transparent"
-                                  cursor="pointer"
-                                >
-                                  {name}
-                                </chakra.a>
-                                <chakra.span
-                                  marginInline="1\.5"
-                                  color="neurtral.500"
-                                  fontSize="sm"
-                                >
-                                  /
-                                </chakra.span>
-                              </chakra.li>
-                            );
-                          }
-                        )}
-                      </chakra.ol>
-                    </chakra.nav>
+                                {name}
+                              </BreadcrumbLink>
+                            </BreadcrumbItem>
+                          );
+                        }
+                      )}
+                    </Breadcrumb>
                   </Box>
                 </Box>
               </Box>

@@ -5,3 +5,7 @@ export { default as Instagram } from './Instagram';
 export { default as YouTube } from './Youtube';
 export { default as Apple } from './Apple';
 export { default as Android } from './Android';
+export { default as DownArrow } from './DownArrow';
+export { default as Share } from './Share';
+export { default as Favorite } from './Favorite';
+export { default as Add } from './Add';

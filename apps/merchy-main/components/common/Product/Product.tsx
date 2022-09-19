@@ -20,11 +20,13 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   IconButton,
+  Collapse,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { ProductCard } from '../../product';
-import { AddCircleOutline, Favorite, IosShare } from '@mui/icons-material';
+import { useState } from 'react';
+import { DownArrow, Share, Favorite, Add } from '../../icons';
 
 const GetProduct = gql`
   query ($productUrl: String!) {
@@ -44,6 +46,7 @@ const GetProduct = gql`
         name
         price
         imageUrl
+        urlKey
       }
       breadCrumbs {
         level
@@ -55,6 +58,8 @@ const GetProduct = gql`
 `;
 
 const Product = () => {
+  const [show, setShow] = useState(false);
+
   const router = useRouter();
 
   const { product } = router.query;
@@ -63,7 +68,6 @@ const Product = () => {
     variables: { productUrl: product },
   });
 
-  console.log('product data', data);
   if (loading) {
     return <div>loading...</div>;
   }
@@ -71,24 +75,38 @@ const Product = () => {
     return <div>ops</div>;
   }
 
+  const handleToggle = () => setShow(!show);
+
   return (
     <Container data-component="ProductView" w="100%" maxW="6xl" pb="8">
       <chakra.section mt="2">
         <Box>
           <Box>
-            <Box display="flex" justifyContent="space-between">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <chakra.div data-component="BreadCrumbs">
                 <Breadcrumb>
                   {data?.product.breadCrumbs.map(({ name, url }, index) => {
                     return (
                       <BreadcrumbItem key={index}>
-                        <BreadcrumbLink href={url}>{name}</BreadcrumbLink>
+                        <BreadcrumbLink
+                          href={url}
+                          fontSize="sm"
+                          color="neurtral.500"
+                          outlineOffset="2px"
+                          outline="2px solid transparent"
+                          cursor="pointer"
+                        >
+                          {name}
+                        </BreadcrumbLink>
                       </BreadcrumbItem>
                     );
                   })}
                 </Breadcrumb>
               </chakra.div>
-
               <Box
                 data-component="utility-wrapper"
                 float={{ base: 'left', sm: 'left', lg: 'right' }}
@@ -99,7 +117,7 @@ const Product = () => {
                     <IconButton
                       aria-label="Add To Portfolio"
                       bg="transparent"
-                      icon={<AddCircleOutline />}
+                      icon={<Add />}
                     />
                   </li>
                   <li>
@@ -113,12 +131,13 @@ const Product = () => {
                     <IconButton
                       aria-label="Share"
                       bg="transparent"
-                      icon={<IosShare />}
+                      icon={<Share />}
                     />
                   </li>
                 </chakra.ul>
               </Box>
             </Box>
+
             <Box data-component="Header" display="flex" flexDir="column">
               <Box>
                 <chakra.h1
@@ -135,6 +154,7 @@ const Product = () => {
                   </chakra.span>
                 </chakra.h1>
               </Box>
+
               <Box
                 display="flex"
                 alignItems="center"
@@ -244,12 +264,13 @@ const Product = () => {
                     display="block"
                     opacity="1"
                     h="auto"
+                    onClick={handleToggle}
                   >
                     <Box
                       maxW={{ md: '350px', lg: '464px' }}
                       mb="5"
                       paddingBottom="0"
-                      border="1px solid neutral.300"
+                      border="1px solid #cfcfcf"
                       borderRadius="0.25rem"
                     >
                       <Button
@@ -285,14 +306,23 @@ const Product = () => {
                             >
                               Size:
                             </Text>
-                            <Box display="flex" flexDir="row">
-                              <Text pr="1">All</Text>
+                            <Box
+                              display="flex"
+                              flexDir="row"
+                              alignItems="center"
+                            >
+                              <Text pr="1" fontSize="sm" lineHeight="md" m="0">
+                                All
+                              </Text>
+                              <DownArrow />
                             </Box>
                           </Box>
                         </chakra.span>
                       </Button>
                     </Box>
                   </Box>
+                  {/* <Collapse isOpen={show}>Herro</Collapse> */}
+
                   <VStack>
                     <Box
                       display="flex"
@@ -349,39 +379,44 @@ const Product = () => {
         </Box>
       </chakra.section>
 
-      <chakra.section
-        data-component="RelatedProductsContainer"
-        mt="4"
-        minH="292px"
-      >
-        <Divider orientation="horizontal" borderWidth="0 0 1px" />
-        <Box>
-          <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
-            Related Products
-          </chakra.h3>
-          <Grid
-            data-component="SmartGridRow"
-            as="ul"
-            templateColumns="repeat(6, 1fr)"
-            gridGap={{ base: 2, lg: 6 }}
-            marginBottom={6}
-            overflow="auto"
-          >
-            {data?.product.variants?.map(({ name, price, imageUrl }, index) => {
-              const product = {
-                name: name,
-                price: price,
-                imageUrl: imageUrl,
-              };
-              return (
-                <li data-component="product-card" key={index}>
-                  <ProductCard product={product} />
-                </li>
-              );
-            })}
-          </Grid>
-        </Box>
-      </chakra.section>
+      {data?.product.variants?.length > 0 && (
+        <chakra.section
+          data-component="RelatedProductsContainer"
+          mt="4"
+          minH="292px"
+        >
+          <Divider orientation="horizontal" borderWidth="0 0 1px" />
+          <Box>
+            <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
+              Related Products
+            </chakra.h3>
+            <Grid
+              data-component="SmartGridRow"
+              as="ul"
+              templateColumns="repeat(6, 1fr)"
+              gridGap={{ base: 2, lg: 6 }}
+              marginBottom={6}
+              overflow="auto"
+            >
+              {data?.product.variants?.map(
+                ({ name, price, imageUrl, urlKey }, index) => {
+                  const product = {
+                    name: name,
+                    price: price,
+                    imageUrl: imageUrl,
+                    urlKey: urlKey,
+                  };
+                  return (
+                    <li data-component="product-card" key={index}>
+                      <ProductCard product={product} />
+                    </li>
+                  );
+                }
+              )}
+            </Grid>
+          </Box>
+        </chakra.section>
+      )}
 
       <chakra.section data-component="ProductDetails" mt="6">
         <Divider orientation="horizontal" borderWidth="0 0 1px" />
