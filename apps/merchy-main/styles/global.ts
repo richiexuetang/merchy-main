@@ -10,6 +10,9 @@ export const theme = extendTheme({
       // body: {
       //   overflow: 'hidden',
       // },
+      input: {
+        boxSizing: 'border-box',
+      },
       ul: {
         listStyle: 'none',
       },

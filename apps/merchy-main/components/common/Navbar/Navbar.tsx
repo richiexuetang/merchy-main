@@ -8,6 +8,7 @@ import { useRef, useState, useEffect } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
 import { BrowseCategory } from '../../../types';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const navListStyle = {
   pos: 'relative',
@@ -21,6 +22,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
+  const { user, error, isLoading } = useUser();
+
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -53,6 +56,11 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const handleMouseLeave = () => {
     setIsOpen(false);
   };
+
+  if (isLoading) {
+    return <div>loading</div>;
+  }
+  console.log('user', user);
 
   return (
     <NavbarRoot>
@@ -146,11 +154,19 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
             <chakra.li {...navListStyle}>
               {/* <MessageCenterIcon /> */}
             </chakra.li>
-            <chakra.li {...navListStyle}>
-              <Button onClick={() => router.push('/login')} variant="login">
-                Login
-              </Button>
-            </chakra.li>
+            {!user && (
+              <chakra.li {...navListStyle}>
+                <Button
+                  onClick={(e) => {
+                    router.push('/api/auth/login');
+                    e.preventDefault();
+                  }}
+                  variant="login"
+                >
+                  Login
+                </Button>
+              </chakra.li>
+            )}
             <chakra.li {...navListStyle}>
               <Button onClick={() => router.push('/signup')} variant="signup">
                 SignUp

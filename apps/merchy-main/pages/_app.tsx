@@ -5,6 +5,7 @@ import { theme, Fonts } from '../styles';
 // import { theme, Fonts } from '@merchy/ui-shared';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { NextPage } from 'next';
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -24,11 +25,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <Head />
-      <ChakraProvider theme={theme}>
-        <Fonts />
-        {getLayout(<Component {...pageProps} />, pageProps)}
-      </ChakraProvider>
+      <UserProvider>
+        <Head />
+        <ChakraProvider theme={theme}>
+          <Fonts />
+          {getLayout(<Component {...pageProps} />, pageProps)}
+        </ChakraProvider>
+      </UserProvider>
     </>
   );
 }

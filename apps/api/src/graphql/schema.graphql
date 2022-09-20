@@ -14,6 +14,7 @@ type Category {
   categoryId: String
   children: [Category]
   description: String
+  filters: [Filters]
   id: ID
   level: Int
   name: String
@@ -33,10 +34,26 @@ type Edge {
   node: Product
 }
 
+type Filters {
+  displayType: String
+  id: ID
+  name: String
+  values: [String]
+}
+
+type LevelCategories {
+  categories: [Category]
+}
+
 type Mutation {
   addProduct(brand: String!, categoryId: String, description: String, imageUrl: String!, model: String, name: String!, price: String!, primaryCategory: String, primaryTitle: String!, productCategory: String, secondaryTitle: String, title: String!, urlKey: String!): Product
   deleteProduct(id: String!): Product!
   signupUser(email: String!, password: String!, phonenumber: String!, username: String!): User
+}
+
+input Operators {
+  in: String
+  lt: Int
 }
 
 type PageInfo {
@@ -51,6 +68,7 @@ type Product {
   condition: String
   createdAt: DateTime
   description: String
+  gender: String
   id: String
   imageUrl: String
   index: Int
@@ -87,6 +105,12 @@ type ProductEdge {
   node: Product
 }
 
+input ProductFilterByInputType {
+  gender: Operators
+  price: Operators
+  productCategory: Operators
+}
+
 input ProductOrderByInputType {
   createdAt: Sort
   price: Sort
@@ -96,10 +120,12 @@ type Query {
   categoryBrowse(categoryUrl: String!): Category
   categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
   childrenCategory(id: String): [Category]
+  filterProduct(filters: ProductFilterByInputType, orderBy: ProductOrderByInputType, skip: Int, take: Int): [Product]
   levelCategories(level: Int): [Category]
   product(productUrl: String!): Product
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   products: [Product]
+  rootCategory(category: String!): Category
   users: [User]
   verticalBrowseCategory(category: String!): [Category]
 }

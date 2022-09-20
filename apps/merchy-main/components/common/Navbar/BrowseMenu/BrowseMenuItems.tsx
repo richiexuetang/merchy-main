@@ -48,7 +48,7 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
     >
       {items.children && items.urlKey ? (
         <React.Fragment>
-          <NextLink href={items.urlKey}>
+          <NextLink href="[...category]" as={items.urlKey}>
             <Link
               padding="8px"
               _hover={{
@@ -66,7 +66,7 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
           />
         </React.Fragment>
       ) : (
-        <NextLink href={items.urlKey}>
+        <NextLink href="[...category]" as={items.urlKey}>
           <Link
             padding="8px"
             _hover={{

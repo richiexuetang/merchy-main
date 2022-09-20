@@ -1,6 +1,25 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import {
+  extendType,
+  intArg,
+  list,
+  nonNull,
+  objectType,
+  stringArg,
+} from 'nexus';
 import { BreadCrumb } from './BreadCrumb';
 import { Product } from './Product';
+
+export const Filters = objectType({
+  name: 'Filters',
+  definition(t) {
+    t.id('id');
+    t.string('name');
+    t.field('values', {
+      type: list('String'),
+    });
+    t.string('displayType');
+  },
+});
 
 export const Category = objectType({
   name: 'Category',
@@ -52,6 +71,28 @@ export const Category = objectType({
         return breadCrumbs;
       },
     });
+    t.list.field('filters', {
+      type: Filters,
+      async resolve(_parent, _args, ctx) {
+        const filters = await ctx.prisma.category
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .filters();
+        return filters;
+      },
+    });
+  },
+});
+
+export const LevelCategories = objectType({
+  name: 'LevelCategories',
+  definition(t) {
+    t.list.field('categories', {
+      type: Category,
+    });
   },
 });
 
@@ -75,7 +116,39 @@ export const CategoryLevelQuery = extendType({
   },
 });
 
-// Get category
+// Get root category
+export const GetRootCategory = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('rootCategory', {
+      type: Category,
+      args: {
+        category: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        const currentCategory = await ctx.prisma.category.findUnique({
+          where: {
+            urlKey: args.category,
+          },
+        });
+
+        let rootCategory = currentCategory;
+
+        while (rootCategory.parentId) {
+          rootCategory = await ctx.prisma.category.findUnique({
+            where: {
+              id: rootCategory.parentId,
+            },
+          });
+        }
+
+        return rootCategory;
+      },
+    });
+  },
+});
+
+// Get all products within a category
 export const LeafCategoriesProductQuery = extendType({
   type: 'Query',
   definition(t) {

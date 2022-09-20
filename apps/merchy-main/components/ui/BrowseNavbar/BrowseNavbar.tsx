@@ -1,9 +1,7 @@
-import { Box, chakra } from '@chakra-ui/react';
+import { Box, chakra, Checkbox } from '@chakra-ui/react';
 import Link from 'next/link';
 
-const BrowseNavbar = ({ name, urlKey, category }) => {
-  const activeCategory = name.toLowerCase() === category;
-
+const BrowseNavbar = ({ name, urlKey, active, nextLevel }) => {
   const h2Styles = {
     fontWeight: 600,
     fontSize: '16px',
@@ -11,7 +9,7 @@ const BrowseNavbar = ({ name, urlKey, category }) => {
     lineHeight: '24px',
     minH: '0vw',
     letterSpacing: '1px',
-    color: activeCategory ? 'green.700' : 'black',
+    color: active ? 'green.700' : 'black',
   };
 
   return (
@@ -19,6 +17,15 @@ const BrowseNavbar = ({ name, urlKey, category }) => {
       <chakra.h2 {...h2Styles}>
         <Link href={urlKey}>{name}</Link>
       </chakra.h2>
+      {nextLevel &&
+        nextLevel.length > 0 &&
+        nextLevel.map(({ name, urlKey }) => (
+          <Box key={urlKey} mb="0px" w="100%">
+            <Checkbox textTransform="none" fontWeight="400" m="0 0 8px">
+              {name}
+            </Checkbox>
+          </Box>
+        ))}
     </Box>
   );
 };

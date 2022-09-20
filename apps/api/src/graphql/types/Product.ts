@@ -79,6 +79,7 @@ export const Product = objectType({
         return breadCrumbs;
       },
     });
+    t.string('gender');
   },
 });
 
@@ -92,6 +93,23 @@ export const ProductOrderByInputType = inputObjectType({
   definition(t) {
     t.field('createdAt', { type: Sort });
     t.field('price', { type: Sort });
+  },
+});
+
+export const Operators = inputObjectType({
+  name: 'Operators',
+  definition(t) {
+    t.int('lt');
+    t.string('in');
+  },
+});
+
+export const ProductFilterByInputType = inputObjectType({
+  name: 'ProductFilterByInputType',
+  definition(t) {
+    t.field('price', { type: Operators });
+    t.field('productCategory', { type: Operators });
+    t.field('gender', { type: Operators });
   },
 });
 
@@ -137,12 +155,45 @@ export const ProductCollectionQuery = extendType({
         orderBy: ProductOrderByInputType,
       },
       resolve(_parent, args, ctx) {
+        const filter = args.filters;
+
+        console.log('filters', filter);
         const collections = ctx.prisma.product.findMany({
-          where: { productCategory: args.productCategory },
+          where: {
+            productCategory: args.productCategory,
+          },
           skip: args.skip,
           take: args.take,
           orderBy: args.orderBy,
         });
+
+        return collections;
+      },
+    });
+  },
+});
+
+export const ProductFilterQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('filterProduct', {
+      type: Product,
+      args: {
+        filters: ProductFilterByInputType,
+        skip: intArg(),
+        take: intArg(),
+        orderBy: ProductOrderByInputType,
+      },
+      resolve(_parent, args, ctx) {
+        const filter = args.filters;
+
+        const collections = ctx.prisma.product.findMany({
+          where: filter,
+          skip: args.skip,
+          take: args.take,
+          orderBy: args.orderBy,
+        });
+
         return collections;
       },
     });

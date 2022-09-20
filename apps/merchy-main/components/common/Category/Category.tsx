@@ -8,6 +8,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Checkbox,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
@@ -15,6 +16,8 @@ import { gql, useQuery } from '@apollo/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BrowseNavbar } from '../../ui';
+import { getStandaloneApolloClient } from '../../../utils';
+import { useEffect, useState } from 'react';
 
 const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
@@ -39,11 +42,34 @@ const BrowseCategoryInfo = gql`
       level
       urlKey
     }
+
+    rootCategory(category: $categoryUrlKey) {
+      filters {
+        id
+        name
+        values
+        displayType
+      }
+    }
+  }
+`;
+
+const FilteredProduct = gql`
+  query ($filters: ProductFilterByInputType) {
+    filterProduct(filters: $filters) {
+      name
+      imageUrl
+      price
+      gender
+    }
   }
 `;
 
 const Category = () => {
   const router = useRouter();
+
+  const [products, setProducts] = useState(null);
+  const [allFilters, setAllFilters] = useState([]);
 
   const { category } = router.query;
 
@@ -51,12 +77,29 @@ const Category = () => {
     variables: { categoryUrlKey: category },
   });
 
+  useEffect(() => {
+    if (data) {
+      setProducts(data.categoryProducts);
+    }
+  }, [products, data]);
+
   if (loading) {
     return <div>loading</div>;
   }
   if (error) {
     return <div>ops</div>;
   }
+
+  const filters = data?.rootCategory.filters;
+  const levelOne = data?.verticalBrowseCategory.filter(
+    (category) => category.level === 1
+  );
+  const levelTwo = data?.verticalBrowseCategory.filter(
+    (category) => category.level === 2
+  );
+  const levelThree = data?.verticalBrowseCategory.filter(
+    (category) => category.level === 3
+  );
 
   const h1Styles = {
     marginBottom: 1,
@@ -84,6 +127,29 @@ const Category = () => {
     letterSpacing: '1px',
     color: 'black',
   };
+
+  const handleFilterOption = async (e, name, value) => {
+    const client = await getStandaloneApolloClient();
+
+    if (e.target.checked) {
+      setAllFilters((prev) => [...prev, { name, value }]);
+    } else {
+      setAllFilters((state) => state.filter((item) => item.name !== name));
+    }
+
+    const newProducts = await client.query({
+      query: FilteredProduct,
+      variables: {
+        filters: {
+          gender: {
+            in: value,
+          },
+        },
+      },
+    });
+    setProducts(newProducts?.data.filterProduct);
+  };
+  // console.log('allFilters', allFilters);
 
   return (
     <Box as="main" minH="100vh" marginTop="0">
@@ -115,20 +181,28 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {data?.verticalBrowseCategory.map(
-                  ({ name, level, urlKey }, index) => {
-                    return (
-                      level === 1 && (
-                        <BrowseNavbar
-                          key={index}
-                          name={name}
-                          urlKey={urlKey}
-                          category={category}
-                        />
-                      )
-                    );
+                {levelOne?.map(({ name, level, urlKey }, index) => {
+                  let active = false;
+                  if (
+                    typeof category === 'string' &&
+                    name.toLowerCase() ===
+                      category?.replace('-', ' ').toLowerCase()
+                  ) {
+                    active = true;
                   }
-                )}
+
+                  return (
+                    level === 1 && (
+                      <BrowseNavbar
+                        key={index}
+                        name={name}
+                        urlKey={urlKey}
+                        active={active}
+                        nextLevel={[]}
+                      />
+                    )
+                  );
+                })}
               </Box>
               {/* End of Left Top Nav Menu */}
 
@@ -141,21 +215,101 @@ const Category = () => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {data?.verticalBrowseCategory.map(
-                  ({ name, level, urlKey }, index) => {
+                {levelTwo?.map(({ name, level, urlKey }, index) => {
+                  let children = [];
+                  let active = false;
+                  if (
+                    typeof category === 'string' &&
+                    name.toLowerCase() ===
+                      category?.replace('-', ' ').toLowerCase()
+                  ) {
+                    children = levelThree;
+                    active = true;
+                  }
+
+                  return (
+                    level === 2 && (
+                      <BrowseNavbar
+                        key={index}
+                        name={name}
+                        urlKey={urlKey}
+                        active={active}
+                        nextLevel={children}
+                      />
+                    )
+                  );
+                })}
+              </Box>
+
+              {filters &&
+                filters.map(({ name, values, displayType }) => {
+                  if (displayType == 'COLUMN') {
                     return (
-                      level === 2 && (
-                        <BrowseNavbar
-                          key={index}
-                          name={name}
-                          urlKey={urlKey}
-                          category={category}
-                        />
-                      )
+                      <Box key={name} mb="8">
+                        <chakra.h2>{name}</chakra.h2>
+                        <Box display="flex" flexWrap="wrap">
+                          {values.map((value) => {
+                            return (
+                              <Box key={value} w="100%" mb="0">
+                                <Checkbox
+                                  onChange={async (e) =>
+                                    handleFilterOption(e, name, value)
+                                  }
+                                  textTransform="none"
+                                  fontWeight="400"
+                                  m="0 0 8px"
+                                >
+                                  {value}
+                                </Checkbox>
+                              </Box>
+                            );
+                          })}
+                        </Box>
+                      </Box>
+                    );
+                  } else {
+                    return (
+                      <Box key={name} mb="8">
+                        <chakra.h2>{name}</chakra.h2>
+                        <Box
+                          display="grid"
+                          gridTemplateColumns="repeat(auto-fill, minmax(32px, 1fr))"
+                          gridRowGap="1"
+                          gridColumnGap={'2.5'}
+                        >
+                          {values.map((name) => {
+                            return (
+                              <Box
+                                key={name}
+                                m="auto auto 10px"
+                                h="32px"
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="center"
+                                border="1px solid #A1A5A4"
+                                bg="white"
+                                color="neutral.700"
+                              >
+                                <chakra.span
+                                  display="block"
+                                  fontSize="12px"
+                                  w="38px"
+                                  letterSpacing="0"
+                                  m="0"
+                                  fontWeight="700"
+                                  textAlign="center"
+                                  cursor="pointer"
+                                >
+                                  {name}
+                                </chakra.span>
+                              </Box>
+                            );
+                          })}
+                        </Box>
+                      </Box>
                     );
                   }
-                )}
-              </Box>
+                })}
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
@@ -214,7 +368,7 @@ const Category = () => {
                 flexWrap="wrap"
                 w="100%"
               >
-                {data?.categoryProducts.map(
+                {data.categoryProducts?.map(
                   ({ name, imageUrl, price, urlKey }, index) => {
                     return (
                       <Box w="25%" padding="0 8px 16px" key={index}>
