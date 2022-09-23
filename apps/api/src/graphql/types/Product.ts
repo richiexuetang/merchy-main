@@ -1,3 +1,4 @@
+import { SelectedAttribute } from './Attribute';
 import {
   extendType,
   intArg,
@@ -9,6 +10,7 @@ import {
 } from 'nexus';
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 import { BreadCrumb } from './BreadCrumb';
+import { Market } from './Market';
 
 export const Traits = objectType({
   name: 'Traits',
@@ -19,7 +21,6 @@ export const Traits = objectType({
     t.string('visible');
   },
 });
-
 export const Product = objectType({
   name: 'Product',
   definition(t) {
@@ -29,10 +30,8 @@ export const Product = objectType({
     t.string('title');
     t.string('imageUrl');
     t.string('brand');
-    t.string('price');
     t.string('description');
-    t.string('urlKey');
-    t.int('index');
+    t.string('slug');
     t.string('condition');
     t.string('primaryTitle');
     t.string('secondaryTitle');
@@ -79,7 +78,45 @@ export const Product = objectType({
         return breadCrumbs;
       },
     });
-    t.string('gender');
+    t.field('market', {
+      type: Market,
+      async resolve(_parent, _args, ctx) {
+        const market = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .market();
+        console.log('market', market);
+        return market;
+      },
+    });
+    t.list.field('attributes', {
+      type: SelectedAttribute,
+      async resolve(_parent, _args, ctx) {
+        const attributes = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .attributes();
+        return attributes;
+      },
+    });
+    t.int('salesEver', {
+      async resolve(_parent, _args, ctx) {
+        const market = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .market();
+        return market.salesEver;
+      },
+    });
   },
 });
 
@@ -93,6 +130,8 @@ export const ProductOrderByInputType = inputObjectType({
   definition(t) {
     t.field('createdAt', { type: Sort });
     t.field('price', { type: Sort });
+    t.field('updatedAt', { type: Sort });
+    t.field('salesEver', { type: Sort });
   },
 });
 
@@ -113,6 +152,41 @@ export const ProductFilterByInputType = inputObjectType({
   },
 });
 
+export const OrderDirection = enumType({
+  name: 'OrderDirection',
+  members: ['asc', 'desc'],
+});
+
+export const ProductOrderField = enumType({
+  name: 'ProductOrderField',
+  members: ['price', 'salesEver', 'createdAt'],
+});
+
+export const ProductOrder = inputObjectType({
+  name: 'ProductOrder',
+  definition(t) {
+    t.field('direction', { type: OrderDirection });
+    t.field('field', { type: ProductOrderField });
+  },
+});
+
+export const AttributeInput = inputObjectType({
+  name: 'AttributeInput',
+  definition(t) {
+    t.string('slug');
+    t.list.string('values');
+  },
+});
+
+export const ProductFilterInput = inputObjectType({
+  name: 'ProductFilterInput',
+  definition(t) {
+    t.list.string('categories');
+    t.list.field('attributes', { type: AttributeInput });
+    t.field('search', { type: 'String' });
+  },
+});
+
 // Get pagination products
 export const ProductsQuery = extendType({
   type: 'Query',
@@ -121,15 +195,64 @@ export const ProductsQuery = extendType({
     //@ts-ignore
     t.connectionField('products', {
       type: Product,
-      resolve: async (_, { after, first }, ctx) => {
-        const offset = after ? cursorToOffset(after) + 1 : 0;
+      additionalArgs: {
+        filter: ProductFilterInput,
+        orderBy: ProductOrder,
+      },
+      resolve: async (_, args, ctx) => {
+        const { first, after } = args;
+        const offset = args.after ? cursorToOffset(args.after) + 1 : 0;
         if (isNaN(offset)) throw new Error('cursor is invalid');
 
+        console.log('productOrder', args.orderBy);
+
+        let orderBy = {};
+
+        if (['salesEver'].includes(args.orderBy.field)) {
+          orderBy = {
+            market: {
+              salesEver: args.orderBy.direction,
+            },
+          };
+        }
+
+        let filter = {};
+        if (args.filter.search) {
+          filter = {
+            AND: [{ title: { contains: args.filter.search } }],
+          };
+        }
+
+        args.filter.attributes.map((attribute) => {
+          filter = {
+            ...filter,
+            OR: {
+              attributes: {
+                some: {
+                  attribute: {
+                    is: {
+                      slug: { equals: attribute.slug },
+                    },
+                  },
+                  attributeValues: {
+                    some: {
+                      name: { in: attribute.values },
+                    },
+                  },
+                },
+              },
+            },
+          };
+        });
+
+        console.log('final filter', filter);
         const [totalCount, items] = await Promise.all([
           ctx.prisma.product.count(),
           ctx.prisma.product.findMany({
-            take: first || undefined,
+            where: filter,
+            take: args.first || undefined,
             skip: offset,
+            orderBy: orderBy,
           }),
         ]);
 
@@ -184,35 +307,38 @@ export const ProductFilterQuery = extendType({
         take: intArg(),
         orderBy: ProductOrderByInputType,
       },
-      resolve(_parent, args, ctx) {
+      async resolve(_parent, args, ctx) {
         const filter = args.filters;
 
-        const collections = ctx.prisma.product.findMany({
+        const orderBy = args.orderBy;
+
+        const products = await ctx.prisma.product.findMany({
           where: filter,
           skip: args.skip,
           take: args.take,
-          orderBy: args.orderBy,
+          orderBy: orderBy,
         });
 
-        return collections;
+        return products;
       },
     });
   },
 });
 
 // Get all products
-export const ProductQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('products', {
-      type: Product,
-      resolve(_parent, _, ctx) {
-        const products = ctx.prisma.product.findMany({});
-        return products;
-      },
-    });
-  },
-});
+// export const ProductQuery = extendType({
+//   type: 'Query',
+//   definition(t) {
+//     t.list.field('products', {
+//       type: Product,
+//       async resolve(_parent, _, ctx) {
+//         const products = await ctx.prisma.product.findMany({});
+
+//         return products;
+//       },
+//     });
+//   },
+// });
 
 // Get product page info using product's url
 export const ProductUrlQuery = extendType({

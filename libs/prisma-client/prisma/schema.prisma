@@ -9,13 +9,11 @@ datasource db {
 }
 
 model User {
-  id              Int     @id @default(autoincrement())
-  username        String? @unique
-  email           String  @unique
-  password        String  @db.VarChar(50)
-  phoneNumber     String? @db.VarChar(50)
-  recentlyViewed  Int[]
-  purchaseHistory Int[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
 }
 
 model Category {
@@ -26,13 +24,15 @@ model Category {
   name        String
   level       Int
   path        String?
-  urlKey      String      @unique
+  slug        String      @unique
   breadCrumbs BreadCrumb[]
   products    Product[]
   parentId    String?
   parent      Category?    @relation("ParentChildren", fields: [parentId], references: [id])
   children    Category[]   @relation("ParentChildren")
   categoryPage CategoryPage?
+
+  @@unique([id, slug])
 }
 
 model CategoryPage {
@@ -50,39 +50,34 @@ model CategoryPage {
 
 model Product {
   id              String         @id @default(uuid())
-  index           Int            @default(autoincrement())
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
-  name            String
-  title           String
-  productCategory ProductCategory @default(streetwear)
-  imageUrl        String
-  brand           String
-  price           Int?            
-  description     String?
-  urlKey          String         @unique
+  name            String         @unique
+  title           String         @unique
+  slug            String         @unique
   variants        Product[]      @relation("Variants")
   variantsOf      Product[]      @relation("Variants")
+  breadCrumbs     BreadCrumb[]
+  market          Market?        @relation(fields: [marketId], references: [id])
+  marketId        String? @unique
+  category        Category       @relation(fields: [categoryId, categorySlug], references: [id, slug])
+  categoryId      String
+  categorySlug    String
+  attributes      SelectedAttribute[]
+  productType     ProductType @relation(fields: [productTypeId, productTypeSlug], references: [id, slug])
+  productTypeId   String
+  productTypeSlug String
+  brand           String          
+  description     String?
   primaryTitle    String
   secondaryTitle  String?
-  condition       Condition      @default(NEW)
-  model           String?        @default("Unknown")
-  traits          Trait[]
-  market          Market?
-  primaryCategory String?
+  model           String        @default("Unknown")
+  primaryCategory String
   listingType     String         @default("Standard")
+  condition       String      @default("New")
   media           ImageGallery?
-  breadCrumbs     BreadCrumb[]
-  category        Category       @relation(fields: [categoryId], references: [id])
-  categoryId      String
-}
 
-model Trait {
-  id      String    @id @default(uuid())
-  name    String
-  value   String
-  visible Boolean   @default(false)
-  product Product[]
+  @@unique([id, slug])
 }
 
 model Market {
@@ -103,8 +98,7 @@ model Market {
   changePercentage Int?
   volatility       Float?
   price            Int
-  product          Product   @relation(fields: [productId], references: [id])
-  productId        String    @unique
+  product          Product?
 }
 
 model BreadCrumb {
@@ -125,15 +119,52 @@ model ImageGallery {
   productId     String  @unique
 }
 
-enum Condition {
-  NEW
-  USED
+model ProductType {
+  id                    String @id @default(uuid())
+  name                  String 
+  slug                  String
+  productAttributes     Attribute[]
+  products              Product[]
+
+  @@unique([id, slug])
 }
 
-enum ProductCategory {
-  nft 
-  collectibles
-  sneakers
-  streetwear
-  handbags
+model SelectedAttribute {
+  id                  String @id @default(uuid())
+  attribute           Attribute @relation(fields: [attributeId, attributeSlug], references: [id, slug])
+  attributeId         String
+  attributeSlug       String 
+  attributeValues     AttributeValue[]
+  products            Product[]
+}
+model Attribute {
+  id                  String @id @default(uuid())
+  name                String 
+  slug                String @unique
+  productTypes        ProductType[]
+  inputType           AttributeInputTypeEnum 
+  visibleInStoreFront Boolean 
+  filterableInStoreFront Boolean
+  selectedAttribute   SelectedAttribute[]
+
+  @@unique([id, slug])
+}
+
+model AttributeValue {
+  id            String @id @default(uuid())
+  name          String? 
+  slug          String?
+  value         AttributeInputTypeEnum
+  plainText     String?
+  selectedAttribute SelectedAttribute[]
+}
+
+enum AttributeInputTypeEnum {
+  NUMERIC 
+  RICH_TEXT
+  PLAIN_TEXT
+  DATE 
+  DATE_TIME
+  COLUMN 
+  GRID
 }

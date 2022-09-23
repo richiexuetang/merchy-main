@@ -2,6 +2,38 @@
 ### Do not make changes to this file directly
 
 
+type Attribute {
+  filterableInStoreFront: Boolean
+  id: ID
+  name: String
+  slug: String
+  visibleInStoreFront: Boolean
+}
+
+input AttributeInput {
+  slug: String
+  values: [String]
+}
+
+"""Attribute Input Type Enum"""
+enum AttributeInputTypeEnum {
+  COLUMN
+  DATE
+  DATE_TIME
+  GRID
+  NUMERIC
+  PLAIN_TEXT
+  RICH_TEXT
+}
+
+type AttributeValue {
+  id: ID
+  name: String
+  plainText: String
+  slug: String
+  value: AttributeInputTypeEnum
+}
+
 type BreadCrumb {
   id: ID
   level: Int
@@ -45,6 +77,12 @@ type LevelCategories {
   categories: [Category]
 }
 
+type Market {
+  id: ID
+  lastSale: Int
+  salesEver: Int
+}
+
 type Mutation {
   addProduct(brand: String!, categoryId: String, description: String, imageUrl: String!, model: String, name: String!, price: String!, primaryCategory: String, primaryTitle: String!, productCategory: String, secondaryTitle: String, title: String!, urlKey: String!): Product
   deleteProduct(id: String!): Product!
@@ -56,32 +94,37 @@ input Operators {
   lt: Int
 }
 
+enum OrderDirection {
+  asc
+  desc
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean
 }
 
 type Product {
+  attributes: [SelectedAttribute]
   brand: String
   breadCrumbs: [BreadCrumb]
   categoryId: String
   condition: String
   createdAt: DateTime
   description: String
-  gender: String
   id: String
   imageUrl: String
-  index: Int
+  market: Market
   model: String
   name: String
-  price: String
   primaryCategory: String
   primaryTitle: String
   productCategory: String
+  salesEver: Int
   secondaryTitle: String
+  slug: String
   title: String
   traits: [Traits]
-  urlKey: String
   variants: [Product]
 }
 
@@ -111,9 +154,28 @@ input ProductFilterByInputType {
   productCategory: Operators
 }
 
+input ProductFilterInput {
+  attributes: [AttributeInput]
+  categories: [String]
+  search: String
+}
+
+input ProductOrder {
+  direction: OrderDirection
+  field: ProductOrderField
+}
+
 input ProductOrderByInputType {
   createdAt: Sort
   price: Sort
+  salesEver: Sort
+  updatedAt: Sort
+}
+
+enum ProductOrderField {
+  createdAt
+  price
+  salesEver
 }
 
 type Query {
@@ -124,7 +186,21 @@ type Query {
   levelCategories(level: Int): [Category]
   product(productUrl: String!): Product
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
-  products: [Product]
+  products(
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+    filter: ProductFilterInput
+
+    """Returns the first n elements from the list."""
+    first: Int
+
+    """Returns the last n elements from the list."""
+    last: Int
+    orderBy: ProductOrder
+  ): ProductConnection
   rootCategory(category: String!): Category
   users: [User]
   verticalBrowseCategory(category: String!): [Category]
@@ -133,6 +209,12 @@ type Query {
 type Response {
   edges: [Edge]
   pageInfo: PageInfo
+}
+
+type SelectedAttribute {
+  attribute: Attribute
+  attributeValues: [AttributeValue]
+  id: ID
 }
 
 enum Sort {
