@@ -46,15 +46,16 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {items.children && items.urlKey ? (
+      {items.children && items.slug ? (
         <React.Fragment>
-          <NextLink href="[...category]" as={items.urlKey}>
+          <NextLink href={`/category/${items.slug}`} passHref>
             <Link
               padding="8px"
               _hover={{
                 borderStyle: 'solid',
                 borderRight: '1px solid #006340',
               }}
+              textTransform="capitalize"
             >
               {items.name}
             </Link>
@@ -66,13 +67,14 @@ const BrowseMenuItems = ({ items, depthLevel }) => {
           />
         </React.Fragment>
       ) : (
-        <NextLink href="[...category]" as={items.urlKey}>
+        <NextLink href="[...category]" as={items.slug}>
           <Link
             padding="8px"
             _hover={{
               borderStyle: 'solid',
               borderRight: '1px solid #006340',
             }}
+            textTransform="capitalize"
           >
             {items.name}
           </Link>

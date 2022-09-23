@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { gql, useQuery } from '@apollo/client';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import Image from 'next/image';
 import { BrowseNavbar } from '../../ui';
 import { getStandaloneApolloClient } from '../../../utils';
@@ -23,9 +23,7 @@ const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
     categoryProducts(categoryUrlKey: $categoryUrlKey) {
       name
-      imageUrl
-      price
-      urlKey
+      slug
     }
 
     categoryBrowse(categoryUrl: $categoryUrlKey) {
@@ -40,48 +38,46 @@ const BrowseCategoryInfo = gql`
     verticalBrowseCategory(category: $categoryUrlKey) {
       name
       level
-      urlKey
+      slug
     }
 
-    rootCategory(category: $categoryUrlKey) {
-      filters {
-        id
-        name
-        values
-        displayType
-      }
-    }
+    # rootCategory(category: $categoryUrlKey) {
+    #   filters {
+    #     id
+    #     name
+    #     values
+    #     displayType
+    #   }
+    # }
   }
 `;
 
-const FilteredProduct = gql`
-  query ($filters: ProductFilterByInputType) {
-    filterProduct(filters: $filters) {
-      name
-      imageUrl
-      price
-      gender
-    }
-  }
-`;
+// const FilteredProduct = gql`
+//   query ($filters: ProductFilterByInputType) {
+//     filterProduct(filters: $filters) {
+//       name
+//       imageUrl
+//       price
+//       gender
+//     }
+//   }
+// `;
 
 const Category = () => {
   const router = useRouter();
+  // const [allFilters, setAllFilters] = useState([]);
 
-  const [products, setProducts] = useState(null);
-  const [allFilters, setAllFilters] = useState([]);
-
-  const { category } = router.query;
+  const { slug } = router.query;
 
   const { data, loading, error } = useQuery(BrowseCategoryInfo, {
-    variables: { categoryUrlKey: category },
+    variables: { categoryUrlKey: slug },
   });
 
-  useEffect(() => {
-    if (data) {
-      setProducts(data.categoryProducts);
-    }
-  }, [products, data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setProducts(data.categoryProducts);
+  //   }
+  // }, [products, data]);
 
   if (loading) {
     return <div>loading</div>;
@@ -90,7 +86,6 @@ const Category = () => {
     return <div>ops</div>;
   }
 
-  const filters = data?.rootCategory.filters;
   const levelOne = data?.verticalBrowseCategory.filter(
     (category) => category.level === 1
   );
@@ -129,25 +124,23 @@ const Category = () => {
   };
 
   const handleFilterOption = async (e, name, value) => {
-    const client = await getStandaloneApolloClient();
-
-    if (e.target.checked) {
-      setAllFilters((prev) => [...prev, { name, value }]);
-    } else {
-      setAllFilters((state) => state.filter((item) => item.name !== name));
-    }
-
-    const newProducts = await client.query({
-      query: FilteredProduct,
-      variables: {
-        filters: {
-          gender: {
-            in: value,
-          },
-        },
-      },
-    });
-    setProducts(newProducts?.data.filterProduct);
+    // const client = await getStandaloneApolloClient();
+    // if (e.target.checked) {
+    //   setAllFilters((prev) => [...prev, { name, value }]);
+    // } else {
+    //   setAllFilters((state) => state.filter((item) => item.name !== name));
+    // }
+    // const newProducts = await client.query({
+    //   query: FilteredProduct,
+    //   variables: {
+    //     filters: {
+    //       gender: {
+    //         in: value,
+    //       },
+    //     },
+    //   },
+    // });
+    // setProducts(newProducts?.data.filterProduct);
   };
   // console.log('allFilters', allFilters);
 
@@ -162,8 +155,9 @@ const Category = () => {
         alignItems="flex-start"
         justifyContent="center"
         margin="auto"
+        textTransform="capitalize"
       >
-        <chakra.h1 {...h1Styles}>{category}</chakra.h1>
+        <chakra.h1 {...h1Styles}>{slug}</chakra.h1>
         <chakra.p {...paragraphStyles}>
           {data?.categoryBrowse.description}
         </chakra.p>
@@ -181,12 +175,11 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {levelOne?.map(({ name, level, urlKey }, index) => {
+                {levelOne?.map(({ name, level, slug: url }, index) => {
                   let active = false;
                   if (
-                    typeof category === 'string' &&
-                    name.toLowerCase() ===
-                      category?.replace('-', ' ').toLowerCase()
+                    typeof slug === 'string' &&
+                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
                   ) {
                     active = true;
                   }
@@ -194,9 +187,9 @@ const Category = () => {
                   return (
                     level === 1 && (
                       <BrowseNavbar
-                        key={index}
+                        key={url}
                         name={name}
-                        urlKey={urlKey}
+                        slug={url}
                         active={active}
                         nextLevel={[]}
                       />
@@ -215,24 +208,24 @@ const Category = () => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {levelTwo?.map(({ name, level, urlKey }, index) => {
+                {levelTwo?.map(({ name, level, slug: url }, index) => {
                   let children = [];
                   let active = false;
                   if (
-                    typeof category === 'string' &&
-                    name.toLowerCase() ===
-                      category?.replace('-', ' ').toLowerCase()
+                    typeof slug === 'string' &&
+                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
                   ) {
                     children = levelThree;
                     active = true;
                   }
 
+                  console.log(slug, name);
                   return (
                     level === 2 && (
                       <BrowseNavbar
-                        key={index}
+                        key={url}
                         name={name}
-                        urlKey={urlKey}
+                        slug={url}
                         active={active}
                         nextLevel={children}
                       />
@@ -241,7 +234,7 @@ const Category = () => {
                 })}
               </Box>
 
-              {filters &&
+              {/* {filters &&
                 filters.map(({ name, values, displayType }) => {
                   if (displayType == 'COLUMN') {
                     return (
@@ -309,7 +302,7 @@ const Category = () => {
                       </Box>
                     );
                   }
-                })}
+                })} */}
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
@@ -334,16 +327,17 @@ const Category = () => {
                         ({ name, url }, index) => {
                           return (
                             <BreadcrumbItem key={index}>
-                              <BreadcrumbLink
-                                href={url}
-                                fontSize="sm"
-                                color="neurtral.500"
-                                outlineOffset="2px"
-                                outline="2px solid transparent"
-                                cursor="pointer"
-                              >
-                                {name}
-                              </BreadcrumbLink>
+                              <NextLink href={url}>
+                                <BreadcrumbLink
+                                  fontSize="sm"
+                                  color="neurtral.500"
+                                  outlineOffset="2px"
+                                  outline="2px solid transparent"
+                                  cursor="pointer"
+                                >
+                                  {name}
+                                </BreadcrumbLink>
+                              </NextLink>
                             </BreadcrumbItem>
                           );
                         }
@@ -351,107 +345,6 @@ const Category = () => {
                     </Breadcrumb>
                   </Box>
                 </Box>
-              </Box>
-            </Box>
-
-            <Box
-              data-component="category-products"
-              display="flex"
-              justifyContent="flex-start"
-              flexWrap="wrap"
-              w="100%"
-            >
-              <Box
-                id="browse-grid"
-                display="flex"
-                justifyContent="flex-start"
-                flexWrap="wrap"
-                w="100%"
-              >
-                {data.categoryProducts?.map(
-                  ({ name, imageUrl, price, urlKey }, index) => {
-                    return (
-                      <Box w="25%" padding="0 8px 16px" key={index}>
-                        <Box
-                          borderRadius="3px"
-                          minW="141px"
-                          h="auto"
-                          pos="relative"
-                          mr="0"
-                        >
-                          <Link href={`/product/${urlKey}`}>
-                            <Box
-                              display="flex"
-                              flexDir="column"
-                              border="1"
-                              borderColor="neutral.200"
-                            >
-                              <Box margin={{ base: '2', lg: '4' }}>
-                                <Box
-                                  display="flex"
-                                  justifyContent="center"
-                                  w="140px"
-                                  h="75px"
-                                  maxW="100%"
-                                  m="0px auto"
-                                >
-                                  <Image
-                                    layout="fixed"
-                                    width={140}
-                                    height={75}
-                                    src={imageUrl}
-                                    alt={name}
-                                  />
-                                </Box>
-                              </Box>
-                              <Box
-                                display="flex"
-                                flexDir="column"
-                                h="100%"
-                                padding="2"
-                                textAlign="left"
-                                pos="relative"
-                              >
-                                <Text
-                                  overflow="hidden"
-                                  fontWeight="md"
-                                  fontSize={{ base: 'xs', md: 'sm' }}
-                                  h={{ base: '34px', md: '40px' }}
-                                >
-                                  {name}
-                                </Text>
-                                <Box
-                                  display="flex"
-                                  flexDir="column"
-                                  justifyContent="space-between"
-                                  h="100%"
-                                >
-                                  <Box>
-                                    <Text
-                                      lineHeight="md"
-                                      fontSize="xs"
-                                      fontWeight="medium"
-                                      mt="1"
-                                    >
-                                      Lowest Ask
-                                    </Text>
-                                    <Text
-                                      fontWeight="bold"
-                                      lineHeight="1.3"
-                                      mt="1"
-                                    >
-                                      {price}
-                                    </Text>
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                          </Link>
-                        </Box>
-                      </Box>
-                    );
-                  }
-                )}
               </Box>
             </Box>
           </Container>

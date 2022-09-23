@@ -46,14 +46,13 @@ type Category {
   categoryId: String
   children: [Category]
   description: String
-  filters: [Filters]
   id: ID
   level: Int
   name: String
   parentId: String
   path: String
   products: [Product]
-  urlKey: String
+  slug: String
 }
 
 """
@@ -66,11 +65,11 @@ type Edge {
   node: Product
 }
 
-type Filters {
-  displayType: String
-  id: ID
-  name: String
-  values: [String]
+type ImageGallery {
+  imageUrl: String
+  label: String
+  smallImageUrl: String
+  thumbUrl: String
 }
 
 type LevelCategories {
@@ -115,6 +114,7 @@ type Product {
   id: String
   imageUrl: String
   market: Market
+  media: ImageGallery
   model: String
   name: String
   primaryCategory: String
@@ -124,7 +124,6 @@ type Product {
   secondaryTitle: String
   slug: String
   title: String
-  traits: [Traits]
   variants: [Product]
 }
 
@@ -186,6 +185,7 @@ type Query {
   levelCategories(level: Int): [Category]
   product(productUrl: String!): Product
   productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
+  productPages: [Product]
   products(
     """Returns the elements in the list that come after the specified cursor"""
     after: String
@@ -220,13 +220,6 @@ type SelectedAttribute {
 enum Sort {
   asc
   desc
-}
-
-type Traits {
-  id: ID
-  name: String
-  value: String
-  visible: String
 }
 
 type User {

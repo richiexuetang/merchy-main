@@ -12,15 +12,16 @@ import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 import { BreadCrumb } from './BreadCrumb';
 import { Market } from './Market';
 
-export const Traits = objectType({
-  name: 'Traits',
+export const ImageGallery = objectType({
+  name: 'ImageGallery',
   definition(t) {
-    t.id('id');
-    t.string('name');
-    t.string('value');
-    t.string('visible');
+    t.string('label');
+    t.string('imageUrl');
+    t.string('smallImageUrl');
+    t.string('thumbUrl');
   },
 });
+
 export const Product = objectType({
   name: 'Product',
   definition(t) {
@@ -52,19 +53,6 @@ export const Product = objectType({
         return variants;
       },
     });
-    t.list.field('traits', {
-      type: Traits,
-      async resolve(_parent, _args, ctx) {
-        const traits = await ctx.prisma.product
-          .findUnique({
-            where: {
-              id: _parent.id,
-            },
-          })
-          .traits();
-        return traits;
-      },
-    });
     t.list.field('breadCrumbs', {
       type: BreadCrumb,
       async resolve(_parent, _args, ctx) {
@@ -88,7 +76,6 @@ export const Product = objectType({
             },
           })
           .market();
-        console.log('market', market);
         return market;
       },
     });
@@ -115,6 +102,17 @@ export const Product = objectType({
           })
           .market();
         return market.salesEver;
+      },
+    });
+    t.field('media', {
+      type: 'ImageGallery',
+      async resolve(_parent, _args, ctx) {
+        const media = await ctx.prisma.product
+          .findUnique({
+            where: { id: _parent.id },
+          })
+          .media();
+        return media;
       },
     });
   },
@@ -219,33 +217,34 @@ export const ProductsQuery = extendType({
         let filter = {};
         if (args.filter.search) {
           filter = {
-            AND: [{ title: { contains: args.filter.search } }],
+            title: { contains: args.filter.search },
           };
         }
 
-        args.filter.attributes.map((attribute) => {
-          filter = {
-            ...filter,
-            OR: {
+        if (args.filter.attributes) {
+          const slugs = [];
+          const values = [];
+          args.filter.attributes.map((attribute, i) => {
+            slugs.push(attribute.slug);
+            values.push([]);
+            values[i] = attribute.values;
+          });
+
+          slugs.map((i) => {
+            filter = {
+              ...filter,
               attributes: {
-                some: {
-                  attribute: {
-                    is: {
-                      slug: { equals: attribute.slug },
-                    },
-                  },
-                  attributeValues: {
-                    some: {
-                      name: { in: attribute.values },
-                    },
-                  },
+                every: {
+                  AND: [
+                    { attribute: { slug: { in: slugs[i] } } },
+                    { attributeValues: { every: { name: { in: values[i] } } } },
+                  ],
                 },
               },
-            },
-          };
-        });
+            };
+          });
+        }
 
-        console.log('final filter', filter);
         const [totalCount, items] = await Promise.all([
           ctx.prisma.product.count(),
           ctx.prisma.product.findMany({
@@ -255,7 +254,7 @@ export const ProductsQuery = extendType({
             orderBy: orderBy,
           }),
         ]);
-
+        console.log('final filter', filter);
         return connectionFromArraySlice(
           items,
           { first, after },
@@ -296,6 +295,20 @@ export const ProductCollectionQuery = extendType({
   },
 });
 
+export const ProductPages = extendType({
+  type: 'Query',
+  definition(t) {
+    t.list.field('productPages', {
+      type: Product,
+      async resolve(_parent, args, ctx) {
+        const pages = await ctx.prisma.product.findMany({});
+
+        return pages;
+      },
+    });
+  },
+});
+
 export const ProductFilterQuery = extendType({
   type: 'Query',
   definition(t) {
@@ -325,21 +338,6 @@ export const ProductFilterQuery = extendType({
   },
 });
 
-// Get all products
-// export const ProductQuery = extendType({
-//   type: 'Query',
-//   definition(t) {
-//     t.list.field('products', {
-//       type: Product,
-//       async resolve(_parent, _, ctx) {
-//         const products = await ctx.prisma.product.findMany({});
-
-//         return products;
-//       },
-//     });
-//   },
-// });
-
 // Get product page info using product's url
 export const ProductUrlQuery = extendType({
   type: 'Query',
@@ -352,7 +350,7 @@ export const ProductUrlQuery = extendType({
       resolve(_parent, args, ctx) {
         const product = ctx.prisma.product.findUnique({
           where: {
-            urlKey: args.productUrl,
+            slug: args.productUrl,
           },
         });
         return product;

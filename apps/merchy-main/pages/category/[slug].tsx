@@ -1,15 +1,15 @@
 import { gql } from '@apollo/client';
-import { getStandaloneApolloClient } from '../utils/stand-alone-apollo-client';
-import Category from '../components/common/Category';
+import { getStandaloneApolloClient } from '../../utils/stand-alone-apollo-client';
+import Category from '../../components/common/Category';
 
 const CategoryUrls = gql`
   query getCategoryUrlsQuery($level: Int) {
     levelCategories(level: $level) {
-      urlKey
+      slug
       children {
-        urlKey
+        slug
         children {
-          urlKey
+          slug
         }
       }
     }
@@ -20,13 +20,13 @@ const BrowseCategories = gql`
   query allBrowseCategoriesQuery($level: Int) {
     levelCategories(level: $level) {
       name
-      urlKey
+      slug
       children {
         name
-        urlKey
+        slug
         children {
           name
-          urlKey
+          slug
         }
       }
     }
@@ -42,6 +42,7 @@ export async function getStaticProps() {
       level: 1,
     },
   });
+
   const allCategories = await client.query({
     query: BrowseCategories,
     variables: {
@@ -53,12 +54,12 @@ export async function getStaticProps() {
 
   const category = [];
 
-  allCategory?.data.levelCategories.map(({ urlKey, children }) => {
-    category.push({ category: urlKey });
-    children?.map(({ urlKey, children }) => {
-      category.push({ category: urlKey });
-      children?.map(({ urlKey }) => {
-        category.push({ category: urlKey });
+  allCategory?.data.levelCategories.map(({ slug: url, children }) => {
+    category.push({ slug: url });
+    children?.map(({ slug, children }) => {
+      category.push({ slug: url });
+      children?.map(({ slug }) => {
+        category.push({ slug: url });
       });
     });
   });
@@ -83,12 +84,12 @@ export async function getStaticPaths() {
   });
   const category = [];
 
-  allCategory?.data.levelCategories.map(({ urlKey, children }) => {
-    category.push({ params: { category: urlKey } });
-    children?.map(({ urlKey, children }) => {
-      category.push({ params: { category: urlKey } });
-      children?.map(({ urlKey }) => {
-        category.push({ params: { category: urlKey } });
+  allCategory?.data.levelCategories.map(({ slug: url, children }) => {
+    category.push({ params: { slug: url } });
+    children?.map(({ slug: url, children }) => {
+      category.push({ params: { slug: url } });
+      children?.map(({ slug: url }) => {
+        category.push({ params: { slug: url } });
       });
     });
   });

@@ -99,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <NextLink href="sneakers">
+              <NextLink href="/">
                 <Link
                   padding={{ md: '8px 1px', xl: '8px' }}
                   fontSize={{ md: 'xs', lg: 'md' }}

@@ -7,36 +7,35 @@ import { ProductCard } from '../components';
 import { Box, Grid, Container } from '@chakra-ui/react';
 import { Carousel } from '../components';
 
-const ProductCollection = gql`
-  query (
-    $productCategory: String!
-    $take: Int
-    $orderBy: ProductOrderByInputType
-  ) {
-    productCollection(
-      productCategory: $productCategory
-      take: $take
-      orderBy: $orderBy
-    ) {
-      name
-      imageUrl
-      price
-      urlKey
-    }
-  }
-`;
+// const ProductCollection = gql`
+//   query (
+//     $productCategory: String!
+//     $take: Int
+//     $orderBy: ProductOrderByInputType
+//   ) {
+//     productCollection(
+//       productCategory: $productCategory
+//       take: $take
+//       orderBy: $orderBy
+//     ) {
+//       name
+//       price
+//       slug
+//     }
+//   }
+// `;
 
 const BrowseCategories = gql`
   query allBrowseCategoriesQuery($level: Int) {
     levelCategories(level: $level) {
       name
-      urlKey
+      slug
       children {
         name
-        urlKey
+        slug
         children {
           name
-          urlKey
+          slug
         }
       }
     }
@@ -46,14 +45,14 @@ const BrowseCategories = gql`
 export const getStaticProps: GetStaticProps = async () => {
   const client = await getStandaloneApolloClient();
 
-  const products = await client.query({
-    query: ProductCollection,
-    variables: {
-      productCategory: 'sneakers',
-      take: 6,
-      orderBy: { createdAt: 'desc' },
-    },
-  });
+  // const products = await client.query({
+  //   query: ProductCollection,
+  //   variables: {
+  //     productCategory: 'sneakers',
+  //     take: 6,
+  //     orderBy: { createdAt: 'desc' },
+  //   },
+  // });
 
   const allCategories = await client.query({
     query: BrowseCategories,
@@ -65,7 +64,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const browseCategories = allCategories.data.levelCategories;
 
   return {
-    props: { products, browseCategories },
+    props: { browseCategories },
     revalidate: 60,
   };
 };
@@ -78,8 +77,8 @@ const Home: NextPageWithLayout = ({
 
   const levelOneCategories = [];
 
-  browseCategories?.map(({ name, urlKey }) => {
-    levelOneCategories.push({ name: name, urlKey: urlKey });
+  browseCategories?.map(({ name, slug }) => {
+    levelOneCategories.push({ name: name, slug: slug });
   });
 
   return (
@@ -103,13 +102,13 @@ const Home: NextPageWithLayout = ({
             marginBottom={6}
             overflow="auto"
           >
-            {productCollection.map((product, index: number) => {
+            {/* {productCollection.map((product, index: number) => {
               return (
                 <li data-component="product-card" key={index}>
                   <ProductCard product={product} />
                 </li>
               );
-            })}
+            })} */}
           </Grid>
         </Box>
       </Container>

@@ -145,7 +145,8 @@ model Attribute {
   inputType           AttributeInputTypeEnum 
   visibleInStoreFront Boolean 
   filterableInStoreFront Boolean
-  selectedAttribute   SelectedAttribute[]
+  attributeValue             SelectedAttribute[]
+  choices      AttributeValue[] 
 
   @@unique([id, slug])
 }
@@ -157,6 +158,7 @@ model AttributeValue {
   value         AttributeInputTypeEnum
   plainText     String?
   selectedAttribute SelectedAttribute[]
+  attribute     Attribute[]
 }
 
 enum AttributeInputTypeEnum {

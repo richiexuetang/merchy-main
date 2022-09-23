@@ -1,25 +1,6 @@
-import {
-  extendType,
-  intArg,
-  list,
-  nonNull,
-  objectType,
-  stringArg,
-} from 'nexus';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import { BreadCrumb } from './BreadCrumb';
 import { Product } from './Product';
-
-export const Filters = objectType({
-  name: 'Filters',
-  definition(t) {
-    t.id('id');
-    t.string('name');
-    t.field('values', {
-      type: list('String'),
-    });
-    t.string('displayType');
-  },
-});
 
 export const Category = objectType({
   name: 'Category',
@@ -29,7 +10,7 @@ export const Category = objectType({
     t.string('name');
     t.int('level');
     t.string('path');
-    t.string('urlKey');
+    t.string('slug');
     t.string('categoryId');
     t.string('parentId');
     t.list.field('children', {
@@ -69,19 +50,6 @@ export const Category = objectType({
           })
           .breadCrumbs();
         return breadCrumbs;
-      },
-    });
-    t.list.field('filters', {
-      type: Filters,
-      async resolve(_parent, _args, ctx) {
-        const filters = await ctx.prisma.category
-          .findUnique({
-            where: {
-              id: _parent.id,
-            },
-          })
-          .filters();
-        return filters;
       },
     });
   },
@@ -128,7 +96,7 @@ export const GetRootCategory = extendType({
       async resolve(_, args, ctx) {
         const currentCategory = await ctx.prisma.category.findUnique({
           where: {
-            urlKey: args.category,
+            slug: args.category,
           },
         });
 
@@ -162,7 +130,7 @@ export const LeafCategoriesProductQuery = extendType({
       async resolve(_, args, ctx) {
         const category = await ctx.prisma.category.findUnique({
           where: {
-            urlKey: args.categoryUrlKey,
+            slug: args.categoryUrlKey,
           },
         });
 
@@ -222,7 +190,7 @@ export const CategoryBrowseInfo = extendType({
       async resolve(_, args, ctx) {
         const category = await ctx.prisma.category.findUnique({
           where: {
-            urlKey: args.categoryUrl,
+            slug: args.categoryUrl,
           },
         });
         return category;
@@ -242,7 +210,7 @@ export const BrowseVerticalCategory = extendType({
       async resolve(_, args, ctx) {
         const category = await ctx.prisma.category.findUnique({
           where: {
-            urlKey: args.category,
+            slug: args.category,
           },
         });
 

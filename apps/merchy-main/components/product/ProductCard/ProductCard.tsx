@@ -14,7 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       position="relative"
       marginRight={0}
     >
-      <Link href={`/product/${product.urlKey}`}>
+      <Link href={`/product/${product.slug}`}>
         <Box
           display="flex"
           flexDirection="column"
