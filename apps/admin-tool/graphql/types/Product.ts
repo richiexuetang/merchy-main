@@ -1,27 +1,27 @@
-import { arg, extendType, list, nonNull, objectType, stringArg } from "nexus";
-import prisma from "../../lib/prisma";
+import { arg, extendType, list, nonNull, objectType, stringArg } from 'nexus';
+import prisma from '../../lib/prisma';
 import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 
 export const Product = objectType({
-    name: 'Product',
-    definition(t) {
-        t.string('id')
-        t.string('name')
-        t.string('title')
-        t.string('imageUrl')
-        t.string('brand')
-        t.string('price')
-        t.string('description')
-        t.string('urlKey')
-        t.int('index')
-        t.string('condition')
-        t.string('primaryTitle')
-        t.string('secondaryTitle')
-        t.string('model')
-        t.string('primaryCategory')
-        t.string('productCategory')
-        t.string('categoryId')
-    }
+  name: 'Product',
+  definition(t) {
+    t.string('id');
+    t.string('name');
+    t.string('title');
+    t.string('imageUrl');
+    t.string('brand');
+    t.string('price');
+    t.string('description');
+    t.string('urlKey');
+    t.int('index');
+    t.string('condition');
+    t.string('primaryTitle');
+    t.string('secondaryTitle');
+    t.string('model');
+    t.string('primaryCategory');
+    t.string('productCategory');
+    t.string('categoryId');
+  },
 });
 
 // Get all products
@@ -53,7 +53,7 @@ export const ProductsQuery = extendType({
   },
 });
 
-// create product 
+// create product
 export const AddProductMutation = extendType({
   type: 'Mutation',
   definition(t) {
@@ -89,12 +89,12 @@ export const AddProductMutation = extendType({
             model: args.model,
             primaryCategory: args.primaryCategory,
             productCategory: args.productCategory,
-            categoryId: args.categoryId
-          }
-        })
-      }
-    })
-  }
+            categoryId: args.categoryId,
+          },
+        });
+      },
+    });
+  },
 });
 
 // delete Product
@@ -118,27 +118,27 @@ export const DeleteProductMutation = extendType({
 export const Edge = objectType({
   name: 'Edge',
   definition(t) {
-    t.string('cursor')
+    t.string('cursor');
     t.field('node', {
       type: Product,
-    })
+    });
   },
-})
+});
 
 export const PageInfo = objectType({
   name: 'PageInfo',
   definition(t) {
-    t.string('endCursor')
-    t.boolean('hasNextPage')
+    t.string('endCursor');
+    t.boolean('hasNextPage');
   },
-})
+});
 
 export const Response = objectType({
   name: 'Response',
   definition(t) {
-    t.field('pageInfo', { type: PageInfo })
+    t.field('pageInfo', { type: PageInfo });
     t.list.field('edges', {
       type: Edge,
-    })
+    });
   },
-})
+});

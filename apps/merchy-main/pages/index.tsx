@@ -73,7 +73,7 @@ const Home: NextPageWithLayout = ({
   products,
   browseCategories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const productCollection = products?.data.productCollection;
+  // const productCollection = products?.data.productCollection;
 
   const levelOneCategories = [];
 

@@ -135,9 +135,10 @@ export const LeafCategoriesProductQuery = extendType({
         });
 
         let leafCategories = [category];
-        let currentLevel = category.level;
+        const currentLevel = category.level;
+        let finalCategories = [];
 
-        while (currentLevel < 3) {
+        while (currentLevel) {
           let next = [];
 
           for (let i = 0; i < leafCategories.length; i++) {
@@ -147,30 +148,30 @@ export const LeafCategoriesProductQuery = extendType({
               },
             });
 
-            if (children) {
+            if (children.length) {
               next = [...children, ...next];
+            } else {
+              finalCategories.push(leafCategories[i]);
             }
           }
+
+          leafCategories = next.slice();
 
           if (next.length === 0) {
             break;
           }
-          leafCategories = next.slice();
-          currentLevel++;
         }
 
         let result = [];
+        finalCategories = [...finalCategories, ...leafCategories];
 
-        for (let i = 0; i < leafCategories.length; i++) {
+        for (let i = 0; i < finalCategories.length; ++i) {
           const products = await ctx.prisma.product.findMany({
             where: {
-              categoryId: leafCategories[i].id,
+              categoryId: finalCategories[i].id,
             },
           });
-
-          if (products) {
-            result = [...result, ...products];
-          }
+          result = [...result, ...products];
         }
 
         return result;

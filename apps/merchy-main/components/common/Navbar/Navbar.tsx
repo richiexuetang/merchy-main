@@ -22,7 +22,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
-  const { user, error, isLoading } = useUser();
+  const { user, isLoading } = useUser();
 
   const router = useRouter();
 
@@ -60,7 +60,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   if (isLoading) {
     return <div>loading</div>;
   }
-  console.log('user', user);
 
   return (
     <NavbarRoot>

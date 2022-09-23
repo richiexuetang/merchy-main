@@ -29,7 +29,6 @@ export const Product = objectType({
     t.field('createdAt', { type: 'DateTime' });
     t.string('name');
     t.string('title');
-    t.string('imageUrl');
     t.string('brand');
     t.string('description');
     t.string('slug');
@@ -157,7 +156,7 @@ export const OrderDirection = enumType({
 
 export const ProductOrderField = enumType({
   name: 'ProductOrderField',
-  members: ['price', 'salesEver', 'createdAt'],
+  members: ['price', 'salesEver', 'createdAt', 'featured'],
 });
 
 export const ProductOrder = inputObjectType({
@@ -179,7 +178,7 @@ export const AttributeInput = inputObjectType({
 export const ProductFilterInput = inputObjectType({
   name: 'ProductFilterInput',
   definition(t) {
-    t.list.string('categories');
+    t.field('category', { type: 'String' });
     t.list.field('attributes', { type: AttributeInput });
     t.field('search', { type: 'String' });
   },
@@ -202,11 +201,9 @@ export const ProductsQuery = extendType({
         const offset = args.after ? cursorToOffset(args.after) + 1 : 0;
         if (isNaN(offset)) throw new Error('cursor is invalid');
 
-        console.log('productOrder', args.orderBy);
-
         let orderBy = {};
 
-        if (['salesEver'].includes(args.orderBy.field)) {
+        if (['salesEver'].includes(args.orderBy?.field)) {
           orderBy = {
             market: {
               salesEver: args.orderBy.direction,
@@ -214,51 +211,94 @@ export const ProductsQuery = extendType({
           };
         }
 
-        let filter = {};
-        if (args.filter.search) {
-          filter = {
-            title: { contains: args.filter.search },
-          };
-        }
+        let items = await ctx.prisma.product.findMany({ orderBy: orderBy });
 
-        if (args.filter.attributes) {
-          const slugs = [];
-          const values = [];
-          args.filter.attributes.map((attribute, i) => {
-            slugs.push(attribute.slug);
-            values.push([]);
-            values[i] = attribute.values;
-          });
-
-          slugs.map((i) => {
-            filter = {
-              ...filter,
-              attributes: {
-                every: {
-                  AND: [
-                    { attribute: { slug: { in: slugs[i] } } },
-                    { attributeValues: { every: { name: { in: values[i] } } } },
-                  ],
-                },
+        if (args.filter) {
+          const { category, search, attributes } = args.filter;
+          if (category) {
+            const currentCategory = await ctx.prisma.category.findUnique({
+              where: {
+                slug: category,
               },
-            };
-          });
+            });
+
+            let leafCategories = [currentCategory];
+            const currentLevel = currentCategory.level;
+            let finalCategories = [];
+
+            while (currentLevel) {
+              let next = [];
+
+              for (let i = 0; i < leafCategories.length; i++) {
+                const children = await ctx.prisma.category.findMany({
+                  where: {
+                    parentId: leafCategories[i].id,
+                  },
+                });
+
+                if (children.length) {
+                  next = [...children, ...next];
+                } else {
+                  finalCategories.push(leafCategories[i]);
+                }
+              }
+
+              leafCategories = next.slice();
+
+              if (next.length === 0) {
+                break;
+              }
+            }
+
+            finalCategories = [...finalCategories, ...leafCategories];
+
+            items = [];
+            for (let i = 0; i < finalCategories.length; ++i) {
+              const products = await ctx.prisma.product.findMany({
+                where: {
+                  categoryId: finalCategories[i].id,
+                },
+                orderBy: orderBy,
+              });
+              items = [...items, ...products];
+            }
+          }
+
+          if (search) {
+            items = items.filter((item) => item.title.includes(search));
+          }
+
+          // if (attributes) {
+          //   const slugs = [];
+          //   const values = [];
+          //   args.filter.attributes.map((attribute, i) => {
+          //     slugs.push(attribute.slug);
+          //     values.push([]);
+          //     values[i] = attribute.values;
+          //   });
+
+          //   slugs.map((i) => {
+          //     filter = {
+          //       ...filter,
+          //       attributes: {
+          //         every: {
+          //           AND: [
+          //             { attribute: { slug: { in: slugs[i] } } },
+          //             {
+          //               attributeValues: { every: { name: { in: values[i] } } },
+          //             },
+          //           ],
+          //         },
+          //       },
+          //     };
+          //   });
+          // }
         }
 
-        const [totalCount, items] = await Promise.all([
-          ctx.prisma.product.count(),
-          ctx.prisma.product.findMany({
-            where: filter,
-            take: args.first || undefined,
-            skip: offset,
-            orderBy: orderBy,
-          }),
-        ]);
-        console.log('final filter', filter);
         return connectionFromArraySlice(
           items,
           { first, after },
-          { sliceStart: offset, arrayLength: totalCount }
+          { sliceStart: offset, arrayLength: items.length }
         );
       },
     });
@@ -279,7 +319,6 @@ export const ProductCollectionQuery = extendType({
       resolve(_parent, args, ctx) {
         const filter = args.filters;
 
-        console.log('filters', filter);
         const collections = ctx.prisma.product.findMany({
           where: {
             productCategory: args.productCategory,

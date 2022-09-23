@@ -9,15 +9,43 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   Checkbox,
+  Select,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
-import { gql, useQuery } from '@apollo/client';
-import NextLink from 'next/link';
+import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Image from 'next/image';
-import { BrowseNavbar } from '../../ui';
-import { getStandaloneApolloClient } from '../../../utils';
+import { BrowseNavbar, SelectDropdown } from '../../ui';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import ScrollToTop from 'react-scroll-to-top';
+
+const h1Styles = {
+  marginBottom: 1,
+  fontSize: {
+    base: '2xl',
+    lg: '6xl',
+  },
+};
+
+const paragraphStyles = {
+  fontSize: {
+    base: 'sm',
+    lg: 'lg',
+  },
+  maxW: '438px',
+  overflow: 'hidden',
+};
+
+const h2Styles = {
+  fontWeight: 600,
+  fontSize: '16px',
+  marginBottom: 2,
+  lineHeight: '24px',
+  minH: '0vw',
+  letterSpacing: '1px',
+  color: 'black',
+};
 
 const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
@@ -40,44 +68,62 @@ const BrowseCategoryInfo = gql`
       level
       slug
     }
-
-    # rootCategory(category: $categoryUrlKey) {
-    #   filters {
-    #     id
-    #     name
-    #     values
-    #     displayType
-    #   }
-    # }
   }
 `;
 
-// const FilteredProduct = gql`
-//   query ($filters: ProductFilterByInputType) {
-//     filterProduct(filters: $filters) {
-//       name
-//       imageUrl
-//       price
-//       gender
-//     }
-//   }
-// `;
+const OrderProduct = gql`
+  query ($orderBy: ProductOrder, $first: Int!, $filter: ProductFilterInput) {
+    products(orderBy: $orderBy, first: $first, filter: $filter) {
+      edges {
+        node {
+          name
+          title
+          market {
+            salesEver
+            price
+          }
+          media {
+            thumbUrl
+          }
+        }
+      }
+    }
+  }
+`;
 
 const Category = () => {
   const router = useRouter();
-  // const [allFilters, setAllFilters] = useState([]);
-
   const { slug } = router.query;
+
+  const [executeSearch, { data: orderedProducts }] = useLazyQuery(OrderProduct);
+
+  const [products, setProducts] = useState(null);
+
+  const [sortBy, setSortBy] = useState({
+    direction: 'desc',
+    field: 'featured',
+  });
+
+  const [categoryFilter, setCategoryFilter] = useState({ category: slug });
 
   const { data, loading, error } = useQuery(BrowseCategoryInfo, {
     variables: { categoryUrlKey: slug },
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setProducts(data.categoryProducts);
-  //   }
-  // }, [products, data]);
+  useEffect(() => {
+    executeSearch({
+      variables: {
+        orderBy: sortBy,
+        first: 40,
+        filter: categoryFilter,
+      },
+    });
+    setProducts(orderedProducts?.products.edges);
+  }, [products, sortBy, orderedProducts, categoryFilter, executeSearch]);
+
+  useEffect(() => {
+    setCategoryFilter({ category: slug });
+  }, [slug]);
 
   if (loading) {
     return <div>loading</div>;
@@ -96,53 +142,19 @@ const Category = () => {
     (category) => category.level === 3
   );
 
-  const h1Styles = {
-    marginBottom: 1,
-    fontSize: {
-      base: '2xl',
-      lg: '6xl',
-    },
-  };
+  const handleChange = async (e) => {
+    setSortBy({ direction: 'desc', field: e.target.value });
 
-  const paragraphStyles = {
-    fontSize: {
-      base: 'sm',
-      lg: 'lg',
-    },
-    maxW: '438px',
-    overflow: 'hidden',
-  };
+    executeSearch({
+      variables: {
+        orderBy: sortBy,
+        first: 40,
+        filter: categoryFilter,
+      },
+    });
 
-  const h2Styles = {
-    fontWeight: 600,
-    fontSize: '16px',
-    marginBottom: 2,
-    lineHeight: '24px',
-    minH: '0vw',
-    letterSpacing: '1px',
-    color: 'black',
+    setProducts(orderedProducts?.products.edges);
   };
-
-  const handleFilterOption = async (e, name, value) => {
-    // const client = await getStandaloneApolloClient();
-    // if (e.target.checked) {
-    //   setAllFilters((prev) => [...prev, { name, value }]);
-    // } else {
-    //   setAllFilters((state) => state.filter((item) => item.name !== name));
-    // }
-    // const newProducts = await client.query({
-    //   query: FilteredProduct,
-    //   variables: {
-    //     filters: {
-    //       gender: {
-    //         in: value,
-    //       },
-    //     },
-    //   },
-    // });
-    // setProducts(newProducts?.data.filterProduct);
-  };
-  // console.log('allFilters', allFilters);
 
   return (
     <Box as="main" minH="100vh" marginTop="0">
@@ -175,7 +187,7 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {levelOne?.map(({ name, level, slug: url }, index) => {
+                {levelOne?.map(({ name, level, slug: url }) => {
                   let active = false;
                   if (
                     typeof slug === 'string' &&
@@ -208,7 +220,7 @@ const Category = () => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {levelTwo?.map(({ name, level, slug: url }, index) => {
+                {levelTwo?.map(({ name, level, slug: url }) => {
                   let children = [];
                   let active = false;
                   if (
@@ -219,7 +231,6 @@ const Category = () => {
                     active = true;
                   }
 
-                  console.log(slug, name);
                   return (
                     level === 2 && (
                       <BrowseNavbar
@@ -233,76 +244,6 @@ const Category = () => {
                   );
                 })}
               </Box>
-
-              {/* {filters &&
-                filters.map(({ name, values, displayType }) => {
-                  if (displayType == 'COLUMN') {
-                    return (
-                      <Box key={name} mb="8">
-                        <chakra.h2>{name}</chakra.h2>
-                        <Box display="flex" flexWrap="wrap">
-                          {values.map((value) => {
-                            return (
-                              <Box key={value} w="100%" mb="0">
-                                <Checkbox
-                                  onChange={async (e) =>
-                                    handleFilterOption(e, name, value)
-                                  }
-                                  textTransform="none"
-                                  fontWeight="400"
-                                  m="0 0 8px"
-                                >
-                                  {value}
-                                </Checkbox>
-                              </Box>
-                            );
-                          })}
-                        </Box>
-                      </Box>
-                    );
-                  } else {
-                    return (
-                      <Box key={name} mb="8">
-                        <chakra.h2>{name}</chakra.h2>
-                        <Box
-                          display="grid"
-                          gridTemplateColumns="repeat(auto-fill, minmax(32px, 1fr))"
-                          gridRowGap="1"
-                          gridColumnGap={'2.5'}
-                        >
-                          {values.map((name) => {
-                            return (
-                              <Box
-                                key={name}
-                                m="auto auto 10px"
-                                h="32px"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                border="1px solid #A1A5A4"
-                                bg="white"
-                                color="neutral.700"
-                              >
-                                <chakra.span
-                                  display="block"
-                                  fontSize="12px"
-                                  w="38px"
-                                  letterSpacing="0"
-                                  m="0"
-                                  fontWeight="700"
-                                  textAlign="center"
-                                  cursor="pointer"
-                                >
-                                  {name}
-                                </chakra.span>
-                              </Box>
-                            );
-                          })}
-                        </Box>
-                      </Box>
-                    );
-                  }
-                })} */}
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
@@ -327,17 +268,16 @@ const Category = () => {
                         ({ name, url }, index) => {
                           return (
                             <BreadcrumbItem key={index}>
-                              <NextLink href={url}>
-                                <BreadcrumbLink
-                                  fontSize="sm"
-                                  color="neurtral.500"
-                                  outlineOffset="2px"
-                                  outline="2px solid transparent"
-                                  cursor="pointer"
-                                >
-                                  {name}
-                                </BreadcrumbLink>
-                              </NextLink>
+                              <BreadcrumbLink
+                                href={url}
+                                fontSize="sm"
+                                color="neurtral.500"
+                                outlineOffset="2px"
+                                outline="2px solid transparent"
+                                cursor="pointer"
+                              >
+                                {name}
+                              </BreadcrumbLink>
                             </BreadcrumbItem>
                           );
                         }
@@ -345,10 +285,130 @@ const Category = () => {
                     </Breadcrumb>
                   </Box>
                 </Box>
+
+                <Box>
+                  <Select
+                    onChange={(e) => handleChange(e)}
+                    value={sortBy.field}
+                  >
+                    <option value="featured">Sort By: Featured</option>
+                    <option value="salesEver">Sort By: Total Sold</option>
+                    <option value="releaseDate">Sort By: Release Date</option>
+                  </Select>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              data-component="category-products"
+              display="flex"
+              justifyContent="flex-start"
+              flexWrap="wrap"
+              w="100%"
+            >
+              <Box
+                id="browse-grid"
+                display="flex"
+                justifyContent="flex-start"
+                flexWrap="wrap"
+                w="100%"
+              >
+                {products?.map(({ node }, index) => {
+                  return (
+                    <Box w="25%" padding="0 8px 16px" key={index}>
+                      <Box
+                        border="solid #E2E8F0"
+                        borderWidth="thin"
+                        borderRadius="3px"
+                        minW="141px"
+                        h="auto"
+                        pos="relative"
+                        mr="0"
+                        _hover={{
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Link href={`/product/${slug}`}>
+                          <Box
+                            display="flex"
+                            flexDir="column"
+                            borderColor="neutral.200"
+                          >
+                            <Box margin={{ base: '2', lg: '4' }}>
+                              <Box
+                                display="flex"
+                                justifyContent="center"
+                                w="140px"
+                                h="75px"
+                                maxW="100%"
+                                m="0px auto"
+                              >
+                                <Image
+                                  layout="fixed"
+                                  width={145}
+                                  height={75}
+                                  src={node.media.thumbUrl}
+                                  alt={node.name}
+                                />
+                              </Box>
+                            </Box>
+                            <Box
+                              display="flex"
+                              flexDir="column"
+                              h="100%"
+                              padding="2"
+                              textAlign="left"
+                              pos="relative"
+                            >
+                              <Text
+                                overflow="hidden"
+                                fontWeight="md"
+                                fontSize={{ base: 'xs', md: 'sm' }}
+                                h={{ base: '34px', md: '40px' }}
+                              >
+                                {node.name}
+                              </Text>
+                              <Box
+                                display="flex"
+                                flexDir="column"
+                                justifyContent="space-between"
+                                h="100%"
+                              >
+                                <Box>
+                                  <Text
+                                    lineHeight="md"
+                                    fontSize="xs"
+                                    fontWeight="medium"
+                                    mt="1"
+                                  >
+                                    Lowest Ask
+                                  </Text>
+                                  <Text
+                                    fontWeight="bold"
+                                    lineHeight="1.3"
+                                    mt="1"
+                                  >
+                                    ${node.market.price}
+                                  </Text>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Link>
+                      </Box>
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           </Container>
         </Grid>
+        <ScrollToTop
+          smooth
+          width="auto"
+          viewBox="0 0 32 32"
+          svgPath="M17.504 26.025l.001-14.287 6.366 6.367L26 15.979 15.997 5.975 6 15.971 8.129 18.1l6.366-6.368v14.291z"
+        />
       </Container>
     </Box>
   );

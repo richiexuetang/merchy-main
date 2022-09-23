@@ -79,6 +79,7 @@ type LevelCategories {
 type Market {
   id: ID
   lastSale: Int
+  price: Int
   salesEver: Int
 }
 
@@ -112,7 +113,6 @@ type Product {
   createdAt: DateTime
   description: String
   id: String
-  imageUrl: String
   market: Market
   media: ImageGallery
   model: String
@@ -155,7 +155,7 @@ input ProductFilterByInputType {
 
 input ProductFilterInput {
   attributes: [AttributeInput]
-  categories: [String]
+  category: String
   search: String
 }
 
@@ -173,6 +173,7 @@ input ProductOrderByInputType {
 
 enum ProductOrderField {
   createdAt
+  featured
   price
   salesEver
 }
