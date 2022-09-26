@@ -117,8 +117,6 @@ export const GetRootCategory = extendType({
           },
         });
 
-        console.log('ProductType', productType);
-
         return productType;
       },
     });

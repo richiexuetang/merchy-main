@@ -113,6 +113,7 @@ const CategoryProducts = gql`
         node {
           name
           title
+          slug
           market {
             salesEver
             price
@@ -244,6 +245,16 @@ const Category = () => {
     }
 
     setAttributeFilters(newFilter);
+
+    executeSearch({
+      variables: {
+        orderBy: sortBy,
+        first: 40,
+        filter: { category: categorySlug, attributes: attributeFilters },
+      },
+    });
+
+    setProducts(categoryProducts?.products.edges);
   };
 
   return (
@@ -454,7 +465,7 @@ const Category = () => {
                           cursor: 'pointer',
                         }}
                       >
-                        <Link href={`/product/${slug}`}>
+                        <Link href={`/product/${node.slug}`}>
                           <Box
                             display="flex"
                             flexDir="column"

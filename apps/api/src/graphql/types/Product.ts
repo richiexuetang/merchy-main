@@ -324,32 +324,37 @@ export const ProductsQuery = extendType({
             const ids = [];
             const selectedValues = [];
             args.filter.attributes.map((attribute, i) => {
-              ids.push(attribute.id);
-              selectedValues.push([]);
-              selectedValues[i] = attribute.selectedValues;
+              if (attribute.selectedValues.length > 0) {
+                ids.push(attribute.id);
+                selectedValues.push([]);
+                selectedValues[i] = attribute.selectedValues;
+              }
             });
 
-            let newItems = [];
-
+            const newItems = [];
+            const itemNames = new Set();
             for (let i = 0; i < ids.length; i++) {
-              if (ids[i] === 'releaseYears') {
-                for (let j = 0; j < items.length; j++) {
-                  const itemDetail = await ctx.prisma.productDetails.findUnique(
-                    {
-                      where: {
-                        productId: items[j].id,
-                      },
-                    }
-                  );
+              for (let j = 0; j < items.length; j++) {
+                const currentItem = items[j];
+                const itemDetail = await ctx.prisma.productDetails.findUnique({
+                  where: {
+                    productId: currentItem.id,
+                  },
+                });
 
-                  const year = itemDetail.releaseYear;
-                  if (selectedValues[i].length === 0) {
-                    newItems = items.slice();
-                    continue;
-                  }
-                  if (selectedValues[i].includes(year.toString())) {
-                    newItems.push(items[j]);
-                  }
+                let itemValue = '';
+                if (ids[i] === 'releaseYears') {
+                  itemValue = itemDetail.releaseYear;
+                } else if (ids[i] === 'sizeTypes') {
+                  itemValue = itemDetail.sizeType;
+                }
+
+                if (
+                  selectedValues[i].includes(itemValue.toString()) &&
+                  !itemNames.has(currentItem.name)
+                ) {
+                  newItems.push(currentItem);
+                  itemNames.add(currentItem.name);
                 }
               }
               items = newItems.slice();
