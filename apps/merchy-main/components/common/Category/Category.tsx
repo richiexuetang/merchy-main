@@ -9,6 +9,8 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   Select,
+  Heading,
+  Checkbox,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
@@ -73,11 +75,6 @@ const spanStyles = {
 
 const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
-    categoryProducts(categoryUrlKey: $categoryUrlKey) {
-      name
-      slug
-    }
-
     categoryBrowse(categoryUrl: $categoryUrlKey) {
       description
       breadCrumbs {
@@ -91,6 +88,20 @@ const BrowseCategoryInfo = gql`
       name
       level
       slug
+    }
+
+    rootCategory(category: $categoryUrlKey) {
+      productAttributes {
+        name
+        slug
+        filterableInStoreFront
+        choices {
+          name
+          slug
+          value
+          date
+        }
+      }
     }
   }
 `;
@@ -121,21 +132,29 @@ const CategoryProducts = gql`
   }
 `;
 
+interface AttributeFilterType {
+  id: string;
+  selectedValues: any[];
+}
+
 const Category = () => {
   const router = useRouter();
   const { slug } = router.query;
 
-  const [executeSearch, { data: orderedProducts }] =
+  const [executeSearch, { data: categoryProducts }] =
     useLazyQuery(CategoryProducts);
 
   const [products, setProducts] = useState(null);
+  const [attributeFilters, setAttributeFilters] = useState<
+    AttributeFilterType[]
+  >([]);
 
   const [sortBy, setSortBy] = useState({
     direction: 'desc',
     field: 'featured',
   });
 
-  const [categoryFilter, setCategoryFilter] = useState({ category: slug });
+  const [categorySlug, setCategorySlug] = useState(slug);
 
   const { data, loading, error } = useQuery(BrowseCategoryInfo, {
     variables: { categoryUrlKey: slug },
@@ -146,14 +165,22 @@ const Category = () => {
       variables: {
         orderBy: sortBy,
         first: 40,
-        filter: categoryFilter,
+        filter: { category: categorySlug, attributes: attributeFilters },
       },
     });
-    setProducts(orderedProducts?.products.edges);
-  }, [products, sortBy, orderedProducts, categoryFilter, executeSearch]);
+    setProducts(categoryProducts?.products.edges);
+  }, [
+    products,
+    sortBy,
+    categoryProducts,
+    categorySlug,
+    executeSearch,
+    attributeFilters,
+  ]);
 
   useEffect(() => {
-    setCategoryFilter({ category: slug });
+    setCategorySlug(slug);
+    setAttributeFilters([]);
   }, [slug]);
 
   if (loading) {
@@ -180,11 +207,43 @@ const Category = () => {
       variables: {
         orderBy: sortBy,
         first: 40,
-        filter: categoryFilter,
+        filter: { category: categorySlug, attributes: attributeFilters },
       },
     });
 
-    setProducts(orderedProducts?.products.edges);
+    setProducts(categoryProducts?.products.edges);
+  };
+
+  const handleCheckboxChange = (e, slug) => {
+    const value = e.target.value;
+    const newFilter = [...attributeFilters];
+
+    if (e.target.checked) {
+      let exist = false;
+
+      attributeFilters.map((filter, index) => {
+        if (filter.id === slug) {
+          exist = true;
+          const indexValues = [...newFilter[index].selectedValues, value];
+          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
+        }
+      });
+
+      if (!exist) {
+        newFilter.push({ id: slug, selectedValues: [value] });
+      }
+    } else {
+      attributeFilters.map((attributeFilter, index) => {
+        if (attributeFilter.id === slug) {
+          const indexValues = attributeFilter.selectedValues.filter(
+            (remove) => remove !== value
+          );
+          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
+        }
+      });
+    }
+
+    setAttributeFilters(newFilter);
   };
 
   return (
@@ -274,6 +333,39 @@ const Category = () => {
                     )
                   );
                 })}
+              </Box>
+
+              <Box>
+                {data?.rootCategory?.productAttributes.map(
+                  ({ name, slug, choices }) => {
+                    return (
+                      <Box key={slug}>
+                        <Heading {...h2Styles} textTransform="uppercase">
+                          {name}
+                        </Heading>
+                        <chakra.ul display="flex" flexWrap="wrap">
+                          {choices.map(({ name }) => {
+                            return (
+                              <chakra.li key={name} w="100%" mb="0">
+                                <Checkbox
+                                  m="0px 0px 8px"
+                                  fontWeight="400"
+                                  colorScheme="blackAlpha"
+                                  value={name}
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, slug)
+                                  }
+                                >
+                                  {name}
+                                </Checkbox>
+                              </chakra.li>
+                            );
+                          })}
+                        </chakra.ul>
+                      </Box>
+                    );
+                  }
+                )}
               </Box>
             </Box>
           </Container>

@@ -3,6 +3,7 @@
 
 
 type Attribute {
+  choices: [AttributeValue]
   filterableInStoreFront: Boolean
   id: ID
   name: String
@@ -11,8 +12,8 @@ type Attribute {
 }
 
 input AttributeInput {
-  slug: String
-  values: [String]
+  id: String
+  selectedValues: [String]
 }
 
 """Attribute Input Type Enum"""
@@ -146,6 +147,7 @@ type ProductConnection {
 type ProductDetails {
   id: String
   releaseDate: DateTime
+  releaseYear: Int
   retailPrice: String
   style: String
 }
@@ -186,6 +188,13 @@ enum ProductOrderField {
   salesEver
 }
 
+type ProductType {
+  id: ID
+  name: String
+  productAttributes: [Attribute]
+  slug: String
+}
+
 type Query {
   categoryBrowse(categoryUrl: String!): Category
   categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
@@ -208,7 +217,7 @@ type Query {
     last: Int
     orderBy: ProductOrder
   ): ProductConnection
-  rootCategory(category: String!): Category
+  rootCategory(category: String!): ProductType
   users: [User]
   verticalBrowseCategory(category: String!): [Category]
 }

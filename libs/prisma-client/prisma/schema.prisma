@@ -86,8 +86,8 @@ model ProductDetails {
   releaseDate   DateTime?
   colorWay      String?
   style         String?
-  description   String?
   retailPrice   Int? 
+  releaseYear   Int?
   product       Product? @relation(fields: [productId], references: [id])
   productId     String  @unique
 }
@@ -134,7 +134,7 @@ model ImageGallery {
 model ProductType {
   id                    String @id @default(uuid())
   name                  String 
-  slug                  String
+  slug                  String @unique
   productAttributes     Attribute[]
   products              Product[]
 

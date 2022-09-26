@@ -1,3 +1,4 @@
+import { ProductType } from './Attribute';
 import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 import { BreadCrumb } from './BreadCrumb';
 import { Product } from './Product';
@@ -89,7 +90,7 @@ export const GetRootCategory = extendType({
   type: 'Query',
   definition(t) {
     t.field('rootCategory', {
-      type: Category,
+      type: ProductType,
       args: {
         category: nonNull(stringArg()),
       },
@@ -110,7 +111,15 @@ export const GetRootCategory = extendType({
           });
         }
 
-        return rootCategory;
+        const productType = await ctx.prisma.productType.findUnique({
+          where: {
+            slug: rootCategory.slug,
+          },
+        });
+
+        console.log('ProductType', productType);
+
+        return productType;
       },
     });
   },

@@ -28,6 +28,7 @@ export const ProductDetails = objectType({
     t.string('style');
     t.field('releaseDate', { type: 'DateTime' });
     t.string('retailPrice');
+    t.int('releaseYear');
   },
 });
 
@@ -186,8 +187,8 @@ export const ProductOrder = inputObjectType({
 export const AttributeInput = inputObjectType({
   name: 'AttributeInput',
   definition(t) {
-    t.string('slug');
-    t.list.string('values');
+    t.field('id', { type: 'String' });
+    t.list.string('selectedValues');
   },
 });
 
@@ -219,36 +220,38 @@ export const ProductsQuery = extendType({
 
         let orderBy = {};
         let items = [];
-        if (['salesEver'].includes(args.orderBy?.field)) {
-          orderBy = {
-            market: {
-              salesEver: args.orderBy.direction,
-            },
-          };
-        } else if (args.orderBy?.field === 'releaseDate') {
-          orderBy = {
-            productDetails: {
-              releaseDate: args.orderBy.direction,
-            },
-          };
-        } else if (args.orderBy?.field === 'lastSale') {
-          orderBy = {
-            market: {
-              lastSale: args.orderBy.direction,
-            },
-          };
-        } else if (args.orderBy?.field === 'lowestAsk') {
-          orderBy = {
-            market: {
-              lowestAsk: 'asc',
-            },
-          };
-        } else if (args.orderBy?.field === 'highestBid') {
-          orderBy = {
-            market: {
-              highestBid: args.orderBy.direction,
-            },
-          };
+        if (args.orderBy) {
+          if (['salesEver'].includes(args.orderBy?.field)) {
+            orderBy = {
+              market: {
+                salesEver: args.orderBy.direction,
+              },
+            };
+          } else if (args.orderBy?.field === 'releaseDate') {
+            orderBy = {
+              productDetails: {
+                releaseDate: args.orderBy.direction,
+              },
+            };
+          } else if (args.orderBy?.field === 'lastSale') {
+            orderBy = {
+              market: {
+                lastSale: args.orderBy.direction,
+              },
+            };
+          } else if (args.orderBy?.field === 'lowestAsk') {
+            orderBy = {
+              market: {
+                lowestAsk: 'asc',
+              },
+            };
+          } else if (args.orderBy?.field === 'highestBid') {
+            orderBy = {
+              market: {
+                highestBid: args.orderBy.direction,
+              },
+            };
+          }
         }
 
         items = await ctx.prisma.product.findMany({ orderBy: orderBy });
@@ -317,31 +320,41 @@ export const ProductsQuery = extendType({
             items = items.filter((item) => item.title.includes(search));
           }
 
-          // if (attributes) {
-          //   const slugs = [];
-          //   const values = [];
-          //   args.filter.attributes.map((attribute, i) => {
-          //     slugs.push(attribute.slug);
-          //     values.push([]);
-          //     values[i] = attribute.values;
-          //   });
+          if (attributes) {
+            const ids = [];
+            const selectedValues = [];
+            args.filter.attributes.map((attribute, i) => {
+              ids.push(attribute.id);
+              selectedValues.push([]);
+              selectedValues[i] = attribute.selectedValues;
+            });
 
-          //   slugs.map((i) => {
-          //     filter = {
-          //       ...filter,
-          //       attributes: {
-          //         every: {
-          //           AND: [
-          //             { attribute: { slug: { in: slugs[i] } } },
-          //             {
-          //               attributeValues: { every: { name: { in: values[i] } } },
-          //             },
-          //           ],
-          //         },
-          //       },
-          //     };
-          //   });
-          // }
+            let newItems = [];
+
+            for (let i = 0; i < ids.length; i++) {
+              if (ids[i] === 'releaseYears') {
+                for (let j = 0; j < items.length; j++) {
+                  const itemDetail = await ctx.prisma.productDetails.findUnique(
+                    {
+                      where: {
+                        productId: items[j].id,
+                      },
+                    }
+                  );
+
+                  const year = itemDetail.releaseYear;
+                  if (selectedValues[i].length === 0) {
+                    newItems = items.slice();
+                    continue;
+                  }
+                  if (selectedValues[i].includes(year.toString())) {
+                    newItems.push(items[j]);
+                  }
+                }
+              }
+              items = newItems.slice();
+            }
+          }
         }
 
         items.sort((a, b) => {

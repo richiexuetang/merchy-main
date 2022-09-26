@@ -1,26 +1,26 @@
 import { enumType, objectType } from 'nexus';
 
-// model Attribute {
-//   id                  String @id @default(uuid())
-//   name                String
-//   slug                String @unique
-//   productTypes        ProductType[]
-//   inputType           AttributeInputTypeEnum
-//   visibleInStoreFront Boolean
-//   filterableInStoreFront Boolean
-//   selectedAttribute   SelectedAttribute[]
-
-//   @@unique([id, slug])
-// }
-
-// model SelectedAttribute {
-//   id                  String @id @default(uuid())
-//   attribute           Attribute @relation(fields: [attributeId, attributeSlug], references: [id, slug])
-//   attributeId         String
-//   attributeSlug       String
-//   attributeValues     AttributeValue[]
-//   products            Product[]
-// }
+export const ProductType = objectType({
+  name: 'ProductType',
+  definition(t) {
+    t.id('id');
+    t.string('name');
+    t.string('slug');
+    t.list.field('productAttributes', {
+      type: Attribute,
+      async resolve(_parent, _args, ctx) {
+        const productAttributes = await ctx.prisma.productType
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .productAttributes();
+        return productAttributes;
+      },
+    });
+  },
+});
 
 export const SelectedAttribute = objectType({
   name: 'SelectedAttribute',
@@ -63,17 +63,22 @@ export const Attribute = objectType({
     t.string('slug');
     t.boolean('visibleInStoreFront');
     t.boolean('filterableInStoreFront');
+    t.list.field('choices', {
+      type: AttributeValue,
+      async resolve(_parent, _args, ctx) {
+        const attributeValues = await ctx.prisma.attribute
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .choices();
+        return attributeValues;
+      },
+    });
   },
 });
 
-// model AttributeValue {
-//   id            String @id @default(uuid())
-//   name          String?
-//   slug          String?
-//   value         AttributeInputTypeEnum
-//   plainText     String?
-//   selectedAttribute SelectedAttribute[]
-// }
 export const AttributeValue = objectType({
   name: 'AttributeValue',
   definition(t) {
