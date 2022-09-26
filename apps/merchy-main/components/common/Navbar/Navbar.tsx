@@ -22,7 +22,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
-  const { user, error, isLoading } = useUser();
+  const { user, isLoading } = useUser();
 
   const router = useRouter();
 
@@ -60,7 +60,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   if (isLoading) {
     return <div>loading</div>;
   }
-  console.log('user', user);
 
   return (
     <NavbarRoot>
@@ -99,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <NextLink href="sneakers">
+              <NextLink href="/">
                 <Link
                   padding={{ md: '8px 1px', xl: '8px' }}
                   fontSize={{ md: 'xs', lg: 'md' }}

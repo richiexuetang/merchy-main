@@ -9,7 +9,10 @@ import {
 
 const Menubar = ({ levelOneCategories }) => {
   return (
-    <chakra.nav display={{ base: 'none', md: 'initial' }}>
+    <chakra.nav
+      display={{ base: 'none', md: 'initial' }}
+      textTransform="capitalize"
+    >
       <Box bg="beige.100" justifyContent="space-between" overflowX="auto">
         <List
           display="flex"
@@ -18,10 +21,10 @@ const Menubar = ({ levelOneCategories }) => {
           justifyContent="center"
           m={{ base: '0 1rem', lg: 'auto' }}
         >
-          {levelOneCategories.map(({ name, urlKey }) => {
+          {levelOneCategories.map(({ name, slug }) => {
             return (
               <ListItem
-                key={urlKey}
+                key={slug}
                 display="flex"
                 alignItems="center"
                 letterSpacing="0.5px"
@@ -30,7 +33,7 @@ const Menubar = ({ levelOneCategories }) => {
               >
                 <ChakraLink
                   as={Link}
-                  href={urlKey}
+                  href={`/category/${slug}`}
                   fontSize={{ base: '16px', lg: '18px' }}
                 >
                   {name}

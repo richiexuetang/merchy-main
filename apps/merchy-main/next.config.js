@@ -8,7 +8,7 @@ const { withNx } = require('@nrwl/next/plugins/with-nx');
  **/
 const nextConfig = {
   images: {
-    domains: ['merchy-images.s3.us-west-1.amazonaws.com'],
+    domains: ['merchy-images.s3.us-west-1.amazonaws.com', 'images.stockx.com'],
   },
   nx: {
     // Set this to true if you would like to to use SVGR

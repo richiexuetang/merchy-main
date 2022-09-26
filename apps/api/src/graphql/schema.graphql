@@ -2,6 +2,40 @@
 ### Do not make changes to this file directly
 
 
+type Attribute {
+  choices: [AttributeValue]
+  filterableInStoreFront: Boolean
+  id: ID
+  name: String
+  slug: String
+  visibleInStoreFront: Boolean
+}
+
+input AttributeInput {
+  id: String
+  selectedValues: [String]
+}
+
+"""Attribute Input Type Enum"""
+enum AttributeInputTypeEnum {
+  COLUMN
+  DATE
+  DATE_TIME
+  GRID
+  NUMERIC
+  PLAIN_TEXT
+  RICH_TEXT
+}
+
+type AttributeValue {
+  date: DateTime
+  id: ID
+  name: String
+  plainText: String
+  slug: String
+  value: AttributeInputTypeEnum
+}
+
 type BreadCrumb {
   id: ID
   level: Int
@@ -14,14 +48,13 @@ type Category {
   categoryId: String
   children: [Category]
   description: String
-  filters: [Filters]
   id: ID
   level: Int
   name: String
   parentId: String
   path: String
   products: [Product]
-  urlKey: String
+  slug: String
 }
 
 """
@@ -34,15 +67,24 @@ type Edge {
   node: Product
 }
 
-type Filters {
-  displayType: String
-  id: ID
-  name: String
-  values: [String]
+type ImageGallery {
+  imageUrl: String
+  label: String
+  smallImageUrl: String
+  thumbUrl: String
 }
 
 type LevelCategories {
   categories: [Category]
+}
+
+type Market {
+  highestBid: Int
+  id: ID
+  lastSale: Int
+  lowestAsk: Int
+  price: Int
+  salesEver: Int
 }
 
 type Mutation {
@@ -56,32 +98,37 @@ input Operators {
   lt: Int
 }
 
+enum OrderDirection {
+  asc
+  desc
+}
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean
 }
 
 type Product {
+  attributes: [SelectedAttribute]
   brand: String
   breadCrumbs: [BreadCrumb]
   categoryId: String
   condition: String
   createdAt: DateTime
   description: String
-  gender: String
   id: String
-  imageUrl: String
-  index: Int
+  market: Market
+  media: ImageGallery
   model: String
   name: String
-  price: String
   primaryCategory: String
   primaryTitle: String
   productCategory: String
+  productDetails: ProductDetails
+  salesEver: Int
   secondaryTitle: String
+  slug: String
   title: String
-  traits: [Traits]
-  urlKey: String
   variants: [Product]
 }
 
@@ -95,6 +142,14 @@ type ProductConnection {
   https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
   """
   pageInfo: PageInfo!
+}
+
+type ProductDetails {
+  id: String
+  releaseDate: DateTime
+  releaseYear: Int
+  retailPrice: String
+  style: String
 }
 
 type ProductEdge {
@@ -111,21 +166,58 @@ input ProductFilterByInputType {
   productCategory: Operators
 }
 
-input ProductOrderByInputType {
-  createdAt: Sort
-  price: Sort
+input ProductFilterInput {
+  attributes: [AttributeInput]
+  category: String
+  search: String
+}
+
+input ProductOrder {
+  direction: OrderDirection
+  field: ProductOrderField
+}
+
+enum ProductOrderField {
+  createdAt
+  featured
+  highestBid
+  lastSale
+  lowestAsk
+  price
+  releaseDate
+  salesEver
+}
+
+type ProductType {
+  id: ID
+  name: String
+  productAttributes: [Attribute]
+  slug: String
 }
 
 type Query {
   categoryBrowse(categoryUrl: String!): Category
   categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
   childrenCategory(id: String): [Category]
-  filterProduct(filters: ProductFilterByInputType, orderBy: ProductOrderByInputType, skip: Int, take: Int): [Product]
   levelCategories(level: Int): [Category]
   product(productUrl: String!): Product
-  productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
-  products: [Product]
-  rootCategory(category: String!): Category
+  productPages: [Product]
+  products(
+    """Returns the elements in the list that come after the specified cursor"""
+    after: String
+
+    """Returns the elements in the list that come before the specified cursor"""
+    before: String
+    filter: ProductFilterInput
+
+    """Returns the first n elements from the list."""
+    first: Int
+
+    """Returns the last n elements from the list."""
+    last: Int
+    orderBy: ProductOrder
+  ): ProductConnection
+  rootCategory(category: String!): ProductType
   users: [User]
   verticalBrowseCategory(category: String!): [Category]
 }
@@ -135,16 +227,10 @@ type Response {
   pageInfo: PageInfo
 }
 
-enum Sort {
-  asc
-  desc
-}
-
-type Traits {
+type SelectedAttribute {
+  attribute: Attribute
+  attributeValues: [AttributeValue]
   id: ID
-  name: String
-  value: String
-  visible: String
 }
 
 type User {

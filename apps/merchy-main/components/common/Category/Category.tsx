@@ -8,26 +8,73 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Select,
+  Heading,
   Checkbox,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
-import { gql, useQuery } from '@apollo/client';
-import Link from 'next/link';
+import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { BrowseNavbar } from '../../ui';
-import { getStandaloneApolloClient } from '../../../utils';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import ScrollToTop from 'react-scroll-to-top';
+import moment from 'moment';
+
+const h1Styles = {
+  marginBottom: 1,
+  fontSize: {
+    base: '2xl',
+    lg: '6xl',
+  },
+};
+
+const paragraphStyles = {
+  fontSize: {
+    base: 'sm',
+    lg: 'lg',
+  },
+  maxW: '438px',
+  overflow: 'hidden',
+};
+
+const h2Styles = {
+  fontWeight: 600,
+  fontSize: '16px',
+  marginBottom: 2,
+  lineHeight: '24px',
+  minH: '0vw',
+  letterSpacing: '1px',
+  color: 'black',
+};
+
+const spanStyles = {
+  display: 'inline-flex',
+  verticalAlign: 'top',
+  alignItems: 'center',
+  maxW: '100%',
+  fontWeight: 'normal',
+  lineHeight: '1.2',
+  outline: 'transparent solid 2px',
+  outlineOffset: '2px',
+  mb: '1',
+  mr: '1',
+  mt: '1',
+  minW: '1.5rem',
+  minH: '1.5rem',
+  fontSize: 'xs',
+  borderRadius: '0',
+  paddingInline: '1',
+  bg: 'beige.100',
+  color: 'neutral.black',
+  h: '22px',
+  fontFamily: 'suisseIntlMedium',
+  py: '2px',
+};
 
 const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
-    categoryProducts(categoryUrlKey: $categoryUrlKey) {
-      name
-      imageUrl
-      price
-      urlKey
-    }
-
     categoryBrowse(categoryUrl: $categoryUrlKey) {
       description
       breadCrumbs {
@@ -40,48 +87,102 @@ const BrowseCategoryInfo = gql`
     verticalBrowseCategory(category: $categoryUrlKey) {
       name
       level
-      urlKey
+      slug
     }
 
     rootCategory(category: $categoryUrlKey) {
-      filters {
-        id
+      productAttributes {
         name
-        values
-        displayType
+        slug
+        filterableInStoreFront
+        choices {
+          name
+          slug
+          value
+          date
+        }
       }
     }
   }
 `;
 
-const FilteredProduct = gql`
-  query ($filters: ProductFilterByInputType) {
-    filterProduct(filters: $filters) {
-      name
-      imageUrl
-      price
-      gender
+const CategoryProducts = gql`
+  query ($orderBy: ProductOrder, $first: Int!, $filter: ProductFilterInput) {
+    products(orderBy: $orderBy, first: $first, filter: $filter) {
+      edges {
+        node {
+          name
+          title
+          slug
+          market {
+            salesEver
+            price
+            lastSale
+            lowestAsk
+            highestBid
+          }
+          media {
+            thumbUrl
+          }
+          productDetails {
+            releaseDate
+          }
+        }
+      }
     }
   }
 `;
 
+interface AttributeFilterType {
+  id: string;
+  selectedValues: any[];
+}
+
 const Category = () => {
   const router = useRouter();
+  const { slug } = router.query;
+
+  const [executeSearch, { data: categoryProducts }] =
+    useLazyQuery(CategoryProducts);
 
   const [products, setProducts] = useState(null);
-  const [allFilters, setAllFilters] = useState([]);
+  const [attributeFilters, setAttributeFilters] = useState<
+    AttributeFilterType[]
+  >([]);
 
-  const { category } = router.query;
+  const [sortBy, setSortBy] = useState({
+    direction: 'desc',
+    field: 'featured',
+  });
+
+  const [categorySlug, setCategorySlug] = useState(slug);
 
   const { data, loading, error } = useQuery(BrowseCategoryInfo, {
-    variables: { categoryUrlKey: category },
+    variables: { categoryUrlKey: slug },
   });
 
   useEffect(() => {
-    if (data) {
-      setProducts(data.categoryProducts);
-    }
-  }, [products, data]);
+    executeSearch({
+      variables: {
+        orderBy: sortBy,
+        first: 40,
+        filter: { category: categorySlug, attributes: attributeFilters },
+      },
+    });
+    setProducts(categoryProducts?.products.edges);
+  }, [
+    products,
+    sortBy,
+    categoryProducts,
+    categorySlug,
+    executeSearch,
+    attributeFilters,
+  ]);
+
+  useEffect(() => {
+    setCategorySlug(slug);
+    setAttributeFilters([]);
+  }, [slug]);
 
   if (loading) {
     return <div>loading</div>;
@@ -90,7 +191,6 @@ const Category = () => {
     return <div>ops</div>;
   }
 
-  const filters = data?.rootCategory.filters;
   const levelOne = data?.verticalBrowseCategory.filter(
     (category) => category.level === 1
   );
@@ -101,55 +201,61 @@ const Category = () => {
     (category) => category.level === 3
   );
 
-  const h1Styles = {
-    marginBottom: 1,
-    fontSize: {
-      base: '2xl',
-      lg: '6xl',
-    },
-  };
+  const handleChange = (e) => {
+    setSortBy({ direction: 'desc', field: e.target.value });
 
-  const paragraphStyles = {
-    fontSize: {
-      base: 'sm',
-      lg: 'lg',
-    },
-    maxW: '438px',
-    overflow: 'hidden',
-  };
-
-  const h2Styles = {
-    fontWeight: 600,
-    fontSize: '16px',
-    marginBottom: 2,
-    lineHeight: '24px',
-    minH: '0vw',
-    letterSpacing: '1px',
-    color: 'black',
-  };
-
-  const handleFilterOption = async (e, name, value) => {
-    const client = await getStandaloneApolloClient();
-
-    if (e.target.checked) {
-      setAllFilters((prev) => [...prev, { name, value }]);
-    } else {
-      setAllFilters((state) => state.filter((item) => item.name !== name));
-    }
-
-    const newProducts = await client.query({
-      query: FilteredProduct,
+    executeSearch({
       variables: {
-        filters: {
-          gender: {
-            in: value,
-          },
-        },
+        orderBy: sortBy,
+        first: 40,
+        filter: { category: categorySlug, attributes: attributeFilters },
       },
     });
-    setProducts(newProducts?.data.filterProduct);
+
+    setProducts(categoryProducts?.products.edges);
   };
-  // console.log('allFilters', allFilters);
+
+  const handleCheckboxChange = (e, slug) => {
+    const value = e.target.value;
+    const newFilter = [...attributeFilters];
+
+    if (e.target.checked) {
+      let exist = false;
+
+      attributeFilters.map((filter, index) => {
+        if (filter.id === slug) {
+          exist = true;
+          const indexValues = [...newFilter[index].selectedValues, value];
+          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
+        }
+      });
+
+      if (!exist) {
+        newFilter.push({ id: slug, selectedValues: [value] });
+      }
+    } else {
+      attributeFilters.map((attributeFilter, index) => {
+        if (attributeFilter.id === slug) {
+          const indexValues = attributeFilter.selectedValues.filter(
+            (remove) => remove !== value
+          );
+          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
+        }
+      });
+    }
+
+    setAttributeFilters(newFilter);
+
+    executeSearch({
+      variables: {
+        orderBy: sortBy,
+        first: 40,
+        filter: { category: categorySlug, attributes: attributeFilters },
+      },
+    });
+
+    setProducts(categoryProducts?.products.edges);
+  };
 
   return (
     <Box as="main" minH="100vh" marginTop="0">
@@ -162,8 +268,9 @@ const Category = () => {
         alignItems="flex-start"
         justifyContent="center"
         margin="auto"
+        textTransform="capitalize"
       >
-        <chakra.h1 {...h1Styles}>{category}</chakra.h1>
+        <chakra.h1 {...h1Styles}>{slug}</chakra.h1>
         <chakra.p {...paragraphStyles}>
           {data?.categoryBrowse.description}
         </chakra.p>
@@ -181,12 +288,11 @@ const Category = () => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {levelOne?.map(({ name, level, urlKey }, index) => {
+                {levelOne?.map(({ name, level, slug: url }) => {
                   let active = false;
                   if (
-                    typeof category === 'string' &&
-                    name.toLowerCase() ===
-                      category?.replace('-', ' ').toLowerCase()
+                    typeof slug === 'string' &&
+                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
                   ) {
                     active = true;
                   }
@@ -194,9 +300,9 @@ const Category = () => {
                   return (
                     level === 1 && (
                       <BrowseNavbar
-                        key={index}
+                        key={url}
                         name={name}
-                        urlKey={urlKey}
+                        slug={url}
                         active={active}
                         nextLevel={[]}
                       />
@@ -215,13 +321,12 @@ const Category = () => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {levelTwo?.map(({ name, level, urlKey }, index) => {
+                {levelTwo?.map(({ name, level, slug: url }) => {
                   let children = [];
                   let active = false;
                   if (
-                    typeof category === 'string' &&
-                    name.toLowerCase() ===
-                      category?.replace('-', ' ').toLowerCase()
+                    typeof slug === 'string' &&
+                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
                   ) {
                     children = levelThree;
                     active = true;
@@ -230,9 +335,9 @@ const Category = () => {
                   return (
                     level === 2 && (
                       <BrowseNavbar
-                        key={index}
+                        key={url}
                         name={name}
-                        urlKey={urlKey}
+                        slug={url}
                         active={active}
                         nextLevel={children}
                       />
@@ -241,75 +346,38 @@ const Category = () => {
                 })}
               </Box>
 
-              {filters &&
-                filters.map(({ name, values, displayType }) => {
-                  if (displayType == 'COLUMN') {
+              <Box>
+                {data?.rootCategory?.productAttributes.map(
+                  ({ name, slug, choices }) => {
                     return (
-                      <Box key={name} mb="8">
-                        <chakra.h2>{name}</chakra.h2>
-                        <Box display="flex" flexWrap="wrap">
-                          {values.map((value) => {
+                      <Box key={slug}>
+                        <Heading {...h2Styles} textTransform="uppercase">
+                          {name}
+                        </Heading>
+                        <chakra.ul display="flex" flexWrap="wrap">
+                          {choices.map(({ name }) => {
                             return (
-                              <Box key={value} w="100%" mb="0">
+                              <chakra.li key={name} w="100%" mb="0">
                                 <Checkbox
-                                  onChange={async (e) =>
-                                    handleFilterOption(e, name, value)
-                                  }
-                                  textTransform="none"
+                                  m="0px 0px 8px"
                                   fontWeight="400"
-                                  m="0 0 8px"
-                                >
-                                  {value}
-                                </Checkbox>
-                              </Box>
-                            );
-                          })}
-                        </Box>
-                      </Box>
-                    );
-                  } else {
-                    return (
-                      <Box key={name} mb="8">
-                        <chakra.h2>{name}</chakra.h2>
-                        <Box
-                          display="grid"
-                          gridTemplateColumns="repeat(auto-fill, minmax(32px, 1fr))"
-                          gridRowGap="1"
-                          gridColumnGap={'2.5'}
-                        >
-                          {values.map((name) => {
-                            return (
-                              <Box
-                                key={name}
-                                m="auto auto 10px"
-                                h="32px"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                border="1px solid #A1A5A4"
-                                bg="white"
-                                color="neutral.700"
-                              >
-                                <chakra.span
-                                  display="block"
-                                  fontSize="12px"
-                                  w="38px"
-                                  letterSpacing="0"
-                                  m="0"
-                                  fontWeight="700"
-                                  textAlign="center"
-                                  cursor="pointer"
+                                  colorScheme="blackAlpha"
+                                  value={name}
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, slug)
+                                  }
                                 >
                                   {name}
-                                </chakra.span>
-                              </Box>
+                                </Checkbox>
+                              </chakra.li>
                             );
                           })}
-                        </Box>
+                        </chakra.ul>
                       </Box>
                     );
                   }
-                })}
+                )}
+              </Box>
             </Box>
           </Container>
           {/* End of Left Nav Menu */}
@@ -351,6 +419,20 @@ const Category = () => {
                     </Breadcrumb>
                   </Box>
                 </Box>
+
+                <Box>
+                  <Select
+                    onChange={(e) => handleChange(e)}
+                    value={sortBy.field}
+                  >
+                    <option value="featured">Sort By: Featured</option>
+                    <option value="salesEver">Sort By: Total Sold</option>
+                    <option value="releaseDate">Sort By: Release Date</option>
+                    <option value="lastSale">Sort By: Last Sale</option>
+                    <option value="lowestAsk">Sort By: Lowest Ask</option>
+                    <option value="highestBid">Sort By: Highest Bid</option>
+                  </Select>
+                </Box>
               </Box>
             </Box>
 
@@ -368,94 +450,129 @@ const Category = () => {
                 flexWrap="wrap"
                 w="100%"
               >
-                {data.categoryProducts?.map(
-                  ({ name, imageUrl, price, urlKey }, index) => {
-                    return (
-                      <Box w="25%" padding="0 8px 16px" key={index}>
-                        <Box
-                          borderRadius="3px"
-                          minW="141px"
-                          h="auto"
-                          pos="relative"
-                          mr="0"
-                        >
-                          <Link href={`/product/${urlKey}`}>
+                {products?.map(({ node }, index) => {
+                  return (
+                    <Box w="25%" padding="0 8px 16px" key={index}>
+                      <Box
+                        border="solid #E2E8F0"
+                        borderWidth="thin"
+                        borderRadius="3px"
+                        minW="141px"
+                        h="auto"
+                        pos="relative"
+                        mr="0"
+                        _hover={{
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Link href={`/product/${node.slug}`}>
+                          <Box
+                            display="flex"
+                            flexDir="column"
+                            borderColor="neutral.200"
+                          >
+                            <Box margin={{ base: '2', lg: '4' }}>
+                              <Box
+                                display="flex"
+                                justifyContent="center"
+                                w="140px"
+                                h="75px"
+                                maxW="100%"
+                                m="0px auto"
+                              >
+                                <Image
+                                  layout="fixed"
+                                  width={145}
+                                  height={75}
+                                  src={node.media.thumbUrl}
+                                  alt={node.name}
+                                  priority={true}
+                                />
+                              </Box>
+                            </Box>
                             <Box
                               display="flex"
                               flexDir="column"
-                              border="1"
-                              borderColor="neutral.200"
+                              h="100%"
+                              padding="2"
+                              textAlign="left"
+                              pos="relative"
                             >
-                              <Box margin={{ base: '2', lg: '4' }}>
-                                <Box
-                                  display="flex"
-                                  justifyContent="center"
-                                  w="140px"
-                                  h="75px"
-                                  maxW="100%"
-                                  m="0px auto"
-                                >
-                                  <Image
-                                    layout="fixed"
-                                    width={140}
-                                    height={75}
-                                    src={imageUrl}
-                                    alt={name}
-                                  />
-                                </Box>
-                              </Box>
+                              <Text
+                                overflow="hidden"
+                                fontWeight="md"
+                                fontSize={{ base: 'xs', md: 'sm' }}
+                                h={{ base: '34px', md: '40px' }}
+                              >
+                                {node.name}
+                              </Text>
                               <Box
                                 display="flex"
                                 flexDir="column"
+                                justifyContent="space-between"
                                 h="100%"
-                                padding="2"
-                                textAlign="left"
-                                pos="relative"
                               >
-                                <Text
-                                  overflow="hidden"
-                                  fontWeight="md"
-                                  fontSize={{ base: 'xs', md: 'sm' }}
-                                  h={{ base: '34px', md: '40px' }}
-                                >
-                                  {name}
-                                </Text>
-                                <Box
-                                  display="flex"
-                                  flexDir="column"
-                                  justifyContent="space-between"
-                                  h="100%"
-                                >
-                                  <Box>
-                                    <Text
-                                      lineHeight="md"
-                                      fontSize="xs"
-                                      fontWeight="medium"
-                                      mt="1"
-                                    >
-                                      Lowest Ask
-                                    </Text>
-                                    <Text
-                                      fontWeight="bold"
-                                      lineHeight="1.3"
-                                      mt="1"
-                                    >
-                                      {price}
-                                    </Text>
-                                  </Box>
+                                <Box>
+                                  <Text
+                                    lineHeight="md"
+                                    fontSize="xs"
+                                    fontWeight="medium"
+                                    mt="1"
+                                  >
+                                    {sortBy.field === 'highestBid'
+                                      ? 'Highest Bid'
+                                      : 'Lowest Ask'}
+                                  </Text>
+                                  <Text
+                                    fontWeight="bold"
+                                    lineHeight="1.3"
+                                    mt="1"
+                                  >
+                                    {sortBy.field === 'highestBid'
+                                      ? `${node.market.highestBid}`
+                                      : `${node.market.lowestAsk}`}
+                                  </Text>
                                 </Box>
+                                {sortBy.field !== 'featured' && (
+                                  <Box display="flex" mt="1">
+                                    {sortBy.field === 'salesEver' && (
+                                      <chakra.span {...spanStyles}>
+                                        {node.market.salesEver} sold
+                                      </chakra.span>
+                                    )}
+                                    {sortBy.field === 'releaseDate' && (
+                                      <chakra.span {...spanStyles}>
+                                        Released{' '}
+                                        {moment(
+                                          node.productDetails.releaseDate
+                                        ).format('MM/DD/YYYY')}
+                                      </chakra.span>
+                                    )}
+                                    {sortBy.field === 'lastSale' && (
+                                      <chakra.span {...spanStyles}>
+                                        Last Sale: ${node.market.lastSale}
+                                      </chakra.span>
+                                    )}
+                                  </Box>
+                                )}
                               </Box>
                             </Box>
-                          </Link>
-                        </Box>
+                          </Box>
+                        </Link>
                       </Box>
-                    );
-                  }
-                )}
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           </Container>
         </Grid>
+        <ScrollToTop
+          smooth
+          width="auto"
+          viewBox="0 0 32 32"
+          svgPath="M17.504 26.025l.001-14.287 6.366 6.367L26 15.979 15.997 5.975 6 15.971 8.129 18.1l6.366-6.368v14.291z"
+        />
       </Container>
     </Box>
   );

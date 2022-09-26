@@ -57,7 +57,7 @@ const ProductRowHeader: React.FC = () => {
         </Popover>
       </chakra.h2>
 
-      <Link href="sneakers">
+      <Link href="/">
         <Button
           padding="0.375rem !important"
           fontStyle="normal"

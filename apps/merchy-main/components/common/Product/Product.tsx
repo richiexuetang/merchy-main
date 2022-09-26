@@ -33,25 +33,19 @@ const GetProduct = gql`
     product(productUrl: $productUrl) {
       primaryTitle
       secondaryTitle
-      imageUrl
       condition
-      price
       description
-      traits {
-        name
-        value
-        visible
-      }
       variants {
         name
-        price
-        imageUrl
-        urlKey
+        slug
       }
       breadCrumbs {
         level
         name
         url
+      }
+      media {
+        imageUrl
       }
     }
   }
@@ -62,10 +56,10 @@ const Product = () => {
 
   const router = useRouter();
 
-  const { product } = router.query;
+  const { slug } = router.query;
 
   const { data, loading, error } = useQuery(GetProduct, {
-    variables: { productUrl: product },
+    variables: { productUrl: slug },
   });
 
   if (loading) {
@@ -239,8 +233,8 @@ const Product = () => {
                       layout="fixed"
                       width={512}
                       height={384}
-                      src={data?.product.imageUrl}
-                      alt={data?.product.imageUrl}
+                      src={data?.product.media.imageUrl}
+                      alt={data?.product.media.imageUrl}
                     />
                   </Box>
                 </Box>
@@ -399,12 +393,12 @@ const Product = () => {
               overflow="auto"
             >
               {data?.product.variants?.map(
-                ({ name, price, imageUrl, urlKey }, index) => {
+                ({ name, price, imageUrl, slug }, index) => {
                   const product = {
                     name: name,
                     price: price,
                     imageUrl: imageUrl,
-                    urlKey: urlKey,
+                    slug: slug,
                   };
                   return (
                     <li data-component="product-card" key={index}>

@@ -4,8 +4,8 @@ import { Product } from '../../components';
 
 const Products = gql`
   query {
-    products {
-      urlKey
+    productPages {
+      slug
     }
   }
 `;
@@ -14,13 +14,13 @@ const BrowseCategories = gql`
   query allBrowseCategoriesQuery($level: Int) {
     levelCategories(level: $level) {
       name
-      urlKey
+      slug
       children {
         name
-        urlKey
+        slug
         children {
           name
-          urlKey
+          slug
         }
       }
     }
@@ -45,8 +45,8 @@ export async function getStaticProps() {
 
   const product = [];
 
-  allProducts?.data.products.map(({ urlKey }) => {
-    product.push({ product: urlKey });
+  allProducts?.data.productPages.map(({ slug: url }) => {
+    product.push({ product: url });
   });
 
   return {
@@ -65,14 +65,14 @@ export async function getStaticPaths() {
     query: Products,
   });
 
-  const product = [];
+  const slug = [];
 
-  allProducts?.data.products.map(({ urlKey }) => {
-    product.push({ params: { product: urlKey } });
+  allProducts?.data.productPages.map(({ slug: url }) => {
+    slug.push({ params: { slug: url } });
   });
 
   return {
-    paths: product,
+    paths: slug,
     fallback: false,
   };
 }
