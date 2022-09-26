@@ -76,8 +76,20 @@ model Product {
   listingType     String         @default("Standard")
   condition       String      @default("New")
   media           ImageGallery?
+  productDetails  ProductDetails?
 
   @@unique([id, slug])
+}
+
+model ProductDetails {
+  id            String @id @default(uuid())
+  releaseDate   DateTime?
+  colorWay      String?
+  style         String?
+  description   String?
+  retailPrice   Int? 
+  product       Product? @relation(fields: [productId], references: [id])
+  productId     String  @unique
 }
 
 model Market {
@@ -159,6 +171,7 @@ model AttributeValue {
   plainText     String?
   selectedAttribute SelectedAttribute[]
   attribute     Attribute[]
+  date          DateTime?
 }
 
 enum AttributeInputTypeEnum {

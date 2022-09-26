@@ -82,6 +82,7 @@ export const AttributeValue = objectType({
     t.string('slug');
     t.field('value', { type: AttributeInputTypeEnum });
     t.string('plainText');
+    t.field('date', { type: 'DateTime' });
   },
 });
 

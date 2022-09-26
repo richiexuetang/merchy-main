@@ -1,7 +1,6 @@
 import { SelectedAttribute } from './Attribute';
 import {
   extendType,
-  intArg,
   nonNull,
   inputObjectType,
   objectType,
@@ -19,6 +18,16 @@ export const ImageGallery = objectType({
     t.string('imageUrl');
     t.string('smallImageUrl');
     t.string('thumbUrl');
+  },
+});
+
+export const ProductDetails = objectType({
+  name: 'ProductDetails',
+  definition(t) {
+    t.string('id');
+    t.string('style');
+    t.field('releaseDate', { type: 'DateTime' });
+    t.string('retailPrice');
   },
 });
 
@@ -103,6 +112,19 @@ export const Product = objectType({
         return market.salesEver;
       },
     });
+    t.field('productDetails', {
+      type: ProductDetails,
+      async resolve(_parent, _args, ctx) {
+        const details = await ctx.prisma.product
+          .findUnique({
+            where: {
+              id: _parent.id,
+            },
+          })
+          .productDetails();
+        return details;
+      },
+    });
     t.field('media', {
       type: 'ImageGallery',
       async resolve(_parent, _args, ctx) {
@@ -114,21 +136,6 @@ export const Product = objectType({
         return media;
       },
     });
-  },
-});
-
-export const Sort = enumType({
-  name: 'Sort',
-  members: ['asc', 'desc'],
-});
-
-export const ProductOrderByInputType = inputObjectType({
-  name: 'ProductOrderByInputType',
-  definition(t) {
-    t.field('createdAt', { type: Sort });
-    t.field('price', { type: Sort });
-    t.field('updatedAt', { type: Sort });
-    t.field('salesEver', { type: Sort });
   },
 });
 
@@ -156,7 +163,16 @@ export const OrderDirection = enumType({
 
 export const ProductOrderField = enumType({
   name: 'ProductOrderField',
-  members: ['price', 'salesEver', 'createdAt', 'featured'],
+  members: [
+    'price',
+    'salesEver',
+    'createdAt',
+    'featured',
+    'releaseDate',
+    'lastSale',
+    'lowestAsk',
+    'highestBid',
+  ],
 });
 
 export const ProductOrder = inputObjectType({
@@ -202,16 +218,48 @@ export const ProductsQuery = extendType({
         if (isNaN(offset)) throw new Error('cursor is invalid');
 
         let orderBy = {};
-
+        let items = [];
         if (['salesEver'].includes(args.orderBy?.field)) {
           orderBy = {
             market: {
               salesEver: args.orderBy.direction,
             },
           };
+        } else if (args.orderBy?.field === 'releaseDate') {
+          orderBy = {
+            productDetails: {
+              releaseDate: args.orderBy.direction,
+            },
+          };
+        } else if (args.orderBy?.field === 'lastSale') {
+          orderBy = {
+            market: {
+              lastSale: args.orderBy.direction,
+            },
+          };
+        } else if (args.orderBy?.field === 'lowestAsk') {
+          orderBy = {
+            market: {
+              lowestAsk: 'asc',
+            },
+          };
+        } else if (args.orderBy?.field === 'highestBid') {
+          orderBy = {
+            market: {
+              highestBid: args.orderBy.direction,
+            },
+          };
         }
 
-        let items = await ctx.prisma.product.findMany({ orderBy: orderBy });
+        items = await ctx.prisma.product.findMany({ orderBy: orderBy });
+
+        let currentOrder = 1;
+        const orderMap = new Map<string, number>();
+
+        items.map((item) => {
+          orderMap.set(item.id, currentOrder);
+          currentOrder++;
+        });
 
         if (args.filter) {
           const { category, search, attributes } = args.filter;
@@ -260,6 +308,7 @@ export const ProductsQuery = extendType({
                 },
                 orderBy: orderBy,
               });
+
               items = [...items, ...products];
             }
           }
@@ -295,40 +344,15 @@ export const ProductsQuery = extendType({
           // }
         }
 
+        items.sort((a, b) => {
+          return orderMap.get(a.id) - orderMap.get(b.id);
+        });
+
         return connectionFromArraySlice(
           items,
           { first, after },
           { sliceStart: offset, arrayLength: items.length }
         );
-      },
-    });
-  },
-});
-
-export const ProductCollectionQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('productCollection', {
-      type: Product,
-      args: {
-        productCategory: nonNull(stringArg()),
-        skip: intArg(),
-        take: intArg(),
-        orderBy: ProductOrderByInputType,
-      },
-      resolve(_parent, args, ctx) {
-        const filter = args.filters;
-
-        const collections = ctx.prisma.product.findMany({
-          where: {
-            productCategory: args.productCategory,
-          },
-          skip: args.skip,
-          take: args.take,
-          orderBy: args.orderBy,
-        });
-
-        return collections;
       },
     });
   },
@@ -343,35 +367,6 @@ export const ProductPages = extendType({
         const pages = await ctx.prisma.product.findMany({});
 
         return pages;
-      },
-    });
-  },
-});
-
-export const ProductFilterQuery = extendType({
-  type: 'Query',
-  definition(t) {
-    t.list.field('filterProduct', {
-      type: Product,
-      args: {
-        filters: ProductFilterByInputType,
-        skip: intArg(),
-        take: intArg(),
-        orderBy: ProductOrderByInputType,
-      },
-      async resolve(_parent, args, ctx) {
-        const filter = args.filters;
-
-        const orderBy = args.orderBy;
-
-        const products = await ctx.prisma.product.findMany({
-          where: filter,
-          skip: args.skip,
-          take: args.take,
-          orderBy: orderBy,
-        });
-
-        return products;
       },
     });
   },

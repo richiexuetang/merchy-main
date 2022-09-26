@@ -8,17 +8,17 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Checkbox,
   Select,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Image from 'next/image';
-import { BrowseNavbar, SelectDropdown } from '../../ui';
+import { BrowseNavbar } from '../../ui';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
+import moment from 'moment';
 
 const h1Styles = {
   marginBottom: 1,
@@ -47,6 +47,30 @@ const h2Styles = {
   color: 'black',
 };
 
+const spanStyles = {
+  display: 'inline-flex',
+  verticalAlign: 'top',
+  alignItems: 'center',
+  maxW: '100%',
+  fontWeight: 'normal',
+  lineHeight: '1.2',
+  outline: 'transparent solid 2px',
+  outlineOffset: '2px',
+  mb: '1',
+  mr: '1',
+  mt: '1',
+  minW: '1.5rem',
+  minH: '1.5rem',
+  fontSize: 'xs',
+  borderRadius: '0',
+  paddingInline: '1',
+  bg: 'beige.100',
+  color: 'neutral.black',
+  h: '22px',
+  fontFamily: 'suisseIntlMedium',
+  py: '2px',
+};
+
 const BrowseCategoryInfo = gql`
   query ($categoryUrlKey: String!) {
     categoryProducts(categoryUrlKey: $categoryUrlKey) {
@@ -71,7 +95,7 @@ const BrowseCategoryInfo = gql`
   }
 `;
 
-const OrderProduct = gql`
+const CategoryProducts = gql`
   query ($orderBy: ProductOrder, $first: Int!, $filter: ProductFilterInput) {
     products(orderBy: $orderBy, first: $first, filter: $filter) {
       edges {
@@ -81,9 +105,15 @@ const OrderProduct = gql`
           market {
             salesEver
             price
+            lastSale
+            lowestAsk
+            highestBid
           }
           media {
             thumbUrl
+          }
+          productDetails {
+            releaseDate
           }
         }
       }
@@ -95,7 +125,8 @@ const Category = () => {
   const router = useRouter();
   const { slug } = router.query;
 
-  const [executeSearch, { data: orderedProducts }] = useLazyQuery(OrderProduct);
+  const [executeSearch, { data: orderedProducts }] =
+    useLazyQuery(CategoryProducts);
 
   const [products, setProducts] = useState(null);
 
@@ -142,7 +173,7 @@ const Category = () => {
     (category) => category.level === 3
   );
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     setSortBy({ direction: 'desc', field: e.target.value });
 
     executeSearch({
@@ -294,6 +325,9 @@ const Category = () => {
                     <option value="featured">Sort By: Featured</option>
                     <option value="salesEver">Sort By: Total Sold</option>
                     <option value="releaseDate">Sort By: Release Date</option>
+                    <option value="lastSale">Sort By: Last Sale</option>
+                    <option value="lowestAsk">Sort By: Lowest Ask</option>
+                    <option value="highestBid">Sort By: Highest Bid</option>
                   </Select>
                 </Box>
               </Box>
@@ -349,6 +383,7 @@ const Category = () => {
                                   height={75}
                                   src={node.media.thumbUrl}
                                   alt={node.name}
+                                  priority={true}
                                 />
                               </Box>
                             </Box>
@@ -381,16 +416,42 @@ const Category = () => {
                                     fontWeight="medium"
                                     mt="1"
                                   >
-                                    Lowest Ask
+                                    {sortBy.field === 'highestBid'
+                                      ? 'Highest Bid'
+                                      : 'Lowest Ask'}
                                   </Text>
                                   <Text
                                     fontWeight="bold"
                                     lineHeight="1.3"
                                     mt="1"
                                   >
-                                    ${node.market.price}
+                                    {sortBy.field === 'highestBid'
+                                      ? `${node.market.highestBid}`
+                                      : `${node.market.lowestAsk}`}
                                   </Text>
                                 </Box>
+                                {sortBy.field !== 'featured' && (
+                                  <Box display="flex" mt="1">
+                                    {sortBy.field === 'salesEver' && (
+                                      <chakra.span {...spanStyles}>
+                                        {node.market.salesEver} sold
+                                      </chakra.span>
+                                    )}
+                                    {sortBy.field === 'releaseDate' && (
+                                      <chakra.span {...spanStyles}>
+                                        Released{' '}
+                                        {moment(
+                                          node.productDetails.releaseDate
+                                        ).format('MM/DD/YYYY')}
+                                      </chakra.span>
+                                    )}
+                                    {sortBy.field === 'lastSale' && (
+                                      <chakra.span {...spanStyles}>
+                                        Last Sale: ${node.market.lastSale}
+                                      </chakra.span>
+                                    )}
+                                  </Box>
+                                )}
                               </Box>
                             </Box>
                           </Box>

@@ -27,6 +27,7 @@ enum AttributeInputTypeEnum {
 }
 
 type AttributeValue {
+  date: DateTime
   id: ID
   name: String
   plainText: String
@@ -77,8 +78,10 @@ type LevelCategories {
 }
 
 type Market {
+  highestBid: Int
   id: ID
   lastSale: Int
+  lowestAsk: Int
   price: Int
   salesEver: Int
 }
@@ -120,6 +123,7 @@ type Product {
   primaryCategory: String
   primaryTitle: String
   productCategory: String
+  productDetails: ProductDetails
   salesEver: Int
   secondaryTitle: String
   slug: String
@@ -137,6 +141,13 @@ type ProductConnection {
   https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
   """
   pageInfo: PageInfo!
+}
+
+type ProductDetails {
+  id: String
+  releaseDate: DateTime
+  retailPrice: String
+  style: String
 }
 
 type ProductEdge {
@@ -164,17 +175,14 @@ input ProductOrder {
   field: ProductOrderField
 }
 
-input ProductOrderByInputType {
-  createdAt: Sort
-  price: Sort
-  salesEver: Sort
-  updatedAt: Sort
-}
-
 enum ProductOrderField {
   createdAt
   featured
+  highestBid
+  lastSale
+  lowestAsk
   price
+  releaseDate
   salesEver
 }
 
@@ -182,10 +190,8 @@ type Query {
   categoryBrowse(categoryUrl: String!): Category
   categoryProducts(categoryUrlKey: String, skip: Int, take: Int): [Product]
   childrenCategory(id: String): [Category]
-  filterProduct(filters: ProductFilterByInputType, orderBy: ProductOrderByInputType, skip: Int, take: Int): [Product]
   levelCategories(level: Int): [Category]
   product(productUrl: String!): Product
-  productCollection(orderBy: ProductOrderByInputType, productCategory: String!, skip: Int, take: Int): [Product]
   productPages: [Product]
   products(
     """Returns the elements in the list that come after the specified cursor"""
@@ -216,11 +222,6 @@ type SelectedAttribute {
   attribute: Attribute
   attributeValues: [AttributeValue]
   id: ID
-}
-
-enum Sort {
-  asc
-  desc
 }
 
 type User {

@@ -7,5 +7,7 @@ export const Market = objectType({
     t.int('salesEver');
     t.int('lastSale');
     t.int('price');
+    t.int('lowestAsk');
+    t.int('highestBid');
   },
 });
