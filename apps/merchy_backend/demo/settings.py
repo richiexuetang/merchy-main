@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'core',
 
     # third party libraries
-    "django_nextjs",
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -33,7 +32,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.apple',
     'allauth.socialaccount.providers.twitter',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,12 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

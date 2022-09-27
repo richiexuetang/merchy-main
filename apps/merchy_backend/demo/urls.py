@@ -2,16 +2,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from core.views import home, SignupView
+from core.views import home, SignupView, HomeView
+from rest_framework.authtoken import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', home, name='home'),
+    path('json/', HomeView.as_view(), name='home'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('accounts/', include('django.contrib.auth.urls')),
-    # path("", include("django_nextjs.urls")),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token),
+    path('', home, name='home'),
 ]
 
 if settings.DEBUG:

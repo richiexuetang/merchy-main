@@ -1,15 +1,24 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from .forms import CustomUserCreationForm
-from django_nextjs.render import render_nextjs_page_sync
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
-# def index(request):
-#     return render_nextjs_page_sync(request)
-
-
+@login_required
 def home(request):
     return render(request, 'index.html')
+
+
+class HomeView(APIView):
+    permissions_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        return Response({
+          "email": request.user.email,
+        })
 
 
 class SignupView(CreateView):
