@@ -15,8 +15,6 @@ Django = "==3.0.7"
 django-environ = "*"
 boto3 = "*"
 django-storages = "*"
-django-allauth = "*"
-django-crispy-forms = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.9"
