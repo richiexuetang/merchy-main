@@ -5,9 +5,6 @@ import {
   Container,
   Grid,
   Text,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   Select,
   Heading,
   Checkbox,
@@ -21,6 +18,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
 import moment from 'moment';
+import { BreadCrumbs } from '../../ui';
 
 const h1Styles = {
   marginBottom: 1,
@@ -397,26 +395,9 @@ const Category = () => {
               >
                 <Box>
                   <Box paddingBottom="2">
-                    <Breadcrumb>
-                      {data?.categoryBrowse.breadCrumbs.map(
-                        ({ name, url }, index) => {
-                          return (
-                            <BreadcrumbItem key={index}>
-                              <BreadcrumbLink
-                                href={url}
-                                fontSize="sm"
-                                color="neurtral.500"
-                                outlineOffset="2px"
-                                outline="2px solid transparent"
-                                cursor="pointer"
-                              >
-                                {name}
-                              </BreadcrumbLink>
-                            </BreadcrumbItem>
-                          );
-                        }
-                      )}
-                    </Breadcrumb>
+                    {data?.categoryBrowse.breadCrumbs && (
+                      <BreadCrumbs links={data?.categoryBrowse.breadCrumbs} />
+                    )}
                   </Box>
                 </Box>
 

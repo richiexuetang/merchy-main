@@ -22,4 +22,10 @@ export {
   Favorite,
   Add,
 } from './icons';
-export { Text, BrowseNavbar, SelectDropdown, CustomCheckbox } from './ui';
+export {
+  Text,
+  BrowseNavbar,
+  SelectDropdown,
+  CustomCheckbox,
+  BreadCrumbs,
+} from './ui';

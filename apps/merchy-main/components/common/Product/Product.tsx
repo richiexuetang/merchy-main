@@ -16,17 +16,14 @@ import {
   StatLabel,
   StatNumber,
   Grid,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   IconButton,
-  Collapse,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { ProductCard } from '../../product';
 import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
+import { BreadCrumbs } from '../../ui';
 
 const GetProduct = gql`
   query ($productUrl: String!) {
@@ -82,24 +79,9 @@ const Product = () => {
               alignItems="center"
             >
               <chakra.div data-component="BreadCrumbs">
-                <Breadcrumb>
-                  {data?.product.breadCrumbs.map(({ name, url }, index) => {
-                    return (
-                      <BreadcrumbItem key={index}>
-                        <BreadcrumbLink
-                          href={url}
-                          fontSize="sm"
-                          color="neurtral.500"
-                          outlineOffset="2px"
-                          outline="2px solid transparent"
-                          cursor="pointer"
-                        >
-                          {name}
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    );
-                  })}
-                </Breadcrumb>
+                {data?.product.breadCrumbs && (
+                  <BreadCrumbs links={data.product.breadCrumbs} />
+                )}
               </chakra.div>
               <Box
                 data-component="utility-wrapper"
