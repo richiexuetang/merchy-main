@@ -37,6 +37,8 @@ typed-ast = "==1.5.4"
 urllib3 = "==1.25.9"
 wrapt = "==1.11.2"
 dj-rest-auth = "==1.0.0"
+install = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 
