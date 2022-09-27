@@ -11,12 +11,11 @@ import {
   Stack,
   FormControl,
   FormLabel,
-  InputRightElement,
+  Checkbox,
   InputGroup,
+  InputRightElement,
   IconButton,
 } from '@chakra-ui/react';
-import { Link as ChakraLink } from '@chakra-ui/react';
-import Link from 'next/link';
 import {
   Twitter,
   Facebook,
@@ -25,22 +24,13 @@ import {
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
+import { getLayout } from '../../components';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getProviders, signIn, getCsrfToken } from 'next-auth/react';
 
-export async function getServerSideProps(context) {
-  const csrfToken = await getCsrfToken(context);
-  const providers = await getProviders();
-
-  return {
-    props: { csrfToken, providers },
-  };
-}
-
-const SignIn = ({ csrfToken, providers }) => {
+const SignUp = () => {
   const router = useRouter();
-
   const [passwordVisible, setPasswordVisible] = useState(false);
   const handleVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -62,7 +52,7 @@ const SignIn = ({ csrfToken, providers }) => {
           maxW="400px"
           border="solid 1px #e0e0e0"
           borderRadius="4.5px"
-          h="605px"
+          h="735px"
         >
           <HStack
             data-component="toggle-buttons"
@@ -71,35 +61,28 @@ const SignIn = ({ csrfToken, providers }) => {
             margin="6px 16px 0px 16px"
           >
             <Button
-              variant="accessToggle"
-              flex="1"
-              // onClick={() => router.push('/signup')}
-            >
-              Sign Up
-            </Button>
-            <Button
               borderBottom="2px solid #010101"
               variant="accessToggle"
               flex="1"
             >
-              Log In
+              Sign Up
             </Button>
+            <Link
+              as={router.pathname.includes('auth') ? `login` : `auth/login`}
+              href={router.pathname.includes('auth') ? '[slug]' : 'auth/[slug]'}
+            >
+              <Button variant="accessToggle" flex="1">
+                Log In
+              </Button>
+            </Link>
           </HStack>
 
           <Box data-component="tab-container" padding="16px">
             <VStack>
-              <Button
-                leftIcon={<Google />}
-                onClick={() => signIn('google')}
-                variant="continue"
-              >
+              <Button leftIcon={<Google />} variant="continue">
                 Continue With Google
               </Button>
-              <Button
-                leftIcon={<Facebook />}
-                onClick={() => signIn('facebook')}
-                variant="continue"
-              >
+              <Button leftIcon={<Facebook />} variant="continue">
                 Continue With Facebook
               </Button>
               <Button leftIcon={<Apple />} variant="continue">
@@ -131,6 +114,18 @@ const SignIn = ({ csrfToken, providers }) => {
               </Stack>
 
               <Stack w="full">
+                {/* First Name Form Field */}
+                <FormControl variant="floating">
+                  <Input placeholder=" " autoComplete="off" />
+                  <FormLabel>First Name</FormLabel>
+                </FormControl>
+
+                {/* Last Name Form Field */}
+                <FormControl variant="floating">
+                  <Input placeholder=" " autoComplete="off" />
+                  <FormLabel>Last Name</FormLabel>
+                </FormControl>
+
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
                   <Input placeholder=" " autoComplete="off" />
@@ -168,32 +163,26 @@ const SignIn = ({ csrfToken, providers }) => {
                   </InputGroup>
                 </FormControl>
 
-                <Flex justifyContent="flex-end">
-                  <Text
-                    variant="authentication"
-                    fontSize="12px"
-                    marginBottom="24px"
-                  >
-                    <ChakraLink as={Link} href="/">
-                      Forgot Password?
-                    </ChakraLink>
+                <Flex justifyContent="flex-start">
+                  <Text variant="authentication" fontSize="12px">
+                    At least 8 characters, 1 uppercase letter, 1 number & 1
+                    symbol
                   </Text>
                 </Flex>
               </Stack>
 
-              <VStack w="full">
-                <Button variant="authentication">Log In</Button>
-                <Flex margin="8px 0 12px 0">
-                  <Text
-                    variant="authentication"
-                    fontSize="12px"
-                    marginBottom="24px"
-                  >
-                    By logging in, you agree to the Terms of Service and Privacy
-                    Policy
-                  </Text>
-                </Flex>
-              </VStack>
+              <Checkbox>
+                <Text
+                  variant="authentication"
+                  fontSize="12px"
+                  marginBottom="12px"
+                >
+                  By signing up, you agree to the Terms of Service and Privacy
+                  Policy
+                </Text>
+              </Checkbox>
+
+              <Button variant="authentication">Sign Up</Button>
             </VStack>
           </Box>
         </Container>
@@ -202,4 +191,6 @@ const SignIn = ({ csrfToken, providers }) => {
   );
 };
 
-export default SignIn;
+SignUp.getLayout = getLayout;
+
+export default SignUp;

@@ -56,9 +56,9 @@ export async function getStaticProps() {
 
   allCategory?.data.levelCategories.map(({ slug: url, children }) => {
     category.push({ slug: url });
-    children?.map(({ slug, children }) => {
+    children?.map(({ slug: url, children }) => {
       category.push({ slug: url });
-      children?.map(({ slug }) => {
+      children?.map(({ slug: url }) => {
         category.push({ slug: url });
       });
     });

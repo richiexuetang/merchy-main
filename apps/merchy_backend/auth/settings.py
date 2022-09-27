@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
-ROOT_URLCONF = 'demo.urls'
+ROOT_URLCONF = 'auth.urls'
 
 TEMPLATES = [
     {
@@ -144,12 +144,12 @@ if DEBUG is False:
 
     STATIC_LOCATION = 'static'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-    STATICFILES_STORAGE = 'demo.storage_backends.StaticStorage'
+    STATICFILES_STORAGE = 'auth.storage_backends.StaticStorage'
 
     # s3 public media settings
 
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'demo.storage_backends.PublicMediaStorage'
+    DEFAULT_FILE_STORAGE = 'auth.storage_backends.PublicMediaStorage'
 
     STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)

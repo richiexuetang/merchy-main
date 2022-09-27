@@ -1,5 +1,4 @@
 import { Logo } from '../../icons';
-import { useRouter } from 'next/router';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
 import { chakra, Flex, Icon, Link, Button } from '@chakra-ui/react';
@@ -8,7 +7,6 @@ import { useRef, useState, useEffect } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
 import { BrowseCategory } from '../../../types';
-import { useUser } from '@auth0/nextjs-auth0';
 
 const navListStyle = {
   pos: 'relative',
@@ -22,10 +20,6 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
-  const { user, isLoading } = useUser();
-
-  const router = useRouter();
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>();
@@ -56,10 +50,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const handleMouseLeave = () => {
     setIsOpen(false);
   };
-
-  if (isLoading) {
-    return <div>loading</div>;
-  }
 
   return (
     <NavbarRoot>
@@ -153,23 +143,15 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
             <chakra.li {...navListStyle}>
               {/* <MessageCenterIcon /> */}
             </chakra.li>
-            {!user && (
-              <chakra.li {...navListStyle}>
-                <Button
-                  onClick={(e) => {
-                    router.push('/api/auth/login');
-                    e.preventDefault();
-                  }}
-                  variant="login"
-                >
-                  Login
-                </Button>
-              </chakra.li>
-            )}
             <chakra.li {...navListStyle}>
-              <Button onClick={() => router.push('/signup')} variant="signup">
-                SignUp
-              </Button>
+              <NextLink href="/auth/[slug]" as="/auth/login">
+                <Button variant="login">Login</Button>
+              </NextLink>
+            </chakra.li>
+            <chakra.li {...navListStyle}>
+              <NextLink href="/auth/[slug]" as="/auth/signup">
+                <Button variant="signup">SignUp</Button>
+              </NextLink>
             </chakra.li>
           </chakra.ul>
         </Flex>
