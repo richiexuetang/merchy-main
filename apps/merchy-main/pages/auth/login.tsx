@@ -28,13 +28,43 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { getLayout } from '../../components';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../store/auth/auth.slice';
 
 const LogIn = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const handleVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+
+  const handleLogIn = async () => {
+    console.log(inputEmail, inputPassword);
+
+    axios
+      .post('http://127.0.0.1:8000/dj-rest-auth/login/', {
+        email: inputEmail,
+        password: inputPassword,
+      })
+      .then((res) => {
+        const token = res.data.key;
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // localStorage.setItem('token', token);
+        // localStorage.setItem('expirationDate', expirationDate);
+        dispatch(setToken(token));
+        router.push('/');
+        // dispatch(checkAuthTimeout(3600));
+      })
+      .catch((err) => {
+        // dispatch(authFail(err));
+        console.log(err);
+      });
   };
 
   return (
@@ -117,7 +147,12 @@ const LogIn = () => {
               <Stack w="full">
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
-                  <Input placeholder=" " autoComplete="off" />
+                  <Input
+                    placeholder=""
+                    autoComplete="off"
+                    value={inputEmail}
+                    onChange={(e) => setInputEmail(e.target.value)}
+                  />
                   <FormLabel>Email Address</FormLabel>
                 </FormControl>
 
@@ -129,6 +164,8 @@ const LogIn = () => {
                       placeholder=" "
                       autoComplete="off"
                       pr={8}
+                      value={inputPassword}
+                      onChange={(e) => setInputPassword(e.target.value)}
                     />
                     <InputRightElement>
                       <IconButton
@@ -166,7 +203,9 @@ const LogIn = () => {
               </Stack>
 
               <VStack w="full">
-                <Button variant="authentication">Log In</Button>
+                <Button variant="authentication" onClick={handleLogIn}>
+                  Log In
+                </Button>
                 <Flex margin="8px 0 12px 0">
                   <Text
                     variant="authentication"
