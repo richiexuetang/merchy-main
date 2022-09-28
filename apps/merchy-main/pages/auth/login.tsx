@@ -143,7 +143,7 @@ const LogIn = () => {
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
                   <Input
-                    placeholder=""
+                    placeholder=" "
                     autoComplete="off"
                     value={inputEmail}
                     onChange={(e) => setInputEmail(e.target.value)}

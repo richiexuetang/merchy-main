@@ -11,14 +11,14 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import Image from 'next/image';
-import { BrowseNavbar } from '../../ui';
+import { BrowseNavbar, BreadCrumbs } from '../../ui';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
 import moment from 'moment';
-import { BreadCrumbs } from '../../ui';
+import { CategoryProducts } from '../../../utils/gql';
 
 const h1Styles = {
   marginBottom: 1,
@@ -71,79 +71,19 @@ const spanStyles = {
   py: '2px',
 };
 
-const BrowseCategoryInfo = gql`
-  query ($categoryUrlKey: String!) {
-    categoryBrowse(categoryUrl: $categoryUrlKey) {
-      description
-      breadCrumbs {
-        name
-        level
-        url
-      }
-    }
-
-    verticalBrowseCategory(category: $categoryUrlKey) {
-      name
-      level
-      slug
-    }
-
-    rootCategory(category: $categoryUrlKey) {
-      productAttributes {
-        name
-        slug
-        filterableInStoreFront
-        choices {
-          name
-          slug
-          value
-          date
-        }
-      }
-    }
-  }
-`;
-
-const CategoryProducts = gql`
-  query ($orderBy: ProductOrder, $first: Int!, $filter: ProductFilterInput) {
-    products(orderBy: $orderBy, first: $first, filter: $filter) {
-      edges {
-        node {
-          name
-          title
-          slug
-          market {
-            salesEver
-            price
-            lastSale
-            lowestAsk
-            highestBid
-          }
-          media {
-            thumbUrl
-          }
-          productDetails {
-            releaseDate
-          }
-        }
-      }
-    }
-  }
-`;
-
 interface AttributeFilterType {
   id: string;
-  selectedValues: any[];
+  selectedValues: (string | number)[];
 }
 
-const Category = () => {
+const Category = ({ categoryInfo, initialProducts }) => {
   const router = useRouter();
   const { slug } = router.query;
 
   const [executeSearch, { data: categoryProducts }] =
     useLazyQuery(CategoryProducts);
 
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState(initialProducts.products);
   const [attributeFilters, setAttributeFilters] = useState<
     AttributeFilterType[]
   >([]);
@@ -154,10 +94,6 @@ const Category = () => {
   });
 
   const [categorySlug, setCategorySlug] = useState(slug);
-
-  const { data, loading, error } = useQuery(BrowseCategoryInfo, {
-    variables: { categoryUrlKey: slug },
-  });
 
   useEffect(() => {
     executeSearch({
@@ -182,20 +118,13 @@ const Category = () => {
     setAttributeFilters([]);
   }, [slug]);
 
-  if (loading) {
-    return <div>loading</div>;
-  }
-  if (error) {
-    return <div>ops</div>;
-  }
-
-  const levelOne = data?.verticalBrowseCategory.filter(
+  const levelOne = categoryInfo.verticalBrowseCategory.filter(
     (category) => category.level === 1
   );
-  const levelTwo = data?.verticalBrowseCategory.filter(
+  const levelTwo = categoryInfo.verticalBrowseCategory.filter(
     (category) => category.level === 2
   );
-  const levelThree = data?.verticalBrowseCategory.filter(
+  const levelThree = categoryInfo.verticalBrowseCategory.filter(
     (category) => category.level === 3
   );
 
@@ -270,7 +199,7 @@ const Category = () => {
       >
         <chakra.h1 {...h1Styles}>{slug}</chakra.h1>
         <chakra.p {...paragraphStyles}>
-          {data?.categoryBrowse.description}
+          {categoryInfo.categoryBrowse.description}
         </chakra.p>
       </VStack>
 
@@ -345,7 +274,7 @@ const Category = () => {
               </Box>
 
               <Box>
-                {data?.rootCategory?.productAttributes.map(
+                {categoryInfo.rootCategory?.productAttributes.map(
                   ({ name, slug, choices }) => {
                     return (
                       <Box key={slug}>
@@ -395,8 +324,10 @@ const Category = () => {
               >
                 <Box>
                   <Box paddingBottom="2">
-                    {data?.categoryBrowse.breadCrumbs && (
-                      <BreadCrumbs links={data?.categoryBrowse.breadCrumbs} />
+                    {categoryInfo.categoryBrowse.breadCrumbs && (
+                      <BreadCrumbs
+                        links={categoryInfo.categoryBrowse.breadCrumbs}
+                      />
                     )}
                   </Box>
                 </Box>

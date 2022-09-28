@@ -1,87 +1,32 @@
-import { gql } from '@apollo/client';
-import { getStandaloneApolloClient } from '../../utils/stand-alone-apollo-client';
 import Category from '../../components/common/Category';
+import {
+  getAllBrowseCategories,
+  getBrowseCategoryInfo,
+  getInitialCategoryProducts,
+} from '../../api';
 
-const CategoryUrls = gql`
-  query getCategoryUrlsQuery($level: Int) {
-    levelCategories(level: $level) {
-      slug
-      children {
-        slug
-        children {
-          slug
-        }
-      }
-    }
-  }
-`;
+export async function getStaticProps(context) {
+  const allCategories = await getAllBrowseCategories();
 
-const BrowseCategories = gql`
-  query allBrowseCategoriesQuery($level: Int) {
-    levelCategories(level: $level) {
-      name
-      slug
-      children {
-        name
-        slug
-        children {
-          name
-          slug
-        }
-      }
-    }
-  }
-`;
+  const categoryProducts = await getInitialCategoryProducts(
+    context.params.slug
+  );
 
-export async function getStaticProps() {
-  const client = await getStandaloneApolloClient();
-
-  const allCategory = await client.query({
-    query: CategoryUrls,
-    variables: {
-      level: 1,
-    },
-  });
-
-  const allCategories = await client.query({
-    query: BrowseCategories,
-    variables: {
-      level: 1,
-    },
-  });
-
+  const categoryInfo = await getBrowseCategoryInfo(context.params.slug);
   const browseCategories = allCategories.data.levelCategories;
-
-  const category = [];
-
-  allCategory?.data.levelCategories.map(({ slug: url, children }) => {
-    category.push({ slug: url });
-    children?.map(({ slug: url, children }) => {
-      category.push({ slug: url });
-      children?.map(({ slug: url }) => {
-        category.push({ slug: url });
-      });
-    });
-  });
 
   return {
     props: {
-      category,
       browseCategories,
+      initialProducts: categoryProducts,
+      categoryInfo: categoryInfo.data,
     },
     revalidate: 200,
   };
 }
 
 export async function getStaticPaths() {
-  const client = await getStandaloneApolloClient();
-
-  const allCategory = await client.query({
-    query: CategoryUrls,
-    variables: {
-      level: 1,
-    },
-  });
+  const allCategory = await getAllBrowseCategories();
   const category = [];
 
   allCategory?.data.levelCategories.map(({ slug: url, children }) => {

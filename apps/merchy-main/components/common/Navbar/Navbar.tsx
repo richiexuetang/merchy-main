@@ -2,7 +2,7 @@ import { Account, Bell, Logo } from '../../icons';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
 import { chakra, Flex, Icon, Link, Button, IconButton } from '@chakra-ui/react';
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
 import { BrowseCategory } from '../../../types';
@@ -26,56 +26,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
-
-  const ref = useRef<HTMLDivElement>();
-
-  useEffect(() => {
-    const handler = (event: React.SyntheticEvent) => {
-      if (
-        isOpen &&
-        ref.current &&
-        !ref.current?.contains(event.target as HTMLInputElement)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', () => handler);
-    document.addEventListener('touchstart', () => handler);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener('mousedown', () => handler);
-      document.removeEventListener('touchstart', () => handler);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const accountHandler = (event: React.SyntheticEvent) => {
-      if (
-        accountDropdown &&
-        ref.current &&
-        !ref.current?.contains(event.target as HTMLInputElement)
-      ) {
-        setAccountDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', () => accountHandler);
-    document.addEventListener('touchstart', () => accountHandler);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener('mousedown', () => accountHandler);
-      document.removeEventListener('touchstart', () => accountHandler);
-    };
-  }, [accountDropdown]);
-
-  const handleMouseEnter = () => {
-    setIsOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsOpen(false);
-  };
 
   return (
     <NavbarRoot>
@@ -111,8 +61,8 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
           >
             <chakra.li
               {...navListStyle}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
             >
               <NextLink href="/">
                 <Link
