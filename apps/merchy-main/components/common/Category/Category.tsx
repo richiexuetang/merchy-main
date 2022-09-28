@@ -274,7 +274,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
               </Box>
 
               <Box>
-                {categoryInfo.rootCategory.productAttributes.map(
+                {categoryInfo.rootCategory?.productAttributes.map(
                   ({ name, slug, choices }) => {
                     return (
                       <Box key={slug}>
