@@ -28,12 +28,36 @@ import { getLayout } from '../../components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import axios from 'axios';
+import { setToken } from '../../store/auth/auth.slice';
+import { useDispatch } from 'react-redux';
 
 const SignUp = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const handleVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
+  const handleSignUp = async () => {
+    console.log(inputEmail, inputPassword);
+
+    axios
+      .post('http://127.0.0.1:8000/dj-rest-auth/registration/', {
+        email: inputEmail,
+        password1: inputPassword,
+        password2: inputPassword,
+      })
+      .then((res) => {
+        const token = res.data.key;
+        dispatch(setToken(token));
+        router.push('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -128,7 +152,11 @@ const SignUp = () => {
 
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
-                  <Input placeholder=" " autoComplete="off" />
+                  <Input
+                    placeholder=" "
+                    autoComplete="off"
+                    onChange={(e) => setInputEmail(e.target.value)}
+                  />
                   <FormLabel>Email Address</FormLabel>
                 </FormControl>
 
@@ -140,6 +168,7 @@ const SignUp = () => {
                       placeholder=" "
                       autoComplete="off"
                       pr={8}
+                      onChange={(e) => setInputPassword(e.target.value)}
                     />
                     <InputRightElement>
                       <IconButton
@@ -152,7 +181,7 @@ const SignUp = () => {
                         _active={{
                           bg: 'none',
                         }}
-                        onClick={handleVisibility}
+                        onClick={() => setPasswordVisible(!passwordVisible)}
                         aria-label="show password icon"
                         icon={
                           passwordVisible ? <Visibility /> : <VisibilityOff />
@@ -182,7 +211,9 @@ const SignUp = () => {
                 </Text>
               </Checkbox>
 
-              <Button variant="authentication">Sign Up</Button>
+              <Button variant="authentication" onClick={handleSignUp}>
+                Sign Up
+              </Button>
             </VStack>
           </Box>
         </Container>

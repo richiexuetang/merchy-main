@@ -24,7 +24,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const userAuth = useSelector((state: RootState) => state.auth.token);
 
-  console.log('userAuth', userAuth);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
 
