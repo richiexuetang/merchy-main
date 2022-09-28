@@ -1,12 +1,14 @@
-import { Logo } from '../../icons';
+import { Account, Bell, Logo } from '../../icons';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
-import { chakra, Flex, Icon, Link, Button } from '@chakra-ui/react';
+import { chakra, Flex, Icon, Link, Button, IconButton } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
-// import { MessageCenterIcon } from '@merchy/ui-shared';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
 import { BrowseCategory } from '../../../types';
+import { useSelector } from 'react-redux';
+import { AccountMenu } from '../../ui';
+import { RootState } from '../../../store/store';
 
 const navListStyle = {
   pos: 'relative',
@@ -20,7 +22,11 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
+  const userAuth = useSelector((state: RootState) => state.auth.token);
+
+  console.log('userAuth', userAuth);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>();
 
@@ -34,6 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
         setIsOpen(false);
       }
     };
+
     document.addEventListener('mousedown', () => handler);
     document.addEventListener('touchstart', () => handler);
     return () => {
@@ -42,6 +49,26 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
       document.removeEventListener('touchstart', () => handler);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const accountHandler = (event: React.SyntheticEvent) => {
+      if (
+        accountDropdown &&
+        ref.current &&
+        !ref.current?.contains(event.target as HTMLInputElement)
+      ) {
+        setAccountDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', () => accountHandler);
+    document.addEventListener('touchstart', () => accountHandler);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener('mousedown', () => accountHandler);
+      document.removeEventListener('touchstart', () => accountHandler);
+    };
+  }, [accountDropdown]);
 
   const handleMouseEnter = () => {
     setIsOpen(true);
@@ -140,19 +167,48 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               </NextLink>
             </chakra.li>
 
-            <chakra.li {...navListStyle}>
-              {/* <MessageCenterIcon /> */}
-            </chakra.li>
-            <chakra.li {...navListStyle}>
-              <NextLink href="/auth/[slug]" as="/auth/login">
-                <Button variant="login">Login</Button>
-              </NextLink>
-            </chakra.li>
-            <chakra.li {...navListStyle}>
-              <NextLink href="/auth/[slug]" as="/auth/signup">
-                <Button variant="signup">SignUp</Button>
-              </NextLink>
-            </chakra.li>
+            {!userAuth ? (
+              <>
+                <chakra.li {...navListStyle}>
+                  <NextLink href="/auth/[slug]" as="/auth/login">
+                    <Button variant="login">Login</Button>
+                  </NextLink>
+                </chakra.li>
+                <chakra.li {...navListStyle}>
+                  <NextLink href="/auth/[slug]" as="/auth/signup">
+                    <Button variant="signup">SignUp</Button>
+                  </NextLink>
+                </chakra.li>
+              </>
+            ) : (
+              <>
+                <chakra.li {...navListStyle}>
+                  <IconButton
+                    bg="none"
+                    w="6"
+                    aria-label="Message Center Icon"
+                    h="42px"
+                    minW="auto"
+                    mr="0"
+                    fontSize="1.25rem"
+                    _hover={{
+                      bg: 'transparent',
+                    }}
+                    icon={<Bell />}
+                  />
+                </chakra.li>
+                <chakra.li
+                  {...navListStyle}
+                  onMouseEnter={() => setAccountDropdown(true)}
+                  onMouseLeave={() => setAccountDropdown(false)}
+                >
+                  <NextLink href="/profile">
+                    <Icon as={Account} w="6" h="6" verticalAlign="middle" />
+                  </NextLink>
+                  {accountDropdown && <AccountMenu />}
+                </chakra.li>
+              </>
+            )}
           </chakra.ul>
         </Flex>
       </chakra.div>

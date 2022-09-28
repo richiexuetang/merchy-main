@@ -21,6 +21,16 @@ export {
   Share,
   Favorite,
   Add,
+  Account,
+  Logout,
+  Settings,
+  Profile,
+  Security,
+  Following,
+  Portfolio,
+  Selling,
+  Buying,
+  Bell,
 } from './icons';
 export {
   Text,
@@ -28,4 +38,5 @@ export {
   SelectDropdown,
   CustomCheckbox,
   BreadCrumbs,
+  AccountMenu,
 } from './ui';
