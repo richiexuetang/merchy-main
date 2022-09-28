@@ -103,7 +103,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
         filter: { category: categorySlug, attributes: attributeFilters },
       },
     });
-    setProducts(categoryProducts.products.edges);
+    setProducts(categoryProducts?.products.edges);
   }, [
     products,
     sortBy,
@@ -362,7 +362,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
                 flexWrap="wrap"
                 w="100%"
               >
-                {products.map(({ node }, index) => {
+                {products?.map(({ node }, index) => {
                   return (
                     <Box w="25%" padding="0 8px 16px" key={index}>
                       <Box
