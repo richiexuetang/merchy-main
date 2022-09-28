@@ -3,3 +3,4 @@ export {
   CategoryProducts,
   BrowseCategoryInfo,
 } from './category';
+export { Products, GetProductInfo } from './product';
