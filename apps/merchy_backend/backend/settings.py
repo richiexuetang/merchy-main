@@ -19,9 +19,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
+    'mptt',
 
     # project apps
-    'core',
+    'backend.core',
+    'backend.product',
+    'backend.gql',
 
     # third party libraries
     'rest_framework',
@@ -52,15 +56,15 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-"http://localhost:4200",
+    "http://localhost:4200",
 ]
 
-ROOT_URLCONF = 'auth.urls'
+ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, '../templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,8 +91,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, 'db.sqlite3')
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        'NAME': "merchy",
+        'USER': 'postgres',
+        'PASSWORD': 'Wtfwtf159',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -120,6 +128,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ]
+}
+
+GRAPHENE = {
+    "SCHEMA": "backend.gql.api.schema"
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

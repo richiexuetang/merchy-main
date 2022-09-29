@@ -2,9 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from core.views import home, SignupView, HomeView
+from .core.views import home, SignupView, HomeView
 from rest_framework.authtoken import views
 from dj_rest_auth.registration.views import VerifyEmailView
+from graphene_django.views import GraphQLView
 
 
 urlpatterns = [
@@ -19,6 +20,7 @@ urlpatterns = [
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('dj-rest-auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
     path('dj-rest-auth/login/', include('dj_rest_auth.registration.urls')),
+    path('graphql/', GraphQLView.as_view(graphiql=True), name='api'),
 
     # Custom auth
     path('signup/', SignupView.as_view(), name='signup'),
