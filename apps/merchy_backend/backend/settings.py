@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'mptt',
-
+    'django_filters',
     # project apps
     'backend.core',
     'backend.product',

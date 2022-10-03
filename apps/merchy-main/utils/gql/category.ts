@@ -76,3 +76,23 @@ export const BrowseCategoryInfo = gql`
     }
   }
 `;
+
+export const GetCategories = gql`
+  query ($level: Int!) {
+    categories(level: 0) {
+      edges {
+        node {
+          name
+          level
+          children {
+            edges {
+              node {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

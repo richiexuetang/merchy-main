@@ -40,6 +40,7 @@ wrapt = "==1.11.2"
 psycopg2 = "*"
 django-mptt = "*"
 graphene-django = "*"
+django-filter = "*"
 
 [dev-packages]
 
