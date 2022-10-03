@@ -1,14 +1,14 @@
-import { Logo } from '../../icons';
-import { useRouter } from 'next/router';
+import { Account, Bell, Logo } from '../../icons';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
-import { chakra, Flex, Icon, Link, Button } from '@chakra-ui/react';
-import { useRef, useState, useEffect } from 'react';
-// import { MessageCenterIcon } from '@merchy/ui-shared';
+import { chakra, Flex, Icon, Link, Button, IconButton } from '@chakra-ui/react';
+import { useState } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
 import { BrowseCategory } from '../../../types';
-import { useUser } from '@auth0/nextjs-auth0';
+import { useSelector } from 'react-redux';
+import { AccountMenu } from '../../ui';
+import { RootState } from '../../../store/store';
 
 const navListStyle = {
   pos: 'relative',
@@ -22,44 +22,10 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
-  const { user, isLoading } = useUser();
-
-  const router = useRouter();
+  const userAuth = useSelector((state: RootState) => state.auth.token);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const ref = useRef<HTMLDivElement>();
-
-  useEffect(() => {
-    const handler = (event: React.SyntheticEvent) => {
-      if (
-        isOpen &&
-        ref.current &&
-        !ref.current?.contains(event.target as HTMLInputElement)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', () => handler);
-    document.addEventListener('touchstart', () => handler);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener('mousedown', () => handler);
-      document.removeEventListener('touchstart', () => handler);
-    };
-  }, [isOpen]);
-
-  const handleMouseEnter = () => {
-    setIsOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsOpen(false);
-  };
-
-  if (isLoading) {
-    return <div>loading</div>;
-  }
+  const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
 
   return (
     <NavbarRoot>
@@ -95,8 +61,8 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
           >
             <chakra.li
               {...navListStyle}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
             >
               <NextLink href="/">
                 <Link
@@ -150,27 +116,48 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               </NextLink>
             </chakra.li>
 
-            <chakra.li {...navListStyle}>
-              {/* <MessageCenterIcon /> */}
-            </chakra.li>
-            {!user && (
-              <chakra.li {...navListStyle}>
-                <Button
-                  onClick={(e) => {
-                    router.push('/api/auth/login');
-                    e.preventDefault();
-                  }}
-                  variant="login"
+            {!userAuth ? (
+              <>
+                <chakra.li {...navListStyle}>
+                  <NextLink href="/auth/[slug]" as="/auth/login">
+                    <Button variant="login">Login</Button>
+                  </NextLink>
+                </chakra.li>
+                <chakra.li {...navListStyle}>
+                  <NextLink href="/auth/[slug]" as="/auth/signup">
+                    <Button variant="signup">SignUp</Button>
+                  </NextLink>
+                </chakra.li>
+              </>
+            ) : (
+              <>
+                <chakra.li {...navListStyle}>
+                  <IconButton
+                    bg="none"
+                    w="6"
+                    aria-label="Message Center Icon"
+                    h="42px"
+                    minW="auto"
+                    mr="0"
+                    fontSize="1.25rem"
+                    _hover={{
+                      bg: 'transparent',
+                    }}
+                    icon={<Bell />}
+                  />
+                </chakra.li>
+                <chakra.li
+                  {...navListStyle}
+                  onMouseEnter={() => setAccountDropdown(true)}
+                  onMouseLeave={() => setAccountDropdown(false)}
                 >
-                  Login
-                </Button>
-              </chakra.li>
+                  <NextLink href="/profile">
+                    <Icon as={Account} w="6" h="6" verticalAlign="middle" />
+                  </NextLink>
+                  {accountDropdown && <AccountMenu />}
+                </chakra.li>
+              </>
             )}
-            <chakra.li {...navListStyle}>
-              <Button onClick={() => router.push('/signup')} variant="signup">
-                SignUp
-              </Button>
-            </chakra.li>
           </chakra.ul>
         </Flex>
       </chakra.div>

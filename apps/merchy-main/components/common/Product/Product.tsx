@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
-import { gql, useQuery } from '@apollo/client';
 import {
   Box,
   chakra,
@@ -16,58 +14,17 @@ import {
   StatLabel,
   StatNumber,
   Grid,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   IconButton,
-  Collapse,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { ProductCard } from '../../product';
 import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
+import { BreadCrumbs } from '../../ui';
 
-const GetProduct = gql`
-  query ($productUrl: String!) {
-    product(productUrl: $productUrl) {
-      primaryTitle
-      secondaryTitle
-      condition
-      description
-      variants {
-        name
-        slug
-      }
-      breadCrumbs {
-        level
-        name
-        url
-      }
-      media {
-        imageUrl
-      }
-    }
-  }
-`;
-
-const Product = () => {
+const Product = ({ productInfo }) => {
   const [show, setShow] = useState(false);
-
-  const router = useRouter();
-
-  const { slug } = router.query;
-
-  const { data, loading, error } = useQuery(GetProduct, {
-    variables: { productUrl: slug },
-  });
-
-  if (loading) {
-    return <div>loading...</div>;
-  }
-  if (error) {
-    return <div>ops</div>;
-  }
 
   const handleToggle = () => setShow(!show);
 
@@ -82,24 +39,9 @@ const Product = () => {
               alignItems="center"
             >
               <chakra.div data-component="BreadCrumbs">
-                <Breadcrumb>
-                  {data?.product.breadCrumbs.map(({ name, url }, index) => {
-                    return (
-                      <BreadcrumbItem key={index}>
-                        <BreadcrumbLink
-                          href={url}
-                          fontSize="sm"
-                          color="neurtral.500"
-                          outlineOffset="2px"
-                          outline="2px solid transparent"
-                          cursor="pointer"
-                        >
-                          {name}
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    );
-                  })}
-                </Breadcrumb>
+                {productInfo.product.breadCrumbs && (
+                  <BreadCrumbs links={productInfo.product.breadCrumbs} />
+                )}
               </chakra.div>
               <Box
                 data-component="utility-wrapper"
@@ -142,9 +84,9 @@ const Product = () => {
                   minH="0vw"
                   mb="2"
                 >
-                  {data?.product.primaryTitle}
+                  {productInfo?.product.primaryTitle}
                   <chakra.span display="block" color="neutral.500" mt="1">
-                    {data?.product.secondaryTitle}
+                    {productInfo?.product.secondaryTitle}
                   </chakra.span>
                 </chakra.h1>
               </Box>
@@ -197,7 +139,7 @@ const Product = () => {
                             whiteSpace="nowrap"
                             color="green.700"
                           >
-                            {data?.product.condition}
+                            {productInfo?.product.condition}
                           </chakra.span>
                         </chakra.span>
                       </Link>
@@ -233,8 +175,8 @@ const Product = () => {
                       layout="fixed"
                       width={512}
                       height={384}
-                      src={data?.product.media.imageUrl}
-                      alt={data?.product.media.imageUrl}
+                      src={productInfo?.product.media.imageUrl}
+                      alt={productInfo?.product.media.imageUrl}
                     />
                   </Box>
                 </Box>
@@ -361,7 +303,7 @@ const Product = () => {
                         minW="auto"
                       >
                         <Text>
-                          Sell for ${data?.product.price} or Ask for More
+                          Sell for ${productInfo?.product.price} or Ask for More
                         </Text>
                       </Button>
                     </NextLink>
@@ -373,7 +315,7 @@ const Product = () => {
         </Box>
       </chakra.section>
 
-      {data?.product.variants?.length > 0 && (
+      {productInfo?.product.variants?.length > 0 && (
         <chakra.section
           data-component="RelatedProductsContainer"
           mt="4"
@@ -392,7 +334,7 @@ const Product = () => {
               marginBottom={6}
               overflow="auto"
             >
-              {data?.product.variants?.map(
+              {productInfo?.product.variants?.map(
                 ({ name, price, imageUrl, slug }, index) => {
                   const product = {
                     name: name,
@@ -425,7 +367,7 @@ const Product = () => {
             w="100%"
           >
             <Box w={{ base: '100%', md: '40%' }}>
-              {data?.product.traits && (
+              {productInfo?.product.traits && (
                 <Box
                   data-component="ProductTraits"
                   display="flex"
@@ -434,8 +376,8 @@ const Product = () => {
                   justifyContent="space-between"
                   flexWrap={{ md: 'wrap' }}
                 >
-                  {data?.product.traits &&
-                    data?.product.traits.map(
+                  {productInfo?.product.traits &&
+                    productInfo?.product.traits.map(
                       ({ name, value, visible }, index) =>
                         visible !== 'false' && (
                           <Box
@@ -462,13 +404,13 @@ const Product = () => {
                 </Box>
               )}
             </Box>
-            {data?.product.description && (
+            {productInfo?.product.description && (
               <Box data-component="ProductDescription">
                 <chakra.h2>Product Description</chakra.h2>
                 <Text>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: data?.product.description,
+                      __html: productInfo?.product.description,
                     }}
                   />
                   {/* {data?.product.description} */}

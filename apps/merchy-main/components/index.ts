@@ -21,5 +21,22 @@ export {
   Share,
   Favorite,
   Add,
+  Account,
+  Logout,
+  Settings,
+  Profile,
+  Security,
+  Following,
+  Portfolio,
+  Selling,
+  Buying,
+  Bell,
 } from './icons';
-export { Text, BrowseNavbar, SelectDropdown, CustomCheckbox } from './ui';
+export {
+  Text,
+  BrowseNavbar,
+  SelectDropdown,
+  CustomCheckbox,
+  BreadCrumbs,
+  AccountMenu,
+} from './ui';

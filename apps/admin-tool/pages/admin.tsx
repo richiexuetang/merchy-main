@@ -1,101 +1,162 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { gql, useMutation } from '@apollo/client';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
 const BUCKET_URL = 'https://merchy-images.s3.us-west-1.amazonaws.com/';
 
 type FormValues = {
-    name: string;
-    title: string;
-    brand: string;
-    price: string;
-    description: string;
-    urlKey: string;
-    primaryTitle: string;
-    secondaryTitle: string;
-    model: string;
-    primaryCategory: string;
-    productCategory: string;
-    categoryId: String;
-    image: any;
-}
+  name: string;
+  title: string;
+  brand: string;
+  price: string;
+  description: string;
+  urlKey: string;
+  primaryTitle: string;
+  secondaryTitle: string;
+  model: string;
+  primaryCategory: string;
+  productCategory: string;
+  categoryId: String;
+  image: any;
+};
 
 const AddProductMutation = gql`
-  mutation ($name: String!, $title: String!, $imageUrl: String!, $brand: String!, $price: String!, $urlKey: String!, $primaryTitle: String!, $secondaryTitle: String, $model: String, $primaryCategory: String, $productCategory: String, $categoryId: String!) {
-  addProduct(name: $name, title: $title, imageUrl: $imageUrl, brand: $brand, price: $price, urlKey: $urlKey, primaryTitle: $primaryTitle, secondaryTitle: $secondaryTitle, model: $model, primaryCategory: $primaryCategory, productCategory: $productCategory, categoryId: $categoryId) {
-    id 
+  mutation (
+    $name: String!
+    $title: String!
+    $imageUrl: String!
+    $brand: String!
+    $price: String!
+    $urlKey: String!
+    $primaryTitle: String!
+    $secondaryTitle: String
+    $model: String
+    $primaryCategory: String
+    $productCategory: String
+    $categoryId: String!
+  ) {
+    addProduct(
+      name: $name
+      title: $title
+      imageUrl: $imageUrl
+      brand: $brand
+      price: $price
+      urlKey: $urlKey
+      primaryTitle: $primaryTitle
+      secondaryTitle: $secondaryTitle
+      model: $model
+      primaryCategory: $primaryCategory
+      productCategory: $productCategory
+      categoryId: $categoryId
+    ) {
+      id
+    }
   }
-}
-`
+`;
 
 const Admin = () => {
-  const [addProduct, { data, loading, error }] = useMutation(AddProductMutation, {
-    onCompleted: () => reset()
-  })
+  const [addProduct, { data, loading, error }] = useMutation(
+    AddProductMutation,
+    {
+      onCompleted: () => reset(),
+    }
+  );
 
   const [file, setFile] = useState<any>();
-  
+
   const selectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0]);
-  }
+  };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormValues>()
+  } = useForm<FormValues>();
 
   // Upload photo function
-  const uploadPhoto = async() => {
-    let { data } = await axios.post('api/upload-image', {
-        name: file.name,
-        type: file.type
+  const uploadPhoto = async () => {
+    const { data } = await axios.post('api/upload-image', {
+      name: file.name,
+      type: file.type,
     });
-  
+
     const url = data.url;
 
     toast.promise(
       axios.put(url, file, {
         headers: {
-        "Content-type": file.type
-      },
-    }),
+          'Content-type': file.type,
+        },
+      }),
       {
         loading: 'Uploading...',
         success: 'Image successfully uploaded!🎉',
         error: `Upload failed 😥 Please try again ${error}`,
-      },
+      }
     );
-  }
+  };
 
-  const onSubmit = async(data: any) => {
+  const onSubmit = async (data: any) => {
     await uploadPhoto();
     const imageUrl: string = BUCKET_URL + file.name;
     setFile(null);
-    
-    const { name, title, category, brand, price, description, urlKey, primaryTitle, secondaryTitle, model, primaryCategory, productCategory, categoryId } = data
-    
-    const variables = { name, title, category, imageUrl, brand, price, description, urlKey, primaryTitle, secondaryTitle, model, primaryCategory, productCategory, categoryId}
+
+    const {
+      name,
+      title,
+      category,
+      brand,
+      price,
+      description,
+      urlKey,
+      primaryTitle,
+      secondaryTitle,
+      model,
+      primaryCategory,
+      productCategory,
+      categoryId,
+    } = data;
+
+    const variables = {
+      name,
+      title,
+      category,
+      imageUrl,
+      brand,
+      price,
+      description,
+      urlKey,
+      primaryTitle,
+      secondaryTitle,
+      model,
+      primaryCategory,
+      productCategory,
+      categoryId,
+    };
 
     try {
       toast.promise(addProduct({ variables }), {
         loading: 'Creating new product..',
         success: 'Product successfully created!🎉',
         error: `Something went wrong 😥 Please try again -  ${error}`,
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto max-w-md py-12">
       <Toaster />
       <h1 className="text-3xl font-medium my-5">Create a new product</h1>
-      <form className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <label className="block">
           <span className="text-gray-700">Name</span>
           <input
@@ -217,7 +278,9 @@ const Admin = () => {
           />
         </label>
         <label className="block">
-          <span className="text-gray-700">Upload a .png or .jpg image (max 1MB).</span>
+          <span className="text-gray-700">
+            Upload a .png or .jpg image (max 1MB).
+          </span>
           <input
             {...register('image', { required: true })}
             onChange={(e) => selectFile(e)}
@@ -226,8 +289,6 @@ const Admin = () => {
             name="image"
           />
         </label>
-        
-        
 
         <button
           disabled={loading}
@@ -252,7 +313,7 @@ const Admin = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;

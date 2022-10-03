@@ -1,65 +1,12 @@
 import { getLayout, MenuBar, ProductRowHeader } from '../components';
 import type { NextPageWithLayout } from './_app';
-import { gql } from '@apollo/client';
-import { getStandaloneApolloClient } from '../utils';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { ProductCard } from '../components';
 import { Box, Grid, Container } from '@chakra-ui/react';
 import { Carousel } from '../components';
-
-// const ProductCollection = gql`
-//   query (
-//     $productCategory: String!
-//     $take: Int
-//     $orderBy: ProductOrderByInputType
-//   ) {
-//     productCollection(
-//       productCategory: $productCategory
-//       take: $take
-//       orderBy: $orderBy
-//     ) {
-//       name
-//       price
-//       slug
-//     }
-//   }
-// `;
-
-const BrowseCategories = gql`
-  query allBrowseCategoriesQuery($level: Int) {
-    levelCategories(level: $level) {
-      name
-      slug
-      children {
-        name
-        slug
-        children {
-          name
-          slug
-        }
-      }
-    }
-  }
-`;
+import { getAllBrowseCategories } from '../api';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const client = await getStandaloneApolloClient();
-
-  // const products = await client.query({
-  //   query: ProductCollection,
-  //   variables: {
-  //     productCategory: 'sneakers',
-  //     take: 6,
-  //     orderBy: { createdAt: 'desc' },
-  //   },
-  // });
-
-  const allCategories = await client.query({
-    query: BrowseCategories,
-    variables: {
-      level: 1,
-    },
-  });
+  const allCategories = await getAllBrowseCategories();
 
   const browseCategories = allCategories.data.levelCategories;
 
@@ -70,7 +17,6 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const Home: NextPageWithLayout = ({
-  products,
   browseCategories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   // const productCollection = products?.data.productCollection;

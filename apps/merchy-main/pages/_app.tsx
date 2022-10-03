@@ -2,10 +2,10 @@ import { AppProps } from 'next/app';
 import { Head } from '../components';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme, Fonts } from '../styles';
-// import { theme, Fonts } from '@merchy/ui-shared';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { NextPage } from 'next';
-import { UserProvider } from '@auth0/nextjs-auth0';
+import { Provider } from 'react-redux';
+import { store } from '../store/store';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -25,13 +25,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <UserProvider>
-        <Head />
+      <Head />
+      <Provider store={store}>
         <ChakraProvider theme={theme}>
           <Fonts />
           {getLayout(<Component {...pageProps} />, pageProps)}
         </ChakraProvider>
-      </UserProvider>
+      </Provider>
     </>
   );
 }

@@ -25,7 +25,7 @@ interface Props {
   };
 }
 
-const Layout: React.FC<Props> = ({ children, pageProps }) => {
+export const Layout: React.FC<Props> = ({ children, pageProps }) => {
   return (
     <ApolloProvider client={client}>
       <chakra.div minH="100vh">
@@ -48,5 +48,3 @@ const Layout: React.FC<Props> = ({ children, pageProps }) => {
 export const getLayout = (page, pageProps) => (
   <Layout pageProps={pageProps}>{page}</Layout>
 );
-
-export default Layout;

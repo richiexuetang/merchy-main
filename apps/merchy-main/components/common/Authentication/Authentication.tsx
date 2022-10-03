@@ -27,23 +27,42 @@ import {
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getProviders, signIn, getCsrfToken } from 'next-auth/react';
+import { getLayout } from '../Layout';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../../store/auth/auth.slice';
 
-export async function getServerSideProps(context) {
-  const csrfToken = await getCsrfToken(context);
-  const providers = await getProviders();
-
-  return {
-    props: { csrfToken, providers },
-  };
-}
-
-const SignIn = ({ csrfToken, providers }) => {
+const LogIn = () => {
   const router = useRouter();
 
+  const { slug } = router.query;
+
+  const dispatch = useDispatch();
+
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const handleVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+
+  const handleLogIn = async () => {
+    axios
+      .post('http://127.0.0.1:8000/dj-rest-auth/login/', {
+        email: inputEmail,
+        password: inputPassword,
+      })
+      .then((res) => {
+        const token = res.data.key;
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // localStorage.setItem('token', token);
+        // localStorage.setItem('expirationDate', expirationDate);
+        dispatch(setToken(token));
+        router.push('/');
+        // dispatch(checkAuthTimeout(3600));
+      })
+      .catch((err) => {
+        // dispatch(authFail(err));
+        console.log(err);
+      });
   };
 
   return (
@@ -70,13 +89,14 @@ const SignIn = ({ csrfToken, providers }) => {
             h="50px"
             margin="6px 16px 0px 16px"
           >
-            <Button
-              variant="accessToggle"
-              flex="1"
-              // onClick={() => router.push('/signup')}
+            <Link
+              as={router.pathname.includes('auth') ? `signup` : `auth/signup`}
+              href={router.pathname.includes('auth') ? '[slug]' : 'auth/[slug]'}
             >
-              Sign Up
-            </Button>
+              <Button variant="accessToggle" flex="1">
+                Sign Up
+              </Button>
+            </Link>
             <Button
               borderBottom="2px solid #010101"
               variant="accessToggle"
@@ -88,18 +108,10 @@ const SignIn = ({ csrfToken, providers }) => {
 
           <Box data-component="tab-container" padding="16px">
             <VStack>
-              <Button
-                leftIcon={<Google />}
-                onClick={() => signIn('google')}
-                variant="continue"
-              >
+              <Button leftIcon={<Google />} variant="continue">
                 Continue With Google
               </Button>
-              <Button
-                leftIcon={<Facebook />}
-                onClick={() => signIn('facebook')}
-                variant="continue"
-              >
+              <Button leftIcon={<Facebook />} variant="continue">
                 Continue With Facebook
               </Button>
               <Button leftIcon={<Apple />} variant="continue">
@@ -133,7 +145,12 @@ const SignIn = ({ csrfToken, providers }) => {
               <Stack w="full">
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
-                  <Input placeholder=" " autoComplete="off" />
+                  <Input
+                    placeholder=" "
+                    autoComplete="off"
+                    value={inputEmail}
+                    onChange={(e) => setInputEmail(e.target.value)}
+                  />
                   <FormLabel>Email Address</FormLabel>
                 </FormControl>
 
@@ -145,6 +162,8 @@ const SignIn = ({ csrfToken, providers }) => {
                       placeholder=" "
                       autoComplete="off"
                       pr={8}
+                      value={inputPassword}
+                      onChange={(e) => setInputPassword(e.target.value)}
                     />
                     <InputRightElement>
                       <IconButton
@@ -157,7 +176,7 @@ const SignIn = ({ csrfToken, providers }) => {
                         _active={{
                           bg: 'none',
                         }}
-                        onClick={handleVisibility}
+                        onClick={() => setPasswordVisible(!passwordVisible)}
                         aria-label="show password icon"
                         icon={
                           passwordVisible ? <Visibility /> : <VisibilityOff />
@@ -182,7 +201,9 @@ const SignIn = ({ csrfToken, providers }) => {
               </Stack>
 
               <VStack w="full">
-                <Button variant="authentication">Log In</Button>
+                <Button variant="authentication" onClick={handleLogIn}>
+                  Log In
+                </Button>
                 <Flex margin="8px 0 12px 0">
                   <Text
                     variant="authentication"
@@ -202,4 +223,6 @@ const SignIn = ({ csrfToken, providers }) => {
   );
 };
 
-export default SignIn;
+LogIn.getLayout = getLayout;
+
+export default LogIn;

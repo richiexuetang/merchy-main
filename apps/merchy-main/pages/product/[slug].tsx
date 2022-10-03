@@ -1,51 +1,18 @@
-import { gql } from '@apollo/client';
-import { getStandaloneApolloClient } from '../../utils';
 import { Product } from '../../components';
+import { getProducts, getAllBrowseCategories, getProductInfo } from '../../api';
 
-const Products = gql`
-  query {
-    productPages {
-      slug
-    }
-  }
-`;
+export async function getStaticProps(context) {
+  const { data: productUrls } = await getProducts();
 
-const BrowseCategories = gql`
-  query allBrowseCategoriesQuery($level: Int) {
-    levelCategories(level: $level) {
-      name
-      slug
-      children {
-        name
-        slug
-        children {
-          name
-          slug
-        }
-      }
-    }
-  }
-`;
+  const { data: allCategories } = await getAllBrowseCategories();
 
-export async function getStaticProps() {
-  const client = await getStandaloneApolloClient();
+  const { data: productInfo } = await getProductInfo(context.params.slug);
 
-  const allProducts = await client.query({
-    query: Products,
-  });
-
-  const allCategories = await client.query({
-    query: BrowseCategories,
-    variables: {
-      level: 1,
-    },
-  });
-
-  const browseCategories = allCategories.data.levelCategories;
+  const browseCategories = allCategories.levelCategories;
 
   const product = [];
 
-  allProducts?.data.productPages.map(({ slug: url }) => {
+  productUrls.productPages.map(({ slug: url }) => {
     product.push({ product: url });
   });
 
@@ -53,18 +20,14 @@ export async function getStaticProps() {
     props: {
       product,
       browseCategories,
+      productInfo,
     },
     revalidate: 200,
   };
 }
 
 export async function getStaticPaths() {
-  const client = await getStandaloneApolloClient();
-
-  const allProducts = await client.query({
-    query: Products,
-  });
-
+  const allProducts = await getProducts();
   const slug = [];
 
   allProducts?.data.productPages.map(({ slug: url }) => {
