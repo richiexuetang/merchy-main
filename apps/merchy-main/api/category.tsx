@@ -1,44 +1,52 @@
-import { getStandaloneApolloClient } from '../utils';
 import {
-  BrowseCategories,
-  CategoryProducts,
-  BrowseCategoryInfo,
+  GetBrowseCategories,
+  GetAllCategoryPaths,
+  GetCategoryProducts,
+  GetBrowseCategoryInfo,
+  GetProductFilter,
 } from '../utils/gql';
+import client from '../pages/api/graphql';
 
 export const getAllBrowseCategories = async () => {
-  const client = await getStandaloneApolloClient();
-
   return await client.query({
-    query: BrowseCategories,
+    query: GetBrowseCategories,
     variables: {
-      level: 1,
+      targetLevel: 0,
     },
   });
 };
 
-export const getInitialCategoryProducts = async (slug) => {
-  const client = await getStandaloneApolloClient();
-
+export const getAllCategoryPaths = async () => {
   return await client.query({
-    query: CategoryProducts,
+    query: GetAllCategoryPaths,
+  });
+};
+
+export const getCategoryProducts = async (slug) => {
+  return await client.query({
+    query: GetCategoryProducts,
     variables: {
-      orderBy: {
-        direction: 'desc',
-        field: 'featured',
-      },
+      categorySlug: slug,
       first: 40,
-      filter: { category: slug, attributes: [] },
+      orderBy: 'createdAt',
     },
   });
 };
 
 export const getBrowseCategoryInfo = async (slug) => {
-  const client = await getStandaloneApolloClient();
-
   return await client.query({
-    query: BrowseCategoryInfo,
+    query: GetBrowseCategoryInfo,
     variables: {
-      categoryUrlKey: slug,
+      browseCategory: slug,
+    },
+  });
+};
+
+export const getProductFilter = async (slug) => {
+  return await client.query({
+    query: GetProductFilter,
+    variables: {
+      categorySlug: slug,
     },
   });
 };

@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
 import moment from 'moment';
-import { CategoryProducts } from '../../../utils/gql';
+import { GetCategoryProducts } from '../../../utils/gql';
 
 const h1Styles = {
   marginBottom: 1,
@@ -71,27 +71,30 @@ const spanStyles = {
   py: '2px',
 };
 
-interface AttributeFilterType {
-  id: string;
-  selectedValues: (string | number)[];
-}
+const attributeFiltersInitialState = {
+  priceRange: '',
+  releaseYears: [],
+  sizes: [],
+  sizeTypes: [],
+};
 
-const Category = ({ categoryInfo, initialProducts }) => {
+const Category = ({
+  initialProducts,
+  verticalBrowseCategories,
+  filterAttributes,
+}) => {
   const router = useRouter();
   const { slug } = router.query;
 
   const [executeSearch, { data: categoryProducts }] =
-    useLazyQuery(CategoryProducts);
+    useLazyQuery(GetCategoryProducts);
 
-  const [products, setProducts] = useState(initialProducts.products);
-  const [attributeFilters, setAttributeFilters] = useState<
-    AttributeFilterType[]
-  >([]);
+  const [products, setProducts] = useState(initialProducts);
+  const [attributeFilters, setAttributeFilters] = useState(
+    attributeFiltersInitialState
+  );
 
-  const [sortBy, setSortBy] = useState({
-    direction: 'desc',
-    field: 'featured',
-  });
+  const [sortBy, setSortBy] = useState<string>('createdAt');
 
   const [categorySlug, setCategorySlug] = useState(slug);
 
@@ -100,10 +103,14 @@ const Category = ({ categoryInfo, initialProducts }) => {
       variables: {
         orderBy: sortBy,
         first: 40,
-        filter: { category: categorySlug, attributes: attributeFilters },
+        categorySlug: categorySlug,
+        priceRange: attributeFilters.priceRange,
+        releaseYears: attributeFilters.releaseYears,
+        sizes: attributeFilters.sizes,
+        sizeTypes: attributeFilters.sizeTypes,
       },
     });
-    setProducts(categoryProducts?.products.edges);
+    setProducts(categoryProducts?.allProducts.edges);
   }, [
     products,
     sortBy,
@@ -115,73 +122,72 @@ const Category = ({ categoryInfo, initialProducts }) => {
 
   useEffect(() => {
     setCategorySlug(slug);
-    setAttributeFilters([]);
+    setAttributeFilters(attributeFiltersInitialState);
   }, [slug]);
 
-  const levelOne = categoryInfo.verticalBrowseCategory.filter(
-    (category) => category.level === 1
-  );
-  const levelTwo = categoryInfo.verticalBrowseCategory.filter(
-    (category) => category.level === 2
-  );
-  const levelThree = categoryInfo.verticalBrowseCategory.filter(
-    (category) => category.level === 3
-  );
+  const [rootLevel, levelOne, levelTwo, levelThree] = [[], [], [], []];
+
+  verticalBrowseCategories.map(({ node }) => {
+    if (node.level === 0) {
+      rootLevel.push({ level: node.level, name: node.name, slug: node.slug });
+    } else if (node.level === 1) {
+      levelOne.push({ level: node.level, name: node.name, slug: node.slug });
+    } else if (node.level === 2) {
+      levelTwo.push({ level: node.level, name: node.name, slug: node.slug });
+    } else if (node.level === 3) {
+      levelThree.push({ level: node.level, name: node.name, slug: node.slug });
+    }
+  });
 
   const handleChange = (e) => {
-    setSortBy({ direction: 'desc', field: e.target.value });
+    setSortBy(e.target.value);
 
     executeSearch({
       variables: {
         orderBy: sortBy,
         first: 40,
-        filter: { category: categorySlug, attributes: attributeFilters },
+        categorySlug: categorySlug,
+        priceRange: attributeFilters.priceRange,
+        releaseYears: attributeFilters.releaseYears,
+        sizes: attributeFilters.sizes,
+        sizeTypes: attributeFilters.sizeTypes,
       },
     });
 
-    setProducts(categoryProducts.products.edges);
+    setProducts(categoryProducts.allProducts.edges);
   };
 
-  const handleCheckboxChange = (e, slug) => {
-    const value = e.target.value;
-    const newFilter = [...attributeFilters];
+  const handleCheckboxChange = (e, fieldValue) => {
+    let value = e.target.value;
 
-    if (e.target.checked) {
-      let exist = false;
-
-      attributeFilters.map((filter, index) => {
-        if (filter.id === slug) {
-          exist = true;
-          const indexValues = [...newFilter[index].selectedValues, value];
-          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
-        }
-      });
-
-      if (!exist) {
-        newFilter.push({ id: slug, selectedValues: [value] });
-      }
+    if (!e.target.checked) {
+      value = fieldValue === 'priceRange' ? '' : [];
     } else {
-      attributeFilters.map((attributeFilter, index) => {
-        if (attributeFilter.id === slug) {
-          const indexValues = attributeFilter.selectedValues.filter(
-            (remove) => remove !== value
-          );
-          newFilter[index] = { id: slug, selectedValues: [...indexValues] };
-        }
-      });
+      if (fieldValue === 'releaseYears') {
+        value = [parseInt(e.target.value)];
+      } else if (fieldValue !== 'priceRange') {
+        value = [e.target.value];
+      }
     }
 
-    setAttributeFilters(newFilter);
+    setAttributeFilters((prevState) => ({
+      ...prevState,
+      [fieldValue]: value,
+    }));
 
     executeSearch({
       variables: {
         orderBy: sortBy,
         first: 40,
-        filter: { category: categorySlug, attributes: attributeFilters },
+        categorySlug: categorySlug,
+        priceRange: attributeFilters.priceRange,
+        releaseYears: attributeFilters.releaseYears,
+        sizes: attributeFilters.sizes,
+        sizeTypes: attributeFilters.sizeTypes,
       },
     });
 
-    setProducts(categoryProducts.products.edges);
+    setProducts(categoryProducts?.allProducts.edges);
   };
 
   return (
@@ -199,7 +205,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
       >
         <chakra.h1 {...h1Styles}>{slug}</chakra.h1>
         <chakra.p {...paragraphStyles}>
-          {categoryInfo.categoryBrowse.description}
+          {/* {categoryInfo.categoryBrowse.description} */}
         </chakra.p>
       </VStack>
 
@@ -215,7 +221,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
-                {levelOne?.map(({ name, level, slug: url }) => {
+                {rootLevel.map(({ name, slug: url, level }) => {
                   let active = false;
                   if (
                     typeof slug === 'string' &&
@@ -225,7 +231,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
                   }
 
                   return (
-                    level === 1 && (
+                    level === 0 && (
                       <BrowseNavbar
                         key={url}
                         name={name}
@@ -248,19 +254,19 @@ const Category = ({ categoryInfo, initialProducts }) => {
               {/* End of Below Retail */}
 
               <Box marginBottom={8}>
-                {levelTwo?.map(({ name, level, slug: url }) => {
-                  let children = [];
+                {levelOne?.map(({ name, slug: url, level }) => {
                   let active = false;
+                  let children = [];
                   if (
                     typeof slug === 'string' &&
                     name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
                   ) {
-                    children = levelThree;
                     active = true;
+                    children = levelTwo;
                   }
 
                   return (
-                    level === 2 && (
+                    level === 1 && (
                       <BrowseNavbar
                         key={url}
                         name={name}
@@ -274,36 +280,34 @@ const Category = ({ categoryInfo, initialProducts }) => {
               </Box>
 
               <Box>
-                {categoryInfo.rootCategory?.productAttributes.map(
-                  ({ name, slug, choices }) => {
-                    return (
-                      <Box key={slug}>
-                        <Heading {...h2Styles} textTransform="uppercase">
-                          {name}
-                        </Heading>
-                        <chakra.ul display="flex" flexWrap="wrap">
-                          {choices.map(({ name }) => {
-                            return (
-                              <chakra.li key={name} w="100%" mb="0">
-                                <Checkbox
-                                  m="0px 0px 8px"
-                                  fontWeight="400"
-                                  colorScheme="blackAlpha"
-                                  value={name}
-                                  onChange={(e) =>
-                                    handleCheckboxChange(e, slug)
-                                  }
-                                >
-                                  {name}
-                                </Checkbox>
-                              </chakra.li>
-                            );
-                          })}
-                        </chakra.ul>
-                      </Box>
-                    );
-                  }
-                )}
+                {filterAttributes.map(({ node }) => {
+                  return (
+                    <Box key={node.fieldValue}>
+                      <Heading {...h2Styles} textTransform="uppercase">
+                        {node.displayName}
+                      </Heading>
+                      <chakra.ul display="flex" flexWrap="wrap">
+                        {node.productAttribute.edges.map(({ node: x }) => {
+                          return (
+                            <chakra.li key={x.value} w="100%" mb="0">
+                              <Checkbox
+                                m="0px 0px 8px"
+                                fontWeight="400"
+                                colorScheme="blackAlpha"
+                                value={x.value}
+                                onChange={(e) =>
+                                  handleCheckboxChange(e, node.fieldValue)
+                                }
+                              >
+                                {x.displayName}
+                              </Checkbox>
+                            </chakra.li>
+                          );
+                        })}
+                      </chakra.ul>
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           </Container>
@@ -324,25 +328,28 @@ const Category = ({ categoryInfo, initialProducts }) => {
               >
                 <Box>
                   <Box paddingBottom="2">
-                    {categoryInfo.categoryBrowse.breadCrumbs && (
+                    {/* {categoryInfo.categoryBrowse.breadCrumbs && (
                       <BreadCrumbs
                         links={categoryInfo.categoryBrowse.breadCrumbs}
                       />
-                    )}
+                    )} */}
                   </Box>
                 </Box>
 
                 <Box>
-                  <Select
-                    onChange={(e) => handleChange(e)}
-                    value={sortBy.field}
-                  >
-                    <option value="featured">Sort By: Featured</option>
-                    <option value="salesEver">Sort By: Total Sold</option>
-                    <option value="releaseDate">Sort By: Release Date</option>
-                    <option value="lastSale">Sort By: Last Sale</option>
-                    <option value="lowestAsk">Sort By: Lowest Ask</option>
-                    <option value="highestBid">Sort By: Highest Bid</option>
+                  <Select onChange={(e) => handleChange(e)} value={sortBy}>
+                    <option value="createdAt">Sort By: Featured</option>
+                    <option value="-market__salesEver">
+                      Sort By: Total Sold
+                    </option>
+                    {/* <option value="releaseDate">Sort By: Release Date</option> */}
+                    <option value="market__lastSale">Sort By: Last Sale</option>
+                    <option value="market__lowestAsk">
+                      Sort By: Lowest Ask
+                    </option>
+                    <option value="-market__highestBid">
+                      Sort By: Highest Bid
+                    </option>
                   </Select>
                 </Box>
               </Box>
@@ -431,7 +438,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
                                     fontWeight="medium"
                                     mt="1"
                                   >
-                                    {sortBy.field === 'highestBid'
+                                    {sortBy === 'market__highestBid'
                                       ? 'Highest Bid'
                                       : 'Lowest Ask'}
                                   </Text>
@@ -440,19 +447,19 @@ const Category = ({ categoryInfo, initialProducts }) => {
                                     lineHeight="1.3"
                                     mt="1"
                                   >
-                                    {sortBy.field === 'highestBid'
+                                    {sortBy === 'market__highestBid'
                                       ? `${node.market.highestBid}`
                                       : `${node.market.lowestAsk}`}
                                   </Text>
                                 </Box>
-                                {sortBy.field !== 'featured' && (
+                                {sortBy !== 'featured' && (
                                   <Box display="flex" mt="1">
-                                    {sortBy.field === 'salesEver' && (
+                                    {sortBy === 'market__salesEver' && (
                                       <chakra.span {...spanStyles}>
                                         {node.market.salesEver} sold
                                       </chakra.span>
                                     )}
-                                    {sortBy.field === 'releaseDate' && (
+                                    {sortBy === 'releaseDate' && (
                                       <chakra.span {...spanStyles}>
                                         Released{' '}
                                         {moment(
@@ -460,7 +467,7 @@ const Category = ({ categoryInfo, initialProducts }) => {
                                         ).format('MM/DD/YYYY')}
                                       </chakra.span>
                                     )}
-                                    {sortBy.field === 'lastSale' && (
+                                    {sortBy === 'market__lastSale' && (
                                       <chakra.span {...spanStyles}>
                                         Last Sale: ${node.market.lastSale}
                                       </chakra.span>

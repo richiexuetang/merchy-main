@@ -2,41 +2,44 @@ import Category from '../../components/common/Category';
 import {
   getAllBrowseCategories,
   getBrowseCategoryInfo,
-  getInitialCategoryProducts,
+  getAllCategoryPaths,
+  getCategoryProducts,
+  getProductFilter,
 } from '../../api';
 
 export async function getStaticProps(context) {
   const allCategories = await getAllBrowseCategories();
 
-  const categoryProducts = await getInitialCategoryProducts(
+  const categoryProducts = await getCategoryProducts(context.params.slug);
+
+  const verticalBrowseCategories = await getBrowseCategoryInfo(
     context.params.slug
   );
 
-  const categoryInfo = await getBrowseCategoryInfo(context.params.slug);
-  const browseCategories = allCategories.data.levelCategories;
+  const attributes = await getProductFilter(context.params.slug);
+
+  const browseCategories = allCategories.data.categories.edges;
 
   return {
     props: {
       browseCategories,
-      initialProducts: categoryProducts,
-      categoryInfo: categoryInfo.data,
+      initialProducts: categoryProducts.data.allProducts.edges,
+      verticalBrowseCategories:
+        verticalBrowseCategories.data.verticalBrowseCategories.edges,
+      filterAttributes:
+        attributes.data.productFilterAttributes.edges[0].node
+          .productattributeSet.edges,
     },
     revalidate: 200,
   };
 }
 
 export async function getStaticPaths() {
-  const allCategory = await getAllBrowseCategories();
+  const allCategory = await getAllCategoryPaths();
   const category = [];
 
-  allCategory?.data.levelCategories.map(({ slug: url, children }) => {
-    category.push({ params: { slug: url } });
-    children?.map(({ slug: url, children }) => {
-      category.push({ params: { slug: url } });
-      children?.map(({ slug: url }) => {
-        category.push({ params: { slug: url } });
-      });
-    });
+  allCategory?.data.categories.edges.map(({ node }) => {
+    category.push({ params: { slug: node.slug } });
   });
 
   return {

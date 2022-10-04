@@ -1,6 +1,8 @@
 export {
   getAllBrowseCategories,
-  getInitialCategoryProducts,
   getBrowseCategoryInfo,
+  getAllCategoryPaths,
+  getCategoryProducts,
+  getProductFilter,
 } from './category';
-export { getProducts, getProductInfo } from './product';
+export { getProductPaths, getProductInfo } from './product';

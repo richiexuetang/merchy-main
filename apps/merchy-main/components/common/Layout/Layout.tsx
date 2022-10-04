@@ -1,12 +1,8 @@
 import { Footer, Navbar } from '../..';
 import { chakra } from '@chakra-ui/react';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { BrowseCategory } from '../../../types';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:3333/api/graphql',
-  cache: new InMemoryCache(),
-});
+import client from '../../../pages/api/graphql';
 
 // const Loading = () => {
 //   <div>Loading...</div>;

@@ -1,9 +1,13 @@
 import { gql } from '@apollo/client';
 
-export const Products = gql`
+export const ProductPaths = gql`
   query {
-    productPages {
-      slug
+    products {
+      edges {
+        node {
+          slug
+        }
+      }
     }
   }
 `;

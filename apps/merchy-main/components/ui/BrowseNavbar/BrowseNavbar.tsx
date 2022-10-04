@@ -21,7 +21,7 @@ const BrowseNavbar = ({ name, slug, active, nextLevel }) => {
       </chakra.h2>
       {nextLevel &&
         nextLevel.length > 0 &&
-        nextLevel.map(({ name, slug }) => (
+        nextLevel.map(({ slug, name }) => (
           <Box key={slug} mb="0px" w="100%">
             <Link key={slug} href={`/category/${slug}`}>
               <a>

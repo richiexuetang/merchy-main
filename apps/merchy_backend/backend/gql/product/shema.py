@@ -1,26 +1,47 @@
-from django_filters import NumberFilter, FilterSet, OrderingFilter
+from django_filters import FilterSet, OrderingFilter, RangeFilter, Filter
 import graphene
 from django.db.models import Q
 from graphene_django import DjangoObjectType
-from ...product.models import (Product, Category, Market, ImageGallery)
+from ...product.models import (Product, Category, Market, ImageGallery, Trait, ProductAttribute, ProductAttributeValue,
+                               ProductType)
 from graphene_django.filter import DjangoFilterConnectionField
 
 
-class CategoryFilter(FilterSet):
-    class Meta:
-        model = Category
-        fields = '__all__'
-    order_by = OrderingFilter(
-        fields=['level']
-    )
-
-
-class CategoryNode(DjangoObjectType):
+class ProductTypeNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
 
     class Meta:
-        model = Category
+        model = ProductType
+        interfaces = (graphene.relay.Node,)
+
+
+class ProductTypeFilter(FilterSet):
+    class Meta:
+        model = ProductType
         fields = '__all__'
+
+
+class ProductAttributeValueNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = ProductAttributeValue
+        interfaces = (graphene.relay.Node,)
+
+
+class ProductAttributeNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = ProductAttribute
+        interfaces = (graphene.relay.Node,)
+
+
+class TraitNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = Trait
         interfaces = (graphene.relay.Node,)
 
 
@@ -40,7 +61,7 @@ class MediaNode(DjangoObjectType):
         interfaces = (graphene.relay.Node,)
 
 
-class ProductType(DjangoObjectType):
+class ProductObjectType(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
 
     class Meta:
@@ -49,22 +70,17 @@ class ProductType(DjangoObjectType):
 
 
 class ProductFilter(FilterSet):
-    min_price = NumberFilter(
-        method=lambda queryset, _, value: queryset.filter(price__gte=int(value)))
-    max_price = NumberFilter(
-        method=lambda queryset, _, value: queryset.filter(price__lte=int(value)))
+    price_range = RangeFilter(
+        method=lambda queryset, _, value: queryset.filter(price__range=value.split(',')))
 
     class Meta:
         model = Product
-        fields = ['price']
+        fields = ['price_range']
 
     order_by = OrderingFilter(
-      fields=['created_at', 'price', 'market__retail_price']
+      fields=['created_at', 'price', 'market__retail_price', 'market__sales_ever', 'market__lowest_ask',
+              'market__highest_bid', 'market__last_sale']
     )
-
-    @classmethod
-    def get_queryset(cls, queryset, info):
-        return queryset.filter(price__range=info.context.get('price'))
 
 
 class ProductNode(DjangoObjectType):
@@ -76,22 +92,81 @@ class ProductNode(DjangoObjectType):
         interfaces = (graphene.relay.Node,)
 
 
-class ProductQueries(graphene.ObjectType):
-    products = DjangoFilterConnectionField(ProductNode, search=graphene.String(), filterset_class=ProductFilter)
-    product_by_slug = graphene.Field(ProductType, product_slug=graphene.String(required=True))
-    categories = DjangoFilterConnectionField(CategoryNode, filterset_class=CategoryFilter)
-    category_products = DjangoFilterConnectionField(CategoryNode, category_slug=graphene.String(),
-                                                    filterset_class=CategoryFilter)
+class CategoryFilter(FilterSet):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    order_by = OrderingFilter(
+      fields=['level']
+    )
+
+
+class CategoryNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+        interfaces = (graphene.relay.Node,)
+
+    order_by = OrderingFilter(
+        fields=['position']
+    )
 
     @staticmethod
-    def resolve_products(self, info, search=None, *args, **kwargs):
-        products = Product.objects.all()
+    def resolve_products(self, instance, info):
+        return info.context.products
 
-        if kwargs.get('min_price') and kwargs.get('max_price'):
-            products = products.filter(price__gte=kwargs.get('min_price'), price__lte=kwargs.get('max_price'))
+
+class CategoryType(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class ProductQueries(graphene.ObjectType):
+    all_products = DjangoFilterConnectionField(ProductNode, search=graphene.String(), category_slug=graphene.String(),
+                                               release_years=graphene.List(graphene.Int),
+                                               size_types=graphene.List(graphene.String),
+                                               sizes=graphene.List(graphene.String),
+                                               filterset_class=ProductFilter)
+    product_by_slug = graphene.Field(ProductObjectType, product_slug=graphene.String(required=True))
+    categories = DjangoFilterConnectionField(CategoryNode, target_level=graphene.Int(), filterset_class=CategoryFilter)
+    all_categories = graphene.Field(CategoryType)
+    vertical_browse_categories = DjangoFilterConnectionField(CategoryNode, browse_category=graphene.String(),
+                                                             filterset_class=CategoryFilter)
+    product_filter_attributes = DjangoFilterConnectionField(ProductTypeNode,
+                                                            category_slug=graphene.String(required=True),
+                                                            filterset_class=ProductTypeFilter)
+
+    @staticmethod
+    def resolve_all_products(self, info, search=None, category_slug=None, release_years=None, size_types=None,
+                             sizes=None, **kwargs):
+        products = Product.objects.all()
+        qs = Category.objects.get(slug=category_slug).get_leafnodes(include_self=True)
+
+        category_ids = []
+        for leaf in qs:
+            category_ids.append(leaf.id)
+
+        if release_years and len(release_years):
+            products = products.filter(traits__release_year__in=release_years)
+        if kwargs.get('price_range'):
+            products = products.filter(market__price__range=kwargs.get('price_range').split(','))
+        if size_types and len(size_types):
+            products = products.filter(traits__size_type__contains=size_types)
+        if sizes and len(sizes):
+            products = products.filter(traits__sizes__contains=sizes)
         if search:
             products = Product.objects.filter(
                 Q(name__icontains=search)
+            )
+        if category_ids:
+            products = products.filter(
+                category__id__in=category_ids
             )
         return products
 
@@ -100,13 +175,25 @@ class ProductQueries(graphene.ObjectType):
         return Product.objects.get(slug=product_slug)
 
     @staticmethod
-    def resolve_categories(self, info, level=None):
+    def resolve_categories(self, info, target_level=None):
         categories = Category.objects.all()
-        if level is not None:
-            categories = categories.filter(level=level)
+        if target_level is not None:
+            categories = categories.filter(level=target_level)
         return categories
 
     @staticmethod
-    def resolve_category_products(self, info, category_slug=None):
-        category = Category.objects.get(slug=category_slug)
-        return category.get_leafnodes(include_self=True)
+    def resolve_vertical_browse_categories(self, info, browse_category=None):
+        node = Category.objects.get(slug=browse_category)
+
+        qs = node.get_children()
+        qs2 = node.get_siblings()
+        qs3 = node.get_ancestors(include_self=True)
+        root_categories = node.get_root().get_siblings(include_self=True)
+        root_children = node.get_root().get_children()
+        return qs.union(qs3, qs2, root_categories, root_children).order_by('level', 'position')
+
+    @staticmethod
+    def resolve_product_filter_attributes(self, info, category_slug=None):
+        root = Category.objects.get(slug=category_slug).get_root()
+        print('root', root, root.slug)
+        return ProductType.objects.filter(name=root.slug)
