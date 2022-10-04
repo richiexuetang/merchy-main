@@ -145,6 +145,11 @@ class ProductQueries(graphene.ObjectType):
     @staticmethod
     def resolve_all_products(self, info, search=None, category_slug=None, release_years=None, size_types=None,
                              sizes=None, **kwargs):
+        if search:
+            return Product.objects.filter(
+                Q(name__icontains=search)
+            )
+
         products = Product.objects.all()
         qs = Category.objects.get(slug=category_slug).get_leafnodes(include_self=True)
 
@@ -160,10 +165,6 @@ class ProductQueries(graphene.ObjectType):
             products = products.filter(traits__size_type__contains=size_types)
         if sizes and len(sizes):
             products = products.filter(traits__sizes__contains=sizes)
-        if search:
-            products = Product.objects.filter(
-                Q(name__icontains=search)
-            )
         if category_ids:
             products = products.filter(
                 category__id__in=category_ids

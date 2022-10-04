@@ -102,6 +102,9 @@ class Product(models.Model):
     media = models.ForeignKey(ImageGallery, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     traits = models.ForeignKey(Trait, related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
 
+    brand = models.CharField(max_length=255, null=True, blank=True)
+    primary_title = models.CharField(max_length=255, null=True, blank=True)
+    secondary_title = models.CharField(max_length=255, null=True, blank=True)
     objects = ProductQuerySet.as_manager()
 
     def __str__(self):

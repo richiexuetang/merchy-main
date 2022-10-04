@@ -11,26 +11,7 @@ import {
 import Link from 'next/link';
 import NextImage from 'next/image';
 import { useState } from 'react';
-
-const SearchProducts = gql`
-  query ($filter: ProductFilterInput, $first: Int, $orderBy: ProductOrder) {
-    products(filter: $filter, first: $first, orderBy: $orderBy) {
-      edges {
-        node {
-          title
-          brand
-          primaryTitle
-          secondaryTitle
-          slug
-          media {
-            label
-            imageUrl
-          }
-        }
-      }
-    }
-  }
-`;
+import { SearchProducts } from '../../../utils/gql';
 
 const NavInput = () => {
   const [searchFilter, setSearchFilter] = useState('');
@@ -41,9 +22,7 @@ const NavInput = () => {
 
     executeSearch({
       variables: {
-        filter: { search: searchFilter },
-        first: 2,
-        orderBy: { direction: 'asc', field: 'salesEver' },
+        search: searchFilter,
       },
     });
   };
@@ -110,9 +89,9 @@ const NavInput = () => {
             pos="absolute"
             top="90px"
           >
-            {data || data?.products.edges.length > 0 ? (
+            {data || data?.allProducts.edges.length > 0 ? (
               <chakra.ul>
-                {data.products.edges.map(({ node }) => {
+                {data.allProducts.edges.map(({ node }) => {
                   return (
                     <chakra.li
                       key={node.primaryTitle}
