@@ -46,7 +46,7 @@ class ProductType(models.Model):
 
 
 class ProductAttribute(models.Model):
-    product_type = models.ForeignKey(ProductType, on_delete=models.RESTRICT)
+    product_type = models.ManyToManyField(ProductType)
     name = models.CharField(max_length=255)
     field_value = models.CharField(max_length=255, null=True, blank=True)
     display_name = models.CharField(max_length=255, null=True, blank=True)
@@ -105,6 +105,8 @@ class Product(models.Model):
     brand = models.CharField(max_length=255, null=True, blank=True)
     primary_title = models.CharField(max_length=255, null=True, blank=True)
     secondary_title = models.CharField(max_length=255, null=True, blank=True)
+    condition = models.CharField(max_length=255, default="NEW")
+    description = models.TextField(blank=True, null=True)
     objects = ProductQuerySet.as_manager()
 
     def __str__(self):
@@ -114,7 +116,8 @@ class Product(models.Model):
 class ProductAttributeValue(models.Model):
     name = models.CharField(max_length=250)
     product = models.ManyToManyField(Product, related_name='attributes', null=True, blank=True)
-    attribute = models.ForeignKey(ProductAttribute, related_name='product_attribute', on_delete=models.CASCADE)
+    attribute = models.ForeignKey(ProductAttribute, related_name='product_attribute', on_delete=models.CASCADE,
+                                  null=True, blank=True)
     value = models.CharField(null=True, blank=True, max_length=255)
     type = models.CharField(null=True, blank=True, max_length=100)
     display_name = models.CharField(null=True, blank=True, max_length=255)

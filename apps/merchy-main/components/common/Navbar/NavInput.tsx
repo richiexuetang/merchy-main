@@ -1,4 +1,4 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
   InputGroup,

@@ -12,7 +12,9 @@ export async function getStaticProps(context) {
 
   const { data: productInfo } = await getProductInfo(context.params.slug);
 
-  // const browseCategories = browseCategories.data.edges;
+  console.log('productInfo', productInfo);
+
+  const browseCategories = allCategories.data.categories.edges;
 
   const product = [];
 
@@ -23,7 +25,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       product,
-      browseCategories: allCategories.data.categories.edges,
+      browseCategories,
       productInfo,
     },
     revalidate: 200,

@@ -7,11 +7,11 @@ export const getProductPaths = async () => {
   });
 };
 
-export const getProductInfo = async (productSlug) => {
+export const getProductInfo = async (slug) => {
   return await client.query({
     query: GetProductInfo,
     variables: {
-      productUrl: productSlug,
+      productSlug: slug,
     },
   });
 };

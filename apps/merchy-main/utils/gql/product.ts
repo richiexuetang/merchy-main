@@ -33,21 +33,12 @@ export const ProductPaths = gql`
 `;
 
 export const GetProductInfo = gql`
-  query ($productUrl: String!) {
-    product(productUrl: $productUrl) {
+  query ($productSlug: String!) {
+    productBySlug(productSlug: $productSlug) {
       primaryTitle
       secondaryTitle
       condition
       description
-      variants {
-        name
-        slug
-      }
-      breadCrumbs {
-        level
-        name
-        url
-      }
       media {
         imageUrl
       }
