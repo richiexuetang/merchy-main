@@ -1,6 +1,9 @@
 export {
-  BrowseCategories,
-  CategoryProducts,
   BrowseCategoryInfo,
+  GetBrowseCategories,
+  GetAllCategoryPaths,
+  GetCategoryProducts,
+  GetBrowseCategoryInfo,
+  GetProductFilter,
 } from './category';
-export { Products, GetProductInfo } from './product';
+export { ProductPaths, GetProductInfo, SearchProducts } from './product';

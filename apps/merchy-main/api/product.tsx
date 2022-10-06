@@ -1,21 +1,17 @@
-import { getStandaloneApolloClient } from '../utils';
-import { Products, GetProductInfo } from '../utils/gql';
+import { ProductPaths, GetProductInfo } from '../utils/gql';
+import client from '../pages/api/graphql';
 
-export const getProducts = async () => {
-  const client = await getStandaloneApolloClient();
-
+export const getProductPaths = async () => {
   return await client.query({
-    query: Products,
+    query: ProductPaths,
   });
 };
 
-export const getProductInfo = async (productSlug) => {
-  const client = await getStandaloneApolloClient();
-
+export const getProductInfo = async (slug) => {
   return await client.query({
     query: GetProductInfo,
     variables: {
-      productUrl: productSlug,
+      productSlug: slug,
     },
   });
 };

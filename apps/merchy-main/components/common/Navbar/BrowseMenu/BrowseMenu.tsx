@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import BrowseMenuItems from './BrowseMenuItems';
 import { useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
@@ -51,15 +50,11 @@ const BrowseMenu = ({ isOpen, browseCategories }) => {
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {browseCategories?.map((category, index) => {
+        {browseCategories?.map(({ node }, index) => {
           const depthLevel = 1;
 
           return (
-            <BrowseMenuItems
-              items={category}
-              key={index}
-              depthLevel={depthLevel}
-            />
+            <BrowseMenuItems items={node} key={index} depthLevel={depthLevel} />
           );
         })}
       </chakra.ul>

@@ -8,7 +8,7 @@ import { getAllBrowseCategories } from '../api';
 export const getStaticProps: GetStaticProps = async () => {
   const allCategories = await getAllBrowseCategories();
 
-  const browseCategories = allCategories.data.levelCategories;
+  const browseCategories = allCategories.data.categories.edges;
 
   return {
     props: { browseCategories },
@@ -23,8 +23,8 @@ const Home: NextPageWithLayout = ({
 
   const levelOneCategories = [];
 
-  browseCategories?.map(({ name, slug }) => {
-    levelOneCategories.push({ name: name, slug: slug });
+  browseCategories?.map(({ node }) => {
+    levelOneCategories.push({ name: node.slug, slug: node.slug });
   });
 
   return (

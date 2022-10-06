@@ -6,7 +6,7 @@ export const getStandaloneApolloClient = (
 ): ApolloClient<NormalizedCacheObject> => {
   return new ApolloClient({
     link: new HttpLink({
-      uri: 'http://localhost:3333/api/graphql',
+      uri: 'http://127.0.0.1:8000/graphql/',
       fetch,
     }),
     cache: new InMemoryCache().restore(initialState || {}),
