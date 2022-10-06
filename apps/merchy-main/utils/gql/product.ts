@@ -33,7 +33,7 @@ export const ProductPaths = gql`
 `;
 
 export const GetProductInfo = gql`
-  query ($productSlug: String!) {
+  query productBySlug($productSlug: String!) {
     productBySlug(productSlug: $productSlug) {
       primaryTitle
       secondaryTitle
@@ -41,6 +41,9 @@ export const GetProductInfo = gql`
       description
       media {
         imageUrl
+      }
+      market {
+        price
       }
     }
   }

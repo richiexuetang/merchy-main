@@ -39,9 +39,9 @@ const Product = ({ productInfo }) => {
               alignItems="center"
             >
               <chakra.div data-component="BreadCrumbs">
-                {productInfo.product.breadCrumbs && (
+                {/* {productInfo.product.breadCrumbs && (
                   <BreadCrumbs links={productInfo.product.breadCrumbs} />
-                )}
+                )} */}
               </chakra.div>
               <Box
                 data-component="utility-wrapper"
@@ -84,9 +84,9 @@ const Product = ({ productInfo }) => {
                   minH="0vw"
                   mb="2"
                 >
-                  {productInfo?.product.primaryTitle}
+                  {productInfo?.primaryTitle}
                   <chakra.span display="block" color="neutral.500" mt="1">
-                    {productInfo?.product.secondaryTitle}
+                    {productInfo?.secondaryTitle}
                   </chakra.span>
                 </chakra.h1>
               </Box>
@@ -139,7 +139,7 @@ const Product = ({ productInfo }) => {
                             whiteSpace="nowrap"
                             color="green.700"
                           >
-                            {productInfo?.product.condition}
+                            {productInfo?.condition}
                           </chakra.span>
                         </chakra.span>
                       </Link>
@@ -175,8 +175,8 @@ const Product = ({ productInfo }) => {
                       layout="fixed"
                       width={512}
                       height={384}
-                      src={productInfo?.product.media.imageUrl}
-                      alt={productInfo?.product.media.imageUrl}
+                      src={productInfo?.media.imageUrl}
+                      alt={productInfo?.media.imageUrl}
                     />
                   </Box>
                 </Box>
@@ -303,7 +303,7 @@ const Product = ({ productInfo }) => {
                         minW="auto"
                       >
                         <Text>
-                          Sell for ${productInfo?.product.price} or Ask for More
+                          Sell for ${productInfo?.market.price} or Ask for More
                         </Text>
                       </Button>
                     </NextLink>
@@ -315,7 +315,7 @@ const Product = ({ productInfo }) => {
         </Box>
       </chakra.section>
 
-      {productInfo?.product.variants?.length > 0 && (
+      {/* {productInfo?.product.variants?.length > 0 && (
         <chakra.section
           data-component="RelatedProductsContainer"
           mt="4"
@@ -352,7 +352,7 @@ const Product = ({ productInfo }) => {
             </Grid>
           </Box>
         </chakra.section>
-      )}
+      )} */}
 
       <chakra.section data-component="ProductDetails" mt="6">
         <Divider orientation="horizontal" borderWidth="0 0 1px" />
@@ -367,7 +367,7 @@ const Product = ({ productInfo }) => {
             w="100%"
           >
             <Box w={{ base: '100%', md: '40%' }}>
-              {productInfo?.product.traits && (
+              {/* {productInfo?.traits && (
                 <Box
                   data-component="ProductTraits"
                   display="flex"
@@ -402,18 +402,17 @@ const Product = ({ productInfo }) => {
                         )
                     )}
                 </Box>
-              )}
+              )} */}
             </Box>
-            {productInfo?.product.description && (
+            {productInfo?.description && (
               <Box data-component="ProductDescription">
                 <chakra.h2>Product Description</chakra.h2>
                 <Text>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: productInfo?.product.description,
+                      __html: productInfo?.description,
                     }}
                   />
-                  {/* {data?.product.description} */}
                 </Text>
               </Box>
             )}

@@ -141,6 +141,7 @@ class ProductQueries(graphene.ObjectType):
     product_filter_attributes = DjangoFilterConnectionField(ProductTypeNode,
                                                             category_slug=graphene.String(required=True),
                                                             filterset_class=ProductTypeFilter)
+    products = DjangoFilterConnectionField(ProductNode, filterset_class=ProductFilter)
 
     @staticmethod
     def resolve_all_products(self, info, search=None, category_slug=None, release_years=None, size_types=None,
@@ -172,7 +173,7 @@ class ProductQueries(graphene.ObjectType):
         return products
 
     @staticmethod
-    def resolve_product_by_slug(self, info, product_slug):
+    def resolve_product_by_slug(self, info, product_slug=None):
         return Product.objects.get(slug=product_slug)
 
     @staticmethod
@@ -198,3 +199,7 @@ class ProductQueries(graphene.ObjectType):
         root = Category.objects.get(slug=category_slug).get_root()
         print('root', root, root.slug)
         return ProductType.objects.filter(name=root.slug)
+
+    @staticmethod
+    def resolve_products(self, info):
+        return Product.objects.all()
