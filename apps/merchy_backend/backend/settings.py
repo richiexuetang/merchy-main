@@ -6,7 +6,7 @@ env = environ.Env()
 DEBUG = env.bool('DEBUG')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ['merchy-backend-dev.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['merchy-backend-dev.us-west-2.elasticbeanstalk.com', '127.0.0.1', 'merchy.lol']
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -89,16 +89,28 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        'NAME': "merchy",
-        'USER': 'postgres',
-        'PASSWORD': 'Wtfwtf159',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+  DATABASES = {
+      "default": {
+          "ENGINE": "django.db.backends.postgresql_psycopg2",
+          'NAME': "merchy",
+          'USER': 'postgres',
+          'PASSWORD': 'Wtfwtf159',
+          'HOST': 'localhost',
+          'PORT': '5432',
+      }
+  }
 
 SITE_ID = 1
 
