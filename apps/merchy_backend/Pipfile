@@ -41,6 +41,7 @@ psycopg2 = "*"
 django-mptt = "*"
 graphene-django = "*"
 django-filter = "*"
+awsebcli = "*"
 
 [dev-packages]
 

@@ -6,7 +6,7 @@ env = environ.Env()
 DEBUG = env.bool('DEBUG')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['merchy-backend-dev.us-west-2.elasticbeanstalk.com']
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

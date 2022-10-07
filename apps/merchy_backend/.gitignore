@@ -10,3 +10,7 @@ media
 !.gitignore
 !.travis.yml
 /.vscode
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
