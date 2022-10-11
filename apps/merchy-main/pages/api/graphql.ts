@@ -1,7 +1,11 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
+let endpoint = 'http://127.0.0.1:8000/graphql/';
+if (process.env.NODE_ENV === 'production')
+  endpoint = process.env.GRAPHQL_ENDPOINT;
+
 const client = new ApolloClient({
-  uri: 'https://merchy.lol/graphql/',
+  uri: endpoint,
   cache: new InMemoryCache(),
 });
 

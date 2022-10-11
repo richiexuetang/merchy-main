@@ -9,8 +9,12 @@ export default async function handler(
     return;
   }
 
+  let endpoint = 'http://127.0.0.1:8000/dj-rest-auth/login/';
+  if (process.env.NODE_ENV === 'production')
+    endpoint = process.env.AUTH_LOGIN_ENDPOINT;
+
   try {
-    const response = await fetch('http://127.0.0.1:8000/dj-rest-auth/login/', {
+    const response = await fetch(endpoint, {
       method: 'POST',
       mode: 'cors', // no-cors, *cors, same-origin
       //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
