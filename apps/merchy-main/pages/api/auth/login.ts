@@ -11,7 +11,7 @@ export default async function handler(
 
   let endpoint = 'http://127.0.0.1:8000/dj-rest-auth/login/';
   if (process.env.NODE_ENV === 'production')
-    endpoint = process.env.AUTH_LOGIN_ENDPOINT;
+    endpoint = process.env.NEXT_PUBLIC_AUTH_LOGIN_ENDPOINT;
 
   try {
     const response = await fetch(endpoint, {
