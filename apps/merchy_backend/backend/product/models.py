@@ -82,8 +82,8 @@ class ImageGallery(models.Model):
 
 class Trait(models.Model):
     label = models.CharField(max_length=250, blank=True)
-    size_type = ArrayField(models.CharField(max_length=200), blank=True, default=[])
-    sizes = ArrayField(models.CharField(max_length=200), blank=True, default=[])
+    size_type = ArrayField(models.CharField(max_length=200), blank=True, default=list)
+    sizes = ArrayField(models.CharField(max_length=200), blank=True, default=list)
     release_year = models.IntegerField(null=True, blank=True)
 
 
@@ -115,7 +115,7 @@ class Product(models.Model):
 
 class ProductAttributeValue(models.Model):
     name = models.CharField(max_length=250)
-    product = models.ManyToManyField(Product, related_name='attributes', null=True, blank=True)
+    product = models.ManyToManyField(Product, related_name='attributes')
     attribute = models.ForeignKey(ProductAttribute, related_name='product_attribute', on_delete=models.CASCADE,
                                   null=True, blank=True)
     value = models.CharField(null=True, blank=True, max_length=255)

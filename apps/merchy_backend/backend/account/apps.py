@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CoreConfig(AppConfig):
+class AccountConfig(AppConfig):
     default_auto_field = 'django.db.models.AutoField'
-    name = 'backend.core'
+    name = 'backend.account'

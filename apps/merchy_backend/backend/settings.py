@@ -3,10 +3,10 @@ import environ
 
 env = environ.Env()
 
-DEBUG = env.bool('DEBUG')
+DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ['merchy-backend-dev.us-west-2.elasticbeanstalk.com', '127.0.0.1', 'merchy.lol']
+ALLOWED_HOSTS = ['merchy-backend-dev.us-west-2.elasticbeanstalk.com', '127.0.0.1', 'merchy.lol', '54.203.16.59']
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -59,6 +59,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
 ]
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
@@ -104,10 +106,10 @@ else:
   DATABASES = {
       "default": {
           "ENGINE": "django.db.backends.postgresql_psycopg2",
-          'NAME': "merchy",
+          'NAME': "merchydb",
           'USER': 'postgres',
           'PASSWORD': 'Wtfwtf159',
-          'HOST': 'localhost',
+          'HOST': 'merchydb.c47dhwjon0sd.us-west-2.rds.amazonaws.com',
           'PORT': '5432',
       }
   }
@@ -135,6 +137,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+SILENCED_SYSTEM_CHECKS = ["auth.W004"]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
