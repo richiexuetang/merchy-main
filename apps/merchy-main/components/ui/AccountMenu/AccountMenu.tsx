@@ -45,7 +45,7 @@ const AccountMenu = () => {
       left="-45px"
     >
       <Box data-component="left-pane" wordBreak="break-word">
-        <NextLink href="/buy">
+        <NextLink href="/account/[slug]" as={`/account/buying`}>
           <Link order="1" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Box flexShrink="0">
@@ -76,7 +76,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/selling">
+        <NextLink href="/account/[slug]" as={`/account/selling`}>
           <Link order="2" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Box flexShrink="0">
@@ -107,7 +107,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/portfoolio">
+        <NextLink href="/account/[slug]" as={`/account/portfoolio`}>
           <Link order="3" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Portfolio />
@@ -136,7 +136,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/following">
+        <NextLink href="/account/[slug]" as={`/account/following`}>
           <Link order="4" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Following />
@@ -169,7 +169,7 @@ const AccountMenu = () => {
       <Divider orientation="vertical" />
 
       <Box data-component="right-pane">
-        <NextLink href="/security">
+        <NextLink href="/account/[slug]" as={`/account/security`}>
           <Link order="1" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Security />
@@ -198,7 +198,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/profile">
+        <NextLink href="/account/[slug]" as={`/account/profile`}>
           <Link order="6" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Profile />
@@ -227,7 +227,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/settings">
+        <NextLink href="/account/[slug]" as={`/account/settings`}>
           <Link order="6" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Settings />

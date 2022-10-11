@@ -1,4 +1,5 @@
 export {
+  Account,
   Navbar,
   getLayout,
   Layout,
@@ -21,7 +22,7 @@ export {
   Share,
   Favorite,
   Add,
-  Account,
+  Account as AccountIcon,
   Logout,
   Settings,
   Profile,
@@ -39,4 +40,5 @@ export {
   CustomCheckbox,
   BreadCrumbs,
   AccountMenu,
+  AccountSidebar,
 } from './ui';
