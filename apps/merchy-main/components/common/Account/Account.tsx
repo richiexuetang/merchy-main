@@ -1,8 +1,14 @@
 import { Box, Container, Flex, Heading } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { AccountSidebar } from '../../ui';
 import { getLayout } from '../Layout';
 
 const Account = () => {
+  const router = useRouter();
+
+  const { slug } = router.query;
+
+  console.log(slug);
   return (
     <Flex data-component="MyAccountPageRoot" ml="250px">
       <AccountSidebar data-component="MyAccountSidebar" />

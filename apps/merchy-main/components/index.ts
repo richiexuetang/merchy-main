@@ -8,6 +8,7 @@ export {
   Footer,
   Carousel,
   Product,
+  Buy,
 } from './common';
 export { ProductCard, ProductRowHeader } from './product';
 export {

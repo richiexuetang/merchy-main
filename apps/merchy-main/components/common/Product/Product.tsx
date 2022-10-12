@@ -22,8 +22,13 @@ import { ProductCard } from '../../product';
 import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
 import { BreadCrumbs } from '../../ui';
+import { useRouter } from 'next/router';
 
 const Product = ({ productInfo }) => {
+  const router = useRouter();
+
+  const { slug } = router.query;
+
   const [show, setShow] = useState(false);
 
   const handleToggle = () => setShow(!show);
@@ -279,7 +284,7 @@ const Product = ({ productInfo }) => {
                           <Text>Place Bid</Text>
                         </Button>
                       </NextLink>
-                      <NextLink href="/">
+                      <NextLink href="/buy/[slug]" as={`/buy/${slug}`}>
                         <Button
                           borderRadius="0"
                           borderColor="neutral.black"

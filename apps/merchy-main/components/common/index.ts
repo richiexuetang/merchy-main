@@ -6,3 +6,4 @@ export { default as Footer } from './Footer';
 export { default as Carousel } from './Carousel';
 export { default as Product } from './Product';
 export { default as Account } from './Account';
+export { default as Buy } from './Buy';
