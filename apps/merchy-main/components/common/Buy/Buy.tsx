@@ -24,7 +24,6 @@ const BuyPage = ({ buyProductInfo }) => {
     } else {
       router.push('/');
     }
-    console.log(confirmDetail);
   };
 
   return (

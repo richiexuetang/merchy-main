@@ -8,7 +8,6 @@ const Account = () => {
 
   const { slug } = router.query;
 
-  console.log(slug);
   return (
     <Flex data-component="MyAccountPageRoot" ml="250px">
       <AccountSidebar data-component="MyAccountSidebar" />

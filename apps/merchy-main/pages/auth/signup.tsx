@@ -42,8 +42,6 @@ const SignUp = () => {
   const [inputPassword, setInputPassword] = useState('');
 
   const handleSignUp = async () => {
-    console.log(inputEmail, inputPassword);
-
     axios
       .post('http://127.0.0.1:8000/dj-rest-auth/registration/', {
         email: inputEmail,
