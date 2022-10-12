@@ -1,14 +1,44 @@
 import { Buy } from '../../components';
 import { getProductPaths, getAllBrowseCategories } from '../../api';
+import { gql } from '@apollo/client';
+import client from '../api/graphql';
 
-export async function getStaticProps() {
+export const GetBuyProductInfo = gql`
+  query productBySlug($productSlug: String!) {
+    productBySlug(productSlug: $productSlug) {
+      primaryTitle
+      secondaryTitle
+      media {
+        imageUrl
+      }
+      market {
+        highestBid
+        lowestAsk
+      }
+    }
+  }
+`;
+
+export const getBuyProductInfo = async (slug) => {
+  return await client.query({
+    query: GetBuyProductInfo,
+    variables: {
+      productSlug: slug,
+    },
+  });
+};
+
+export async function getStaticProps(context) {
   const allCategories = await getAllBrowseCategories();
+
+  const { data: productInfo } = await getBuyProductInfo(context.params.slug);
 
   const browseCategories = allCategories.data.categories.edges;
 
   return {
     props: {
       browseCategories,
+      buyProductInfo: productInfo.productBySlug,
     },
     revalidate: 200,
   };
