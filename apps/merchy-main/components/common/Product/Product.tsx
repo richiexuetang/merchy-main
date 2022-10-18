@@ -334,6 +334,8 @@ const Product = ({ productInfo }) => {
                     <Divider orientation="horizontal" borderWidth="0 0 1px" />
                     <NextLink href="/">
                       <Button
+                        as="span"
+                        cursor="pointer"
                         borderRadius="0"
                         borderColor="neutral.black"
                         m="1"
