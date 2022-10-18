@@ -170,7 +170,7 @@ const BuyPage = ({ buyProductInfo }) => {
   useEffect(() => {
     if (clientSecret === '') {
       axios
-        .post('http://127.0.0.1:8000/payment/create-payment-intent/', {})
+        .post('https://127.0.0.1:8000/payment/create-payment-intent/', {})
         .then((res) => res.data)
         .then((data) => setClientSecret(data.clientSecret));
     }
