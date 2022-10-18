@@ -30,8 +30,9 @@ export const theme = extendTheme({
     neutral: {
       black: '#0f0f0f',
       white: '#ffffff',
-      300: '#cfcfcf',
       200: '#ededed',
+      300: '#cfcfcf',
+      400: '#a1a5a4',
       600: '#393939',
       700: '#242424',
     },

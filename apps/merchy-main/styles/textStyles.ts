@@ -1,6 +1,8 @@
 export const TextStyles = {
   baseStyle: {
-    fontFamily: 'proximaNova',
+    fontFamily: 'suisseIntlRegular',
+    lineHeight: 'md',
+    letterSpacing: '0.004rem',
   },
   sizes: {},
   variants: {

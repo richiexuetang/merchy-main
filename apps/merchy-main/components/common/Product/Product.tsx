@@ -15,6 +15,7 @@ import {
   StatNumber,
   Grid,
   IconButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -23,6 +24,8 @@ import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
 import { BreadCrumbs } from '../../ui';
 import { useRouter } from 'next/router';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
+import MarketDrawer from './MarketDrawer';
 
 const Product = ({ productInfo }) => {
   const router = useRouter();
@@ -32,6 +35,22 @@ const Product = ({ productInfo }) => {
   const [show, setShow] = useState(false);
 
   const handleToggle = () => setShow(!show);
+
+  const {
+    isOpen: isAsksOpen,
+    onOpen: onAsksOpen,
+    onClose: onAsksClose,
+  } = useDisclosure();
+  const {
+    isOpen: isBidsOpen,
+    onOpen: onBidsOpen,
+    onClose: onBidsClose,
+  } = useDisclosure();
+  const {
+    isOpen: isSalesOpen,
+    onOpen: onSalesOpen,
+    onClose: onSalesClose,
+  } = useDisclosure();
 
   return (
     <Container data-component="ProductView" w="100%" maxW="6xl" pb="8">
@@ -266,32 +285,47 @@ const Product = ({ productInfo }) => {
 
                   <VStack>
                     <Box
+                      w="100%"
                       display="flex"
                       flexDir="row"
                       marginInline="calc(var(--chakra-space-1) * -1)"
                       mb="4"
                       mt="0px !important"
                     >
-                      <NextLink href="/">
+                      <NextLink href="/buy/[slug]" as={`/buy/${slug}`}>
                         <Button
-                          borderRadius="0"
-                          borderColor="neutral.black"
+                          variant="login"
                           m="1"
                           flex="1 0 0px"
-                          bg="transparent"
                           minW="auto"
+                          w="100%"
+                          color="neutral.black"
+                          fontFamily="suisseIntlRegular"
+                          h="12"
+                          fontSize="sm"
+                          py="0.375rem"
+                          fontStyle="normal"
                         >
                           <Text>Place Bid</Text>
                         </Button>
                       </NextLink>
                       <NextLink href="/buy/[slug]" as={`/buy/${slug}`}>
                         <Button
-                          borderRadius="0"
-                          borderColor="neutral.black"
+                          variant="login"
                           m="1"
                           flex="1 0 0px"
-                          bg="transparent"
                           minW="auto"
+                          w="100%"
+                          color="neutral.white"
+                          bg="green.700"
+                          fontFamily="suisseIntlRegular"
+                          h="12"
+                          fontSize="sm"
+                          py="0.375rem"
+                          fontStyle="normal"
+                          _hover={{
+                            bg: 'green.800',
+                          }}
                         >
                           <Text>Buy now</Text>
                         </Button>
@@ -306,13 +340,156 @@ const Product = ({ productInfo }) => {
                         flex="1 0 0px"
                         bg="transparent"
                         minW="auto"
+                        _hover={{
+                          bg: 'transparent',
+                        }}
                       >
-                        <Text>
+                        <Text
+                          color="green.700"
+                          fontSize="md"
+                          fontWeight="600"
+                          letterSpacing="0.004rem"
+                          lineHeight="5"
+                        >
                           Sell for ${productInfo?.market.price} or Ask for More
                         </Text>
+                        <IconButton
+                          aria-label="sell"
+                          icon={<ArrowForwardIcon w="1em" h="1em" />}
+                          bg="transparent"
+                          color="green.700"
+                          minW="0"
+                          _hover={{
+                            bg: 'transparent',
+                          }}
+                        />
                       </Button>
                     </NextLink>
                   </VStack>
+                </Box>
+
+                <Box>
+                  <Box
+                    data-component="MarkeyActivity"
+                    display="flex"
+                    justifyContent="space-between"
+                    pt="4"
+                    flexDir="row"
+                  >
+                    <Box
+                      data-component="LastSale"
+                      display="flex"
+                      flexDir="column"
+                      mb={{ base: '1rem', sm: '1rem', md: '0px' }}
+                    >
+                      <Text
+                        color="neutral.black"
+                        fontSize="sm"
+                        fontWeight="normal"
+                        fontFamily="suisseIntlRegular"
+                        lineHeight="5"
+                        letterSpacing="0.004rem"
+                      >
+                        Last Sale:
+                      </Text>
+                      <Text
+                        color="neutral.black"
+                        fontSize="xl"
+                        fontWeight="bold"
+                        fontFamily="suisseIntlRegular"
+                        lineHeight="6"
+                        letterSpacing="0.004rem"
+                        my="1"
+                      >
+                        ${productInfo.market.price}
+                      </Text>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <Box data-component="MarketActivityDrawer">
+                        <Box>
+                          <List
+                            display="flex"
+                            justifyContent="flex-start"
+                            flexWrap="wrap"
+                            listStyleType="none"
+                          >
+                            <ListItem>
+                              <Button
+                                variant="login"
+                                h="34px"
+                                w="83px"
+                                minW={{
+                                  base: '110px',
+                                  md: '110px',
+                                  lg: 'auto',
+                                }}
+                                fontSize="sm"
+                                fontStyle="normal"
+                                m="1"
+                                p={{ sm: '1rem 0.5rem' }}
+                                onClick={onAsksOpen}
+                              >
+                                View Asks
+                              </Button>
+                              <MarketDrawer
+                                isOpen={isAsksOpen}
+                                onClose={onAsksClose}
+                                drawerType="ask"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <Button
+                                variant="login"
+                                h="34px"
+                                w="83px"
+                                minW={{
+                                  base: '110px',
+                                  md: '110px',
+                                  lg: 'auto',
+                                }}
+                                fontSize="sm"
+                                fontStyle="normal"
+                                m="1"
+                                p={{ sm: '1rem 0.5rem' }}
+                                onClick={onBidsOpen}
+                              >
+                                View Bids
+                              </Button>
+                              <MarketDrawer
+                                isOpen={isBidsOpen}
+                                onClose={onBidsClose}
+                                drawerType="bid"
+                              />
+                            </ListItem>
+                            <ListItem>
+                              <Button
+                                variant="login"
+                                h="34px"
+                                w="83px"
+                                minW={{
+                                  base: '110px',
+                                  md: '110px',
+                                  lg: 'auto',
+                                }}
+                                fontSize="sm"
+                                fontStyle="normal"
+                                m="1"
+                                p={{ sm: '1rem 0.5rem' }}
+                                onClick={onSalesOpen}
+                              >
+                                View Sales
+                              </Button>
+                              <MarketDrawer
+                                isOpen={isSalesOpen}
+                                onClose={onSalesClose}
+                                drawerType="sale"
+                              />
+                            </ListItem>
+                          </List>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             </Box>

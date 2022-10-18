@@ -51,7 +51,7 @@ export const ButtonStyles = {
       w: 'auto',
       lineHeight: '1.375',
       fontWeight: 'semibold',
-      fontFamily: 'Suissintl',
+      fontFamily: 'suisseIntlRegular',
       minH: 'auto',
     },
     login: {
@@ -60,7 +60,7 @@ export const ButtonStyles = {
       _hover: { bgColor: 'neutral.black', color: 'neutral.white' },
       lineHeight: '1.375',
       fontWeight: 'semibold',
-      fontFamily: 'Suissintl',
+      fontFamily: 'suisseIntlRegular',
       border: '1px solid',
       borderColor: 'neutral.black',
       color: 'neutral.600',
