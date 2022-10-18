@@ -8,7 +8,7 @@ const Head: FC = () => {
     <>
       <DefaultSeo {...config} />
       <NextHead>
-        <title>MerchY</title>
+        <title>MerchY: Sneakers, Streetwear, Trading Cards, Collectibles</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
           rel="icon"
