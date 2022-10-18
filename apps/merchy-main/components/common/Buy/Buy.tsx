@@ -168,11 +168,11 @@ const BuyPage = ({ buyProductInfo }) => {
   const { slug } = router.query;
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const endpoint = process.env.NEXT_PUBLIC_CREATE_PAYMENT_INTENT;
 
     if (clientSecret === '') {
       axios
-        .post(baseUrl + 'payment/create-payment-intent/', {})
+        .post(endpoint, {})
         .then((res) => res.data)
         .then((data) => setClientSecret(data.clientSecret));
     }
