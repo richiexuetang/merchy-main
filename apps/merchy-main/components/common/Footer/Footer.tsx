@@ -185,13 +185,13 @@ const Footer = () => {
             </Stack>
 
             <Stack align={'flex-start'}>
-              <ListHeader slug="" pageType="news">
+              <ListHeader slug="" pageType="">
                 Recent Updates
               </ListHeader>
-              <ListElement slug="sneakers-releasing" pageType="news">
+              <ListElement slug="" pageType="">
                 Best Sneaker Releasing
               </ListElement>
-              <ListElement slug="shoe-size-conversion-charts" pageType="news">
+              <ListElement slug="" pageType="">
                 Shoe Size Conversion Charts
               </ListElement>
               <ListElement slug="hoka" pageType="category">
@@ -209,13 +209,10 @@ const Footer = () => {
             </Stack>
 
             <Stack align={'flex-start'}>
-              <ListHeader slug="releases" pageType="popular">
+              <ListHeader slug="" pageType="">
                 Popular Releases
               </ListHeader>
-              <ListElement
-                slug="crocs-classic-clog-lightning-mcqueen"
-                pageType="product"
-              >
+              <ListElement slug="" pageType="">
                 Lightning McQueen Crocs
               </ListElement>
               <ListElement
@@ -224,7 +221,7 @@ const Footer = () => {
               >
                 NikeCraft GPS Yellow
               </ListElement>
-              <ListElement slug="" pageType="product">
+              <ListElement slug="" pageType="">
                 Jordan 2 J Balvin
               </ListElement>
               <ListElement
@@ -239,10 +236,7 @@ const Footer = () => {
               >
                 Jordan 3 Retro Fire Red
               </ListElement>
-              <ListElement
-                slug="nike-air-force-1-low-white-07"
-                pageType="product"
-              >
+              <ListElement slug="" pageType="">
                 Air Force 1 Low &apos;07 White
               </ListElement>
             </Stack>
