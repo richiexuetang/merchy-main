@@ -36,7 +36,7 @@ const Menubar = ({ levelOneCategories }) => {
                   href={`/category/${slug}`}
                   fontSize={{ base: '16px', lg: '18px' }}
                 >
-                  {name}
+                  {typeof name === 'string' ? name.replace(/-/g, ' ') : name}
                 </ChakraLink>
               </ListItem>
             );
