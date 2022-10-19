@@ -33,6 +33,7 @@ export {
   Selling,
   Buying,
   Bell,
+  LinkedIn,
 } from './icons';
 export {
   Text,

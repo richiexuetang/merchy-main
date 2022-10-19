@@ -7,7 +7,6 @@ import {
   IconButton,
   Text,
 } from '@chakra-ui/react';
-import { url } from 'inspector';
 import Link from 'next/link';
 import { getLayout } from '../components';
 

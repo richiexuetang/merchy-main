@@ -12,18 +12,12 @@ import {
   Spacer,
   Button,
   VStack,
+  ListItem,
+  Icon,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import Link from 'next/link';
-// import { SocialIconGroup } from '@merchy/ui-shared';
-import {
-  Twitter,
-  Facebook,
-  Instagram,
-  YouTube,
-  Apple,
-  Android,
-} from '../../../components';
+import { LinkedIn, GitHub, WebAsset, Apple, Adb } from '@mui/icons-material';
 
 const ListHeader = ({
   children,
@@ -283,32 +277,153 @@ const Footer = () => {
                 </span>
               </Button>
             </Box>
-            <Spacer />
 
-            {/* <SocialIconGroup
-              text="Find Us On Social"
-              icons={[
-                <Twitter key="twitter-icon" />,
-                <Facebook key="facebook-icon" />,
-                <Instagram key="instagram-icon" />,
-                <YouTube key="youtube-icon" />,
-              ]}
-            />
-            <Spacer />
-            <SocialIconGroup
-              text="Download Our App"
-              icons={[
-                <Apple key="apple-icon" />,
-                <Android key="andriod-icon" />,
-              ]}
-            />
-            <Spacer />
-            <SocialIconGroup text="Use Assistive Technology" icons={[]} />
-            <Spacer />
-            <SocialIconGroup text="Proudly Built in Detroit" icons={[]} /> */}
+            <Box
+              data-component="SocialIconGroup"
+              minW={{ base: 'auto', md: '180px', lg: 'auto' }}
+            >
+              <Box
+                display="flex"
+                flexDir="column"
+                pt={{ base: '3', md: '0px' }}
+              >
+                <Text
+                  color="neutral.white"
+                  textAlign={{ base: 'center', lg: 'inherit' }}
+                  fontSize="sm"
+                >
+                  Get to know me :&#41;
+                </Text>
+
+                <Spacer />
+
+                <List
+                  display="flex"
+                  listStyleType="none"
+                  justifyContent={{ base: 'center', lg: 'inherit' }}
+                >
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://www.linkedin.com/in/richardxuetang/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={LinkedIn} />
+                    </a>
+                  </ListItem>
+
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://github.com/richiexuetang"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={GitHub} />
+                    </a>
+                  </ListItem>
+
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://richardxuetang.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={WebAsset} />
+                    </a>
+                  </ListItem>
+                </List>
+              </Box>
+            </Box>
+
+            <Box
+              data-component="SocialIconGroup"
+              minW={{ base: 'auto', md: '180px', lg: 'auto' }}
+            >
+              <Box
+                display="flex"
+                flexDir="column"
+                pt={{ base: '3', md: '0px' }}
+              >
+                <Text
+                  color="neutral.white"
+                  textAlign={{ base: 'center', lg: 'inherit' }}
+                  fontSize="sm"
+                >
+                  Download the app
+                </Text>
+
+                <Spacer />
+
+                <List
+                  display="flex"
+                  listStyleType="none"
+                  justifyContent={{ base: 'center', lg: 'inherit' }}
+                >
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://itunes.apple.com/us/app/stockx-buy-sell-authentic/id881599819?mt=8"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={Apple} />
+                    </a>
+                  </ListItem>
+
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.stockx.stockx&hl=en_US"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={Adb} />
+                    </a>
+                  </ListItem>
+                </List>
+              </Box>
+            </Box>
+
+            <Box
+              data-component="SocialIconGroup"
+              minW={{ base: 'auto', md: '180px', lg: 'auto' }}
+            >
+              <Box
+                display="flex"
+                flexDir="column"
+                pt={{ base: '3', md: '0px' }}
+              >
+                <Text
+                  color="neutral.white"
+                  textAlign={{ base: 'center', lg: 'inherit' }}
+                  fontSize="sm"
+                >
+                  Use Assistive Technology
+                </Text>
+                <Spacer />
+              </Box>
+            </Box>
+
+            <Box
+              data-component="SocialIconGroup"
+              minW={{ base: 'auto', md: '180px', lg: 'auto' }}
+            >
+              <Box
+                display="flex"
+                flexDir="column"
+                pt={{ base: '3', md: '0px' }}
+              >
+                <Text
+                  color="neutral.white"
+                  textAlign={{ base: 'center', lg: 'inherit' }}
+                  fontSize="sm"
+                >
+                  Proudly Built at Home
+                </Text>
+                <Spacer />
+              </Box>
+            </Box>
           </Flex>
         </Box>
-        {/* End of SocialLinksUtility */}
+        {/* End of SocialLinksUtility
 
         {/* SubFooter */}
         <Box

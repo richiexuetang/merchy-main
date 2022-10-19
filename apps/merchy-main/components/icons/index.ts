@@ -19,3 +19,4 @@ export { default as Portfolio } from './Portfolio';
 export { default as Selling } from './Selling';
 export { default as Buying } from './Buying';
 export { default as Bell } from './Bell';
+export { default as LinkedIn } from './LinkedIn';
