@@ -203,7 +203,9 @@ const Category = ({
         margin="auto"
         textTransform="capitalize"
       >
-        <chakra.h1 {...h1Styles}>{slug}</chakra.h1>
+        <chakra.h1 {...h1Styles}>
+          {typeof slug === 'string' ? slug.replace(/-/g, ' ') : slug}
+        </chakra.h1>
         <chakra.p {...paragraphStyles}>
           {/* {categoryInfo.categoryBrowse.description} */}
         </chakra.p>
