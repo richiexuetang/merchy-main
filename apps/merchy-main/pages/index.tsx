@@ -17,7 +17,6 @@ export const getStaticProps: GetStaticProps = async () => {
       browseCategories,
       productCollections: productCollections.data.productCollections,
     },
-    revalidate: 60,
   };
 };
 
