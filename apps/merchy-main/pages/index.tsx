@@ -1,26 +1,30 @@
-import { getLayout, MenuBar, ProductRowHeader } from '../components';
+import { getLayout, MenuBar, ProductRow } from '../components';
 import type { NextPageWithLayout } from './_app';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { Box, Grid, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import { Carousel } from '../components';
-import { getAllBrowseCategories } from '../api';
+import { getAllBrowseCategories, fetchProductCollections } from '../api';
 
 export const getStaticProps: GetStaticProps = async () => {
   const allCategories = await getAllBrowseCategories();
 
   const browseCategories = allCategories.data.categories.edges;
 
+  const productCollections = await fetchProductCollections();
+
   return {
-    props: { browseCategories },
+    props: {
+      browseCategories,
+      productCollections: productCollections.data.productCollections,
+    },
     revalidate: 60,
   };
 };
 
 const Home: NextPageWithLayout = ({
   browseCategories,
+  productCollections,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  // const productCollection = products?.data.productCollection;
-
   const levelOneCategories = [];
 
   browseCategories?.map(({ node }) => {
@@ -38,25 +42,9 @@ const Home: NextPageWithLayout = ({
       >
         <Carousel />
         {/* Product Collections */}
-        <Box>
-          <ProductRowHeader />
-          <Grid
-            data-component="SmartGridRow"
-            as="ul"
-            templateColumns="repeat(6, 1fr)"
-            gridGap={{ base: 2, lg: 6 }}
-            marginBottom={6}
-            overflow="auto"
-          >
-            {/* {productCollection.map((product, index: number) => {
-              return (
-                <li data-component="product-card" key={index}>
-                  <ProductCard product={product} />
-                </li>
-              );
-            })} */}
-          </Grid>
-        </Box>
+        {productCollections.edges.map((node, index: number) => {
+          return <ProductRow key={index} collectionInfo={node} />;
+        })}
       </Container>
     </>
   );

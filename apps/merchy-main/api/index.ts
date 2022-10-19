@@ -5,4 +5,8 @@ export {
   getCategoryProducts,
   getProductFilter,
 } from './category';
-export { getProductPaths, getProductInfo } from './product';
+export {
+  getProductPaths,
+  getProductInfo,
+  fetchProductCollections,
+} from './product';

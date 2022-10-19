@@ -6,4 +6,9 @@ export {
   GetBrowseCategoryInfo,
   GetProductFilter,
 } from './category';
-export { ProductPaths, GetProductInfo, SearchProducts } from './product';
+export {
+  ProductPaths,
+  GetProductInfo,
+  SearchProducts,
+  FetchProductCollections,
+} from './product';

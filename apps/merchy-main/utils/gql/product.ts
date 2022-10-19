@@ -48,3 +48,34 @@ export const GetProductInfo = gql`
     }
   }
 `;
+
+export const FetchProductCollections = gql`
+  query productCollections($first: Int!) {
+    productCollections {
+      edges {
+        node {
+          name
+          helpMessage
+          footnotesType
+          priceType
+          redirectUrl
+          products(first: $first) {
+            edges {
+              node {
+                name
+                slug
+                media {
+                  thumbUrl
+                }
+                market {
+                  lowestAsk
+                  lastSale
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

@@ -1,4 +1,8 @@
-import { ProductPaths, GetProductInfo } from '../utils/gql';
+import {
+  ProductPaths,
+  GetProductInfo,
+  FetchProductCollections,
+} from '../utils/gql';
 import client from '../pages/api/graphql';
 
 export const getProductPaths = async () => {
@@ -12,6 +16,15 @@ export const getProductInfo = async (slug) => {
     query: GetProductInfo,
     variables: {
       productSlug: slug,
+    },
+  });
+};
+
+export const fetchProductCollections = async () => {
+  return await client.query({
+    query: FetchProductCollections,
+    variables: {
+      first: 6,
     },
   });
 };

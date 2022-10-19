@@ -13,7 +13,17 @@ import {
 import { chakra } from '@chakra-ui/react';
 import Link from 'next/link';
 
-const ProductRowHeader: React.FC = () => {
+interface ProductRowHeaderProps {
+  title: string;
+  helpMessage: string;
+  redirectUrl: string;
+}
+
+const ProductRowHeader: React.FC<ProductRowHeaderProps> = ({
+  title,
+  helpMessage,
+  redirectUrl,
+}) => {
   return (
     <Box
       display="flex"
@@ -29,7 +39,7 @@ const ProductRowHeader: React.FC = () => {
         lineHeight="1.333"
         minHeight="0vw"
       >
-        Trending Sneakers
+        {title}
         <Popover isLazy placement="top" trigger="hover">
           <PopoverTrigger>
             <Button
@@ -49,15 +59,14 @@ const ProductRowHeader: React.FC = () => {
           <PopoverContent>
             <PopoverBody paddingInline={3} padding="1rem">
               <Text lineHeight="md" letterSpacing="0.0004rem" fontSize="md">
-                &apos;Trending&apos; products are a curated collection of our
-                best selling items
+                {helpMessage}
               </Text>
             </PopoverBody>
           </PopoverContent>
         </Popover>
       </chakra.h2>
 
-      <Link href="/">
+      <Link href={`category/${redirectUrl}`}>
         <Button
           padding="0.375rem !important"
           fontStyle="normal"

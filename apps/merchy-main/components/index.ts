@@ -10,7 +10,7 @@ export {
   Product,
   Buy,
 } from './common';
-export { ProductCard, ProductRowHeader } from './product';
+export { ProductCard, ProductRowHeader, ProductRow } from './product';
 export {
   Logo,
   YouTube,
