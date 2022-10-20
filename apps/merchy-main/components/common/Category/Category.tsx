@@ -1,6 +1,5 @@
 import {
   Box,
-  VStack,
   chakra,
   Container,
   Grid,
@@ -14,29 +13,12 @@ import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { useLazyQuery } from '@apollo/client';
 import Image from 'next/image';
-import { BrowseNavbar, BreadCrumbs, Blurb } from '../../ui';
+import { BrowseNavbar, BreadCrumbs, Blurb, BrowseHeader } from '../../ui';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
 import moment from 'moment';
 import { GetCategoryProducts } from '../../../utils/gql';
-
-const h1Styles = {
-  marginBottom: 1,
-  fontSize: {
-    base: '2xl',
-    lg: '6xl',
-  },
-};
-
-const paragraphStyles = {
-  fontSize: {
-    base: 'sm',
-    lg: 'lg',
-  },
-  maxW: '438px',
-  overflow: 'hidden',
-};
 
 const h2Styles = {
   fontWeight: 600,
@@ -194,24 +176,10 @@ const Category = ({
 
   return (
     <Box as="main" minH="100vh" marginTop="0">
-      <VStack
-        bg="#dfe2ef"
-        minH="270px"
-        maxW="1248px"
-        paddingLeft={{ base: 0, lg: 12 }}
-        padding="15px"
-        alignItems="flex-start"
-        justifyContent="center"
-        margin="auto"
-        textTransform="capitalize"
-      >
-        <chakra.h1 {...h1Styles}>
-          {typeof slug === 'string' ? slug.replace(/-/g, ' ') : slug}
-        </chakra.h1>
-        <chakra.p {...paragraphStyles}>
-          {categoryInfo.data.currentCategoryInfo.description}
-        </chakra.p>
-      </VStack>
+      <BrowseHeader
+        slug={slug}
+        description={categoryInfo.data.currentCategoryInfo.description}
+      />
 
       <Container
         w="full"
