@@ -1,3 +1,4 @@
+import { SmallCloseIcon } from '@chakra-ui/icons';
 import {
   Drawer,
   DrawerOverlay,
@@ -13,6 +14,7 @@ import {
   Th,
   Td,
   Tbody,
+  IconButton,
 } from '@chakra-ui/react';
 
 const drawerData = {
@@ -43,6 +45,18 @@ const MarketDrawer = ({ onClose, isOpen, drawerType }) => {
     <Drawer placement="right" onClose={onClose} isOpen={isOpen} size="md">
       <DrawerOverlay />
       <DrawerContent>
+        <IconButton
+          aria-label="Close"
+          pos="absolute"
+          top="2"
+          right="3"
+          bg="transparent"
+          _hover={{
+            bg: 'transparent',
+          }}
+          icon={<SmallCloseIcon />}
+          onClick={onClose}
+        />
         <DrawerHeader
           flex="0 1 0%"
           p="6"
