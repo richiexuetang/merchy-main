@@ -5,6 +5,7 @@ export {
   GetCategoryProducts,
   GetBrowseCategoryInfo,
   GetProductFilter,
+  GetCurrentCategoryInfo,
 } from './category';
 export {
   ProductPaths,

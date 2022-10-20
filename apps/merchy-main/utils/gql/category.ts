@@ -94,7 +94,6 @@ export const GetCategoryProducts = gql`
           id
           name
           slug
-          price
           market {
             retailPrice
             salesEver
@@ -120,6 +119,7 @@ export const GetBrowseCategoryInfo = gql`
           name
           level
           slug
+          description
         }
       }
     }
@@ -152,6 +152,18 @@ export const GetProductFilter = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const GetCurrentCategoryInfo = gql`
+  query ($categorySlug: String!) {
+    currentCategoryInfo(categorySlug: $categorySlug) {
+      name
+      slug
+      description
+      shortBlurb
+      blurb
     }
   }
 `;

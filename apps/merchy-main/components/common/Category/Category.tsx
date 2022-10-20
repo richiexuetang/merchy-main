@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { useLazyQuery } from '@apollo/client';
 import Image from 'next/image';
-import { BrowseNavbar, BreadCrumbs } from '../../ui';
+import { BrowseNavbar, BreadCrumbs, Blurb } from '../../ui';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
@@ -80,6 +80,7 @@ const attributeFiltersInitialState = {
 };
 
 const Category = ({
+  categoryInfo,
   initialProducts,
   verticalBrowseCategories,
   filterAttributes,
@@ -208,7 +209,7 @@ const Category = ({
           {typeof slug === 'string' ? slug.replace(/-/g, ' ') : slug}
         </chakra.h1>
         <chakra.p {...paragraphStyles}>
-          {/* {categoryInfo.categoryBrowse.description} */}
+          {categoryInfo.data.currentCategoryInfo.description}
         </chakra.p>
       </VStack>
 
@@ -488,6 +489,13 @@ const Category = ({
                 );
               })}
             </SimpleGrid>
+
+            {categoryInfo.data.currentCategoryInfo.shortBlurb && (
+              <Blurb
+                blurb={categoryInfo.data.currentCategoryInfo.blurb}
+                shortBlurb={categoryInfo.data.currentCategoryInfo.shortBlurb}
+              />
+            )}
           </Box>
         </Grid>
         <ScrollToTop

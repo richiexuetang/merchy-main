@@ -4,6 +4,7 @@ import {
   GetCategoryProducts,
   GetBrowseCategoryInfo,
   GetProductFilter,
+  GetCurrentCategoryInfo,
 } from '../utils/gql';
 import client from '../pages/api/graphql';
 
@@ -45,6 +46,15 @@ export const getBrowseCategoryInfo = async (slug) => {
 export const getProductFilter = async (slug) => {
   return await client.query({
     query: GetProductFilter,
+    variables: {
+      categorySlug: slug,
+    },
+  });
+};
+
+export const getCurrentCategoryInfo = async (slug) => {
+  return await client.query({
+    query: GetCurrentCategoryInfo,
     variables: {
       categorySlug: slug,
     },

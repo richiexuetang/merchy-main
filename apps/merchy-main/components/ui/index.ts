@@ -5,3 +5,4 @@ export { default as SelectDropdown } from './SelectDropdown';
 export { default as CustomCheckbox } from './CustomCheckbox';
 export { default as BreadCrumbs } from './BreadCrumbs';
 export { default as AccountMenu } from './AccountMenu';
+export { default as Blurb } from './Blurb';

@@ -5,6 +5,7 @@ import {
   getAllCategoryPaths,
   getCategoryProducts,
   getProductFilter,
+  getCurrentCategoryInfo,
 } from '../../api';
 
 export async function getStaticProps(context) {
@@ -18,10 +19,13 @@ export async function getStaticProps(context) {
 
   const attributes = await getProductFilter(context.params.slug);
 
+  const categoryInfo = await getCurrentCategoryInfo(context.params.slug);
+
   const browseCategories = allCategories.data.categories.edges;
 
   return {
     props: {
+      categoryInfo,
       browseCategories,
       initialProducts: categoryProducts.data.allProducts.edges,
       verticalBrowseCategories:

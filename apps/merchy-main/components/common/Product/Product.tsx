@@ -401,13 +401,31 @@ const Product = ({ productInfo }) => {
                         color="neutral.black"
                         fontSize="xl"
                         fontWeight="bold"
-                        fontFamily="suisseIntlRegular"
                         lineHeight="6"
-                        letterSpacing="0.004rem"
                         my="1"
                       >
                         ${productInfo.market.price}
                       </Text>
+                      <Box display="flex" alignItems="center">
+                        <Text
+                          lineHeight="5"
+                          letterSpacing="0"
+                          ml="1"
+                          fontSize="sm"
+                          color="neutral.500"
+                        >
+                          --
+                        </Text>
+                        <Text
+                          lineHeight="5"
+                          letterSpacing="0"
+                          ml="1"
+                          fontSize="sm"
+                          color="neutral.500"
+                        >
+                          (--)
+                        </Text>
+                      </Box>
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Box data-component="MarketActivityDrawer">

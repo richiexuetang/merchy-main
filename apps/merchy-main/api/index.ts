@@ -4,6 +4,7 @@ export {
   getAllCategoryPaths,
   getCategoryProducts,
   getProductFilter,
+  getCurrentCategoryInfo,
 } from './category';
 export {
   getProductPaths,

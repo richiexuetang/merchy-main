@@ -37,6 +37,7 @@ export {
 } from './icons';
 export {
   Text,
+  Blurb,
   BrowseNavbar,
   SelectDropdown,
   CustomCheckbox,
