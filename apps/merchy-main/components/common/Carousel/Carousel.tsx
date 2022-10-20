@@ -36,87 +36,60 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ slides }) => {
     ));
 
   const NextArrow = styled.div`
-    display: block;
-    position: relative;
+    &.slick-next {
+      right: 2rem;
+    }
 
     &.slick-next::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      width: 2rem;
-      height: 1px;
-      transform: rotate(45deg);
-      background-color: rgba(0, 0, 0, 0.8);
-      transition: all 0.2s;
-      left: 1rem;
+      content: none;
     }
     &.slick-next::after {
-      content: '';
-      top: 50%;
-      position: absolute;
-      width: 2rem;
-      height: 1px;
-      transform: rotate(-45deg);
-      background-color: rgba(0, 0, 0, 0.8);
-      transition: all 0.2s;
-      left: 1rem;
-    }
-    &.slick-next:hover::before {
-      top: -40%;
-      transform: rotate(35deg);
-    }
-    &.slick-next:hover::after {
-      top: 40%;
-      transform: rotate(-35deg);
+      content: none;
     }
   `;
 
   const PrevArrow = styled.div`
-    display: block;
-    position: relative;
-    transform: rotate(360deg);
+    z-index: 10;
+
+    &.slick-prev {
+      left: 0.5rem;
+    }
 
     &.slick-prev::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      width: 2rem;
-      height: 1px;
-      transform: rotate(-45deg);
-      background-color: rgba(0, 0, 0, 0.8);
-      transition: all 0.2s;
-      right: 1rem;
+      content: none;
     }
     &.slick-prev::after {
-      content: '';
-      top: 50%;
-      position: absolute;
-      width: 2rem;
-      height: 1px;
-      transform: rotate(45deg);
-      background-color: rgba(0, 0, 0, 0.8);
-      transition: all 0.2s;
-      right: 1rem;
-    }
-    &.slick-prev:hover::before {
-      top: -40%;
-      transform: rotate(-35deg);
-    }
-    &.slick-prev:hover::after {
-      top: 40%;
-      transform: rotate(35deg);
+      content: none;
     }
   `;
 
   function SampleNextArrow(props) {
     const { className, onClick } = props;
 
-    return <NextArrow className={className} onClick={onClick} />;
+    return (
+      <NextArrow className={className} onClick={onClick}>
+        <IconButton
+          bg="black"
+          aria-label="next arrow"
+          borderRadius="50%"
+          icon={<ChevronRightIcon color="white" />}
+        />
+      </NextArrow>
+    );
   }
 
   function SamplePrevArrow(props) {
     const { className, onClick } = props;
-    return <PrevArrow className={className} onClick={onClick} />;
+    return (
+      <PrevArrow className={className} onClick={onClick}>
+        <IconButton
+          bg="black"
+          aria-label="prev arrow"
+          borderRadius="50%"
+          icon={<ChevronLeftIcon color="white" />}
+        />
+      </PrevArrow>
+    );
   }
   const settings = {
     customPaging: function (i) {
