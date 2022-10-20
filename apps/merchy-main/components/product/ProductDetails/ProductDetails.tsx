@@ -66,6 +66,7 @@ const ProductDetails = ({ productInfo }) => {
                           flexBasis="50%"
                           fontSize="sm"
                           lineHeight="sm"
+                          textTransform="capitalize"
                         >
                           {name}
                         </Text>
@@ -75,6 +76,7 @@ const ProductDetails = ({ productInfo }) => {
                           fontSize="sm"
                           fontFamily="suisseIntlMedium"
                           lineHeight="sm"
+                          textTransform="uppercase"
                         >
                           {value}
                         </Text>
