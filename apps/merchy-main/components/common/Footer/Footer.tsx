@@ -14,10 +14,28 @@ import {
   VStack,
   ListItem,
   Icon,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  ButtonGroup,
+  FormLabel,
+  Select,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { LinkedIn, GitHub, WebAsset, Apple, Adb } from '@mui/icons-material';
+import {
+  LinkedIn,
+  GitHub,
+  WebAsset,
+  Apple,
+  Adb,
+  Accessible,
+} from '@mui/icons-material';
 
 const ListHeader = ({
   children,
@@ -54,6 +72,8 @@ const ListElement = ({
 };
 
 const Footer = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <chakra.footer
       pos="relative"
@@ -271,11 +291,52 @@ const Footer = () => {
                 fontWeight="semibold"
                 fontSize="md"
                 h="42px"
+                onClick={onOpen}
               >
                 <span>
                   United States&nbsp;|&nbsp;English&nbsp;|&nbsp;$USD&nbsp;
                 </span>
               </Button>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>
+                    <Heading fontWeight="500" fontSize="xl" mb="1">
+                      Change your settings
+                    </Heading>
+                    <Text fontSize="sm" fontWeight="normal">
+                      Choose your language &amp; your preferred currency below
+                    </Text>
+                  </ModalHeader>
+                  <ModalBody>
+                    <FormLabel>Region</FormLabel>
+                    <Select value="United States">
+                      <option>United States</option>
+                    </Select>
+
+                    <FormLabel mt="3">Language</FormLabel>
+                    <Select value="English">
+                      <option>English</option>
+                    </Select>
+
+                    <FormLabel mt="3">Currency</FormLabel>
+                    <Select value="$USD">
+                      <option>$USD</option>
+                    </Select>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <ButtonGroup justifyContent="space-between" w="100%">
+                      <Button variant="login" onClick={onClose}>
+                        Cancel
+                      </Button>
+                      <Button variant="signup" onClick={onClose}>
+                        Save Changes
+                      </Button>
+                    </ButtonGroup>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </Box>
 
             <Box
@@ -307,6 +368,7 @@ const Footer = () => {
                       href="https://www.linkedin.com/in/richardxuetang/"
                       target="_blank"
                       rel="noopener noreferrer"
+                      title="LinkedIn Page"
                     >
                       <Icon w="1em" h="1em" as={LinkedIn} />
                     </a>
@@ -317,6 +379,7 @@ const Footer = () => {
                       href="https://github.com/richiexuetang"
                       target="_blank"
                       rel="noopener noreferrer"
+                      title="GitHub Page"
                     >
                       <Icon w="1em" h="1em" as={GitHub} />
                     </a>
@@ -327,6 +390,7 @@ const Footer = () => {
                       href="https://richardxuetang.com"
                       target="_blank"
                       rel="noopener noreferrer"
+                      title="Personal Website"
                     >
                       <Icon w="1em" h="1em" as={WebAsset} />
                     </a>
@@ -399,6 +463,22 @@ const Footer = () => {
                   Use Assistive Technology
                 </Text>
                 <Spacer />
+
+                <List
+                  display="flex"
+                  listStyleType="none"
+                  justifyContent={{ base: 'center', lg: 'inherit' }}
+                >
+                  <ListItem w="auto" paddingInline="2">
+                    <a
+                      href="https://www.essentialaccessibility.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon w="1em" h="1em" as={Accessible} />
+                    </a>
+                  </ListItem>
+                </List>
               </Box>
             </Box>
 

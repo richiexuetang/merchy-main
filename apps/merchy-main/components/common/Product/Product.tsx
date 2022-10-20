@@ -13,16 +13,13 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  Grid,
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
-import { ProductCard } from '../../product';
 import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
-import { BreadCrumbs } from '../../ui';
 import { useRouter } from 'next/router';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import MarketDrawer from './MarketDrawer';
