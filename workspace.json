@@ -5,10 +5,8 @@
     "admin-tool": "apps/admin-tool",
     "admin-tool-e2e": "apps/admin-tool-e2e",
     "api": "apps/api",
-    "merchy-ui": "apps/merchy-ui",
     "merchy-main": "apps/merchy-main",
     "merchy-main-e2e": "apps/merchy-main-e2e",
-    "merchy-ui-e2e": "apps/merchy-ui-e2e",
     "prisma-client": "libs/prisma-client",
     "shared-assets": "libs/shared/assets",
     "ui-shared": "libs/ui-shared"
