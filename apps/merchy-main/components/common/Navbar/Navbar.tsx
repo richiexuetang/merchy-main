@@ -1,7 +1,15 @@
 import { Account, Bell, Logo } from '../../icons';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
-import { chakra, Flex, Icon, Link, Button, IconButton } from '@chakra-ui/react';
+import {
+  chakra,
+  Flex,
+  Icon,
+  Link,
+  Button,
+  IconButton,
+  Box,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
@@ -32,21 +40,24 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
       <chakra.div pos="sticky" zIndex="1030" top={0} bg="white">
         <Flex minH="48px" justify="space-between" align="center">
           {/* Logo */}
-          <chakra.div display={{ base: 'none', md: 'inline-block' }}>
-            <Link href="/">
+          <Box display={{ base: 'none', md: 'inline-block' }}>
+            <Link display={{ base: 'none', md: 'block' }} href="/">
               <chakra.span
                 display={{ base: 'flex', md: 'block' }}
-                margin={{ base: 'auto 0px', md: 'auto 2.5rem' }}
+                mx={{ base: '0px', md: '2.5rem' }}
               >
                 <Icon
                   as={Logo}
                   h="auto"
                   w={{ base: '95px', md: '125px' }}
+                  display="inline-block"
+                  lineHeight="44px"
                   flexShrink="0"
+                  verticalAlign="middle"
                 />
               </chakra.span>
             </Link>
-          </chakra.div>
+          </Box>
           {/* End of Logo */}
 
           <NavInput />

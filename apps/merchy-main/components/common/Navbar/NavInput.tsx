@@ -29,17 +29,18 @@ const NavInput = () => {
 
   const leftElementStyles = {
     left: { base: 1, md: 0 },
-    top: '0',
+    top: { base: '0px', md: '0px' },
+    w: { base: '2rem', md: '3rem' },
+    h: { base: '2rem', md: '3rem' },
     fontSize: 'lg',
-    w: '12',
-    h: '12',
+    alignItems: 'center',
   } as const;
 
   const inputStyles = {
-    borderColor: 'var(--chakra-colors-neutral-400)',
+    borderColor: 'neutral.400',
     fontSize: { base: 'lg', md: '14px' },
     paddingInlineStart: '12',
-    h: { base: 12, md: '44px' },
+    h: { base: '34px', md: '44px' },
     borderRadius: '3px',
     backgroundColor: '#fafafa',
     pr: '2',
@@ -51,7 +52,7 @@ const NavInput = () => {
       boxShadow: 'none',
     },
     _hover: {
-      borderColor: '5f5f5f',
+      borderColor: '#5f5f5f',
     },
   } as const;
 
@@ -62,17 +63,25 @@ const NavInput = () => {
   });
 
   return (
-    <Box w="90%" paddingRight={8}>
-      <InputGroup>
-        <InputLeftElement {...leftElementStyles}>
-          <SearchIcon />
-        </InputLeftElement>
-        <Input
-          {...inputStyles}
-          placeholder="Search for brand, color, etc."
-          onChange={(e) => handleChange(e)}
-        />
-      </InputGroup>
+    <Box
+      w={{ base: 'auto', md: '90%' }}
+      pr={{ base: '0px', md: '8' }}
+      flexGrow="1"
+    >
+      <Box>
+        <Box pos="relative" flexGrow="1">
+          <InputGroup>
+            <InputLeftElement {...leftElementStyles}>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              {...inputStyles}
+              placeholder="Search for brand, color, etc."
+              onChange={(e) => handleChange(e)}
+            />
+          </InputGroup>
+        </Box>
+      </Box>
       {searchFilter && (
         <Portal>
           <Box

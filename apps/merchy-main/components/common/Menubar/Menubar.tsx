@@ -10,16 +10,26 @@ import {
 const Menubar = ({ levelOneCategories }) => {
   return (
     <chakra.nav
-      display={{ base: 'none', md: 'initial' }}
+      // display={{ base: 'none', md: 'initial' }}
       textTransform="capitalize"
     >
-      <Box bg="beige.100" justifyContent="space-between" overflowX="auto">
+      <Box
+        bg="beige.100"
+        justifyContent="space-between"
+        overflowX="auto"
+        m="0"
+        p="0"
+        display="flex"
+        px={{ base: '1', md: 'initial' }}
+        borderBottom={{ base: '1px', md: 'initial' }}
+        borderColor={{ base: 'neutral.300', md: 'initial' }}
+      >
         <List
           display="flex"
           w="1296px"
           h="48px"
           justifyContent="center"
-          m={{ base: '0 1rem', lg: 'auto' }}
+          m={{ base: 'auto', md: '0 1rem', lg: 'auto' }}
         >
           {levelOneCategories.map(({ name, slug }) => {
             return (
@@ -28,8 +38,12 @@ const Menubar = ({ levelOneCategories }) => {
                 display="flex"
                 alignItems="center"
                 letterSpacing="0.5px"
-                margin={{ md: '0 16px' }}
-                fontSize="18px"
+                margin={{ base: '0 16px', md: '0 8px' }}
+                fontSize={{ base: '18px', md: '16px' }}
+                whiteSpace="nowrap"
+                boxShadow="inset 0 -5px 0 0 transparent"
+                fontFamily="suisseIntlMedium"
+                cursor="pointer"
               >
                 <ChakraLink
                   as={Link}
