@@ -19,7 +19,6 @@ import {
   Image as ChakraImage,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 import { DownArrow, Share, Favorite, Add } from '../../icons';
 import { useRouter } from 'next/router';
@@ -376,11 +375,11 @@ const Product = ({ productInfo }) => {
 
                 <Box>
                   <Box
-                    data-component="MarkeyActivity"
+                    data-component="MarketActivity"
                     display="flex"
                     justifyContent="space-between"
                     pt="4"
-                    flexDir="row"
+                    flexDir={{ base: 'column', lg: 'row' }}
                   >
                     <Box
                       data-component="LastSale"
