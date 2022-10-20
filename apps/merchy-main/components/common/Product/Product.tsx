@@ -15,6 +15,8 @@ import {
   StatNumber,
   IconButton,
   useDisclosure,
+  SimpleGrid,
+  Image as ChakraImage,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Image from 'next/image';
@@ -170,12 +172,17 @@ const Product = ({ productInfo }) => {
               </Box>
             </Box>
 
-            <Box
+            <SimpleGrid
               data-component="ProductMain"
-              display="flex"
-              justifyContent="space-between"
+              columns={{ base: 1, lg: 2 }}
             >
-              <Box data-component="MediaContainer" w="full" h="initial">
+              <Box
+                data-component="MediaContainer"
+                w="full"
+                h="initial"
+                pos="relative"
+                pb={{ base: '0px' }}
+              >
                 <Box
                   data-component="SingleImage"
                   display="flex"
@@ -190,12 +197,12 @@ const Product = ({ productInfo }) => {
                     flexDir="column"
                     alignItems="center"
                     pos="relative"
-                    maxW="576px"
+                    maxW={{ base: '358px', lg: '576px' }}
                   >
-                    <Image
-                      layout="fixed"
-                      width={512}
-                      height={384}
+                    <ChakraImage
+                      // layout="fill"
+                      // width={512}
+                      // height={384}
                       src={productInfo?.media.imageUrl}
                       alt={productInfo?.media.imageUrl}
                     />
@@ -203,7 +210,7 @@ const Product = ({ productInfo }) => {
                 </Box>
               </Box>
 
-              <Box>
+              <Box ml={{ lg: '4' }}>
                 <Box
                   data-component="BuySellContainer"
                   minW={{ base: 'auto', md: '350px', lg: '464px' }}
@@ -491,7 +498,7 @@ const Product = ({ productInfo }) => {
                   </Box>
                 </Box>
               </Box>
-            </Box>
+            </SimpleGrid>
           </Box>
         </Box>
       </chakra.section>

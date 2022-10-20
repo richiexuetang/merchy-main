@@ -338,7 +338,7 @@ const Category = ({
             maxW="100%"
           >
             <Box
-              data-component="category-breadcrumb"
+              data-component="category-breadcrumb-filter"
               display={{ base: 'none', lg: 'block' }}
             >
               <Box
