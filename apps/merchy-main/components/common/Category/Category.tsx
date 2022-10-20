@@ -8,6 +8,7 @@ import {
   Select,
   Heading,
   Checkbox,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
@@ -217,9 +218,25 @@ const Category = ({
         maxW="1170px"
         paddingInline="1rem"
       >
-        <Grid templateColumns="repeat(5, 1fr)" gap={6} marginTop={10}>
+        <Grid
+          templateColumns="repeat(5, 1fr)"
+          gap={{ base: '2', lg: '6' }}
+          mb="6"
+          marginInline="0"
+          paddingInline="0"
+          mt={{ lg: '10' }}
+          overflow="hidden"
+        >
           {/* Left Nav Menu */}
-          <Container display="block" paddingLeft={4} gridColumn="span 1/span 1">
+          <Box
+            display={{ base: 'none', lg: 'block' }}
+            paddingLeft={4}
+            gridColumn={{
+              base: 'span 3/span 3',
+              md: 'span 2/span 2',
+              lg: 'span 1/span 1',
+            }}
+          >
             <Box>
               {/* Left Top Nav Menu */}
               <Box marginBottom={8}>
@@ -312,11 +329,14 @@ const Category = ({
                 })}
               </Box>
             </Box>
-          </Container>
+          </Box>
           {/* End of Left Nav Menu */}
 
           {/* Product Section */}
-          <Container gridColumn="span 4/span 4" maxW="100%">
+          <Box
+            gridColumn={{ base: 'span 5 / span 5', lg: 'span 4/span 4' }}
+            maxW="100%"
+          >
             <Box
               data-component="category-breadcrumb"
               display={{ base: 'none', lg: 'block' }}
@@ -357,136 +377,118 @@ const Category = ({
               </Box>
             </Box>
 
-            <Box
-              data-component="category-products"
-              display="flex"
-              justifyContent="flex-start"
-              flexWrap="wrap"
-              w="100%"
-            >
-              <Box
-                id="browse-grid"
-                display="flex"
-                justifyContent="flex-start"
-                flexWrap="wrap"
-                w="100%"
-              >
-                {products?.map(({ node }, index) => {
-                  return (
-                    <Box w="25%" padding="0 8px 16px" key={index}>
-                      <Box
-                        border="solid #E2E8F0"
-                        borderWidth="thin"
-                        borderRadius="3px"
-                        minW="141px"
-                        h="auto"
-                        pos="relative"
-                        mr="0"
-                        _hover={{
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Link href={`/product/${node.slug}`}>
+            <SimpleGrid id="browse-grid" columns={{ base: 2, lg: 4, xl: 4 }}>
+              {products?.map(({ node }, index) => {
+                return (
+                  <Box padding="0 8px 16px" key={index}>
+                    <Box
+                      border="solid #E2E8F0"
+                      borderWidth="thin"
+                      borderRadius="3px"
+                      minW="141px"
+                      h="auto"
+                      pos="relative"
+                      mr="0"
+                      _hover={{
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Link href={`/product/${node.slug}`}>
+                        <Box
+                          display="flex"
+                          flexDir="column"
+                          borderColor="neutral.200"
+                        >
+                          <Box margin={{ base: '2', lg: '4' }}>
+                            <Box
+                              display="flex"
+                              justifyContent="center"
+                              w="140px"
+                              h="75px"
+                              maxW="100%"
+                              m="0px auto"
+                            >
+                              <Image
+                                layout="fixed"
+                                width={145}
+                                height={75}
+                                src={node.media.thumbUrl}
+                                alt={node.name}
+                                priority={true}
+                              />
+                            </Box>
+                          </Box>
                           <Box
                             display="flex"
                             flexDir="column"
-                            borderColor="neutral.200"
+                            h="100%"
+                            padding="2"
+                            textAlign="left"
+                            pos="relative"
                           >
-                            <Box margin={{ base: '2', lg: '4' }}>
-                              <Box
-                                display="flex"
-                                justifyContent="center"
-                                w="140px"
-                                h="75px"
-                                maxW="100%"
-                                m="0px auto"
-                              >
-                                <Image
-                                  layout="fixed"
-                                  width={145}
-                                  height={75}
-                                  src={node.media.thumbUrl}
-                                  alt={node.name}
-                                  priority={true}
-                                />
-                              </Box>
-                            </Box>
+                            <Text
+                              overflow="hidden"
+                              fontWeight="md"
+                              fontSize={{ base: 'xs', md: 'sm' }}
+                              h={{ base: '34px', md: '40px' }}
+                            >
+                              {node.name}
+                            </Text>
                             <Box
                               display="flex"
                               flexDir="column"
+                              justifyContent="space-between"
                               h="100%"
-                              padding="2"
-                              textAlign="left"
-                              pos="relative"
                             >
-                              <Text
-                                overflow="hidden"
-                                fontWeight="md"
-                                fontSize={{ base: 'xs', md: 'sm' }}
-                                h={{ base: '34px', md: '40px' }}
-                              >
-                                {node.name}
-                              </Text>
-                              <Box
-                                display="flex"
-                                flexDir="column"
-                                justifyContent="space-between"
-                                h="100%"
-                              >
-                                <Box>
-                                  <Text
-                                    lineHeight="md"
-                                    fontSize="xs"
-                                    fontWeight="medium"
-                                    mt="1"
-                                  >
-                                    {sortBy === 'market__highestBid'
-                                      ? 'Highest Bid'
-                                      : 'Lowest Ask'}
-                                  </Text>
-                                  <Text
-                                    fontWeight="bold"
-                                    lineHeight="1.3"
-                                    mt="1"
-                                  >
-                                    {sortBy === 'market__highestBid'
-                                      ? `${node.market.highestBid}`
-                                      : `${node.market.lowestAsk}`}
-                                  </Text>
-                                </Box>
-                                {sortBy !== 'featured' && (
-                                  <Box display="flex" mt="1">
-                                    {sortBy === 'market__salesEver' && (
-                                      <chakra.span {...spanStyles}>
-                                        {node.market.salesEver} sold
-                                      </chakra.span>
-                                    )}
-                                    {sortBy === 'releaseDate' && (
-                                      <chakra.span {...spanStyles}>
-                                        Released{' '}
-                                        {moment(
-                                          node.productDetails.releaseDate
-                                        ).format('MM/DD/YYYY')}
-                                      </chakra.span>
-                                    )}
-                                    {sortBy === 'market__lastSale' && (
-                                      <chakra.span {...spanStyles}>
-                                        Last Sale: ${node.market.lastSale}
-                                      </chakra.span>
-                                    )}
-                                  </Box>
-                                )}
+                              <Box>
+                                <Text
+                                  lineHeight="md"
+                                  fontSize="xs"
+                                  fontWeight="medium"
+                                  mt="1"
+                                >
+                                  {sortBy === 'market__highestBid'
+                                    ? 'Highest Bid'
+                                    : 'Lowest Ask'}
+                                </Text>
+                                <Text fontWeight="bold" lineHeight="1.3" mt="1">
+                                  {sortBy === 'market__highestBid'
+                                    ? `${node.market.highestBid}`
+                                    : `${node.market.lowestAsk}`}
+                                </Text>
                               </Box>
+                              {sortBy !== 'featured' && (
+                                <Box display="flex" mt="1">
+                                  {sortBy === 'market__salesEver' && (
+                                    <chakra.span {...spanStyles}>
+                                      {node.market.salesEver} sold
+                                    </chakra.span>
+                                  )}
+                                  {sortBy === 'releaseDate' && (
+                                    <chakra.span {...spanStyles}>
+                                      Released{' '}
+                                      {moment(
+                                        node.productDetails.releaseDate
+                                      ).format('MM/DD/YYYY')}
+                                    </chakra.span>
+                                  )}
+                                  {sortBy === 'market__lastSale' && (
+                                    <chakra.span {...spanStyles}>
+                                      Last Sale: ${node.market.lastSale}
+                                    </chakra.span>
+                                  )}
+                                </Box>
+                              )}
                             </Box>
                           </Box>
-                        </Link>
-                      </Box>
+                        </Box>
+                      </Link>
                     </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-          </Container>
+                  </Box>
+                );
+              })}
+            </SimpleGrid>
+          </Box>
         </Grid>
         <ScrollToTop
           smooth
