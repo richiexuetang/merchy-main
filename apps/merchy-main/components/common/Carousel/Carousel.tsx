@@ -13,58 +13,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import './index.module.css';
+import styled from '@emotion/styled';
 
 interface ImageSliderProps {
   slides: ImageUrl[];
 }
 
 const ImageSlider: React.FC<ImageSliderProps> = ({ slides }) => {
-  const buttonStyles = {
-    borderRadius: '50%',
-    background: '#0f0f0f',
-    color: 'white',
-    pos: 'absolute',
-    top: '50%',
-    w: '10',
-    mt: '-22px',
-    h: '42px',
-    p: '0.625rem',
-    maxWidth: '2.5rem',
-    maxHeight: '2.5rem',
-    _disabled: {
-      _hover: {
-        background: '#ededed',
-        color: '#A1A5A4',
-      },
-      background: '#ededed',
-      color: '#A1A5A4',
-    },
-    _hover: {
-      background: '#0f0f0f',
-      color: 'white',
-    },
-  } as const;
-
-  const RightIcon = createIcon({
-    displayName: 'RightIcon',
-    viewBox: '0 0 50 50',
-    path: (
-      <path
-        fill="currentColor"
-        d="M14.2 40.2001L30.4 25.0001L14.2 9.8001L16.7 7.1001L35.8 25.0001L16.7 42.9001L14.2 40.2001Z"
-      />
-    ),
-  });
-
-  const iconStyles = {
-    w: '1em',
-    h: '0.5rem',
-    lineHeight: '1em',
-    flexShrink: '0',
-    color: 'white',
-    verticalAlign: 'middle',
-  } as const;
-
   const renderSlides = () =>
     slides.map((slide, sid) => (
       <Box key={`slide-${sid}`}>
@@ -79,60 +35,89 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ slides }) => {
       </Box>
     ));
 
+  const NextArrow = styled.div`
+    display: block;
+    position: relative;
+
+    &.slick-next::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      width: 2rem;
+      height: 1px;
+      transform: rotate(45deg);
+      background-color: rgba(0, 0, 0, 0.8);
+      transition: all 0.2s;
+      left: 1rem;
+    }
+    &.slick-next::after {
+      content: '';
+      top: 50%;
+      position: absolute;
+      width: 2rem;
+      height: 1px;
+      transform: rotate(-45deg);
+      background-color: rgba(0, 0, 0, 0.8);
+      transition: all 0.2s;
+      left: 1rem;
+    }
+    &.slick-next:hover::before {
+      top: -40%;
+      transform: rotate(35deg);
+    }
+    &.slick-next:hover::after {
+      top: 40%;
+      transform: rotate(-35deg);
+    }
+  `;
+
+  const PrevArrow = styled.div`
+    display: block;
+    position: relative;
+    transform: rotate(360deg);
+
+    &.slick-prev::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      width: 2rem;
+      height: 1px;
+      transform: rotate(-45deg);
+      background-color: rgba(0, 0, 0, 0.8);
+      transition: all 0.2s;
+      right: 1rem;
+    }
+    &.slick-prev::after {
+      content: '';
+      top: 50%;
+      position: absolute;
+      width: 2rem;
+      height: 1px;
+      transform: rotate(45deg);
+      background-color: rgba(0, 0, 0, 0.8);
+      transition: all 0.2s;
+      right: 1rem;
+    }
+    &.slick-prev:hover::before {
+      top: -40%;
+      transform: rotate(-35deg);
+    }
+    &.slick-prev:hover::after {
+      top: 40%;
+      transform: rotate(35deg);
+    }
+  `;
+
   function SampleNextArrow(props) {
     const { className, onClick } = props;
-    return (
-      <IconButton
-        aria-label="next image"
-        className={className}
-        right="1 !important"
-        style={{
-          display: 'block',
-          zIndex: '10',
-          borderRadius: '50%',
-          color: 'white',
-          position: 'absolute',
-          top: '50%',
-          width: '10',
-          marginTop: '-22px',
-          height: '42px',
-          padding: '0.625rem',
-          maxWidth: '2.5rem',
-          maxHeight: '2.5rem',
-        }}
-        onClick={onClick}
-        icon={<RightIcon {...iconStyles} />}
-      />
-    );
+
+    return <NextArrow className={className} onClick={onClick} />;
   }
 
   function SamplePrevArrow(props) {
     const { className, onClick } = props;
-    return (
-      <IconButton
-        aria-label="prev image"
-        className={className}
-        left="1 !important"
-        style={{
-          display: 'block',
-          zIndex: '10',
-          borderRadius: '50%',
-          color: 'white',
-          position: 'absolute',
-          top: '50%',
-          width: '10',
-          marginTop: '-22px',
-          height: '42px',
-          padding: '0.625rem',
-          maxWidth: '2.5rem',
-          maxHeight: '2.5rem',
-        }}
-        onClick={onClick}
-        icon={<ChevronRightIcon bg="transparent" color="transparent" />}
-      />
-    );
+    return <PrevArrow className={className} onClick={onClick} />;
   }
-
   const settings = {
     customPaging: function (i) {
       return (
