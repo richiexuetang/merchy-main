@@ -45,6 +45,11 @@ export const GetProductInfo = gql`
       market {
         price
       }
+      productTraits {
+        format
+        name
+        value
+      }
     }
   }
 `;

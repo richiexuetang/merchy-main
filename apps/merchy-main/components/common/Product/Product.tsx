@@ -24,6 +24,7 @@ import { DownArrow, Share, Favorite, Add } from '../../icons';
 import { useRouter } from 'next/router';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import MarketDrawer from './MarketDrawer';
+import { ProductDetails } from '../../product';
 
 const Product = ({ productInfo }) => {
   const router = useRouter();
@@ -559,71 +560,7 @@ const Product = ({ productInfo }) => {
         </chakra.section>
       )} */}
 
-      <chakra.section data-component="ProductDetails" mt="6">
-        <Divider orientation="horizontal" borderWidth="0 0 1px" />
-        <chakra.h3 fontWeight="bold" lineHeight="md" mb="2" py="3">
-          Product Details
-        </chakra.h3>
-        <Box>
-          <Box
-            display="flex"
-            flexDir={{ md: 'row' }}
-            justifyContent="flex-start"
-            w="100%"
-          >
-            <Box w={{ base: '100%', md: '40%' }}>
-              {/* {productInfo?.traits && (
-                <Box
-                  data-component="ProductTraits"
-                  display="flex"
-                  flexDir="column"
-                  w="100%"
-                  justifyContent="space-between"
-                  flexWrap={{ md: 'wrap' }}
-                >
-                  {productInfo?.product.traits &&
-                    productInfo?.product.traits.map(
-                      ({ name, value, visible }, index) =>
-                        visible !== 'false' && (
-                          <Box
-                            key={index}
-                            data-component="product-trait"
-                            display="flex"
-                            justifyContent={{
-                              base: 'space-between',
-                              md: 'flex-start',
-                            }}
-                            // w={{ base: '100%', md: '40%' }}
-                            mb="1"
-                          >
-                            <chakra.span flexBasis="50%">{name}</chakra.span>
-                            <chakra.p
-                              textAlign={{ base: 'right', md: 'left' }}
-                              w="100%"
-                            >
-                              {value}
-                            </chakra.p>
-                          </Box>
-                        )
-                    )}
-                </Box>
-              )} */}
-            </Box>
-            {productInfo?.description && (
-              <Box data-component="ProductDescription">
-                <chakra.h2>Product Description</chakra.h2>
-                <Text>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: productInfo?.description,
-                    }}
-                  />
-                </Text>
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </chakra.section>
+      <ProductDetails productInfo={productInfo} />
 
       <chakra.section data-component="MarketHistory" mt="6">
         <Divider orientation="horizontal" borderWidth="0 0 1px" />
