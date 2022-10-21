@@ -7,8 +7,17 @@ import {
   getProductFilter,
   getCurrentCategoryInfo,
 } from '../../api';
+import axios from 'axios';
 
 export async function getStaticProps(context) {
+  const { data: breadcrumbs } = await axios.get(
+    process.env.NEXT_PUBLIC_API_BASE_URL +
+      'categories/breadcrumbs/' +
+      context.params.slug +
+      '/',
+    {}
+  );
+
   const allCategories = await getAllBrowseCategories();
 
   const categoryProducts = await getCategoryProducts(context.params.slug);
@@ -25,6 +34,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
+      breadcrumbs,
       categoryInfo,
       browseCategories,
       initialProducts: categoryProducts.data.allProducts.edges,

@@ -42,7 +42,7 @@ const SignUp = () => {
   const [inputPassword, setInputPassword] = useState('');
 
   const handleSignUp = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     axios
       .post(baseUrl + 'dj-rest-auth/registration/', {

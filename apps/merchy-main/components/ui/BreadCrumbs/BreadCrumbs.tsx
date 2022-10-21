@@ -22,6 +22,7 @@ const BreadCrumbs = ({ links }) => {
                   outlineOffset="2px"
                   outline="2px solid transparent"
                   cursor="pointer"
+                  textTransform="capitalize"
                 >
                   {name}
                 </BreadcrumbLink>

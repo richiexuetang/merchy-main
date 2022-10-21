@@ -62,6 +62,7 @@ const attributeFiltersInitialState = {
 };
 
 const Category = ({
+  breadcrumbs,
   categoryInfo,
   initialProducts,
   verticalBrowseCategories,
@@ -319,11 +320,9 @@ const Category = ({
               >
                 <Box>
                   <Box paddingBottom="2">
-                    {/* {categoryInfo.categoryBrowse.breadCrumbs && (
-                      <BreadCrumbs
-                        links={categoryInfo.categoryBrowse.breadCrumbs}
-                      />
-                    )} */}
+                    {breadcrumbs.breadcrumbs && (
+                      <BreadCrumbs links={breadcrumbs.breadcrumbs} />
+                    )}
                   </Box>
                 </Box>
 
