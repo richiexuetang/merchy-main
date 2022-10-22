@@ -164,6 +164,7 @@ export const GetCurrentCategoryInfo = gql`
       description
       shortBlurb
       blurb
+      breadcrumbs
     }
   }
 `;

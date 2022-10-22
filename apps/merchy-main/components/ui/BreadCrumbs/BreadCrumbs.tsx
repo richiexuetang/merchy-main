@@ -9,7 +9,9 @@ import Link from 'next/link';
 const BreadCrumbs = ({ links }) => {
   return (
     <Breadcrumb>
-      {links.map(({ name, url }, index) => {
+      {links.map((breadcrumb, index) => {
+        const { name, url } = JSON.parse(breadcrumb);
+
         const lastItem = index + 1 === links.length;
 
         return (
