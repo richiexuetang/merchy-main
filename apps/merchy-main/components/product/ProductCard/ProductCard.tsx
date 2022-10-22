@@ -2,8 +2,15 @@ import { Box, Text, Flex, Image } from '@chakra-ui/react';
 import Link from 'next/link';
 import NextImage from 'next/image';
 
+interface ProductInfo {
+  name: string;
+  lowestAsk: number;
+  lastSale: number;
+  imageUrl: string;
+  slug: string;
+}
 interface ProductCardProps {
-  product: any;
+  product: ProductInfo;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -15,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       position="relative"
       marginRight={0}
     >
-      <Link href={`/product/${product.node.slug}`}>
+      <Link href={`/product/${product.slug}`}>
         <Box
           border="solid #E2E8F0"
           borderWidth="thin"
@@ -37,8 +44,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <Image
                 objectFit="contain"
                 maxW="100%"
-                src={product.node.media.thumbUrl}
-                alt={product.node.name}
+                src={product.imageUrl}
+                alt={product.name}
               />
             </Box>
           </Box>
@@ -56,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               height={{ base: '34px', md: '40px' }}
               overflow="hidden"
             >
-              {product.node.name}
+              {product.name}
             </Text>
             <Flex
               flexDirection="column"
@@ -73,7 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   whiteSpace="nowrap"
                   marginTop={1}
                 >
-                  ${product.node.market.lowestAsk}
+                  ${product.lowestAsk}
                 </Text>
               </Box>
             </Flex>
@@ -101,7 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 color="neutral.black"
                 fontFamily="suisseIntlMedium"
               >
-                Last sale: ${product.node.market.lastSale}
+                Last sale: ${product.lastSale}
               </Text>
             </Flex>
           </Box>

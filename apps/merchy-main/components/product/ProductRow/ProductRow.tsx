@@ -18,11 +18,21 @@ const ProductRow = ({ collectionInfo }) => {
         marginBottom={6}
         overflow="auto"
       >
-        {collectionInfo.node.products.edges.map((node, index) => (
-          <li data-component="product-card" key={index}>
-            <ProductCard product={node} />
-          </li>
-        ))}
+        {collectionInfo.node.products.edges.map(({ node }, index) => {
+          const product = {
+            name: node.name,
+            lowestAsk: node.market.lowestAsk,
+            lastSale: node.market.lastSale,
+            imageUrl: node.media.thumbUrl,
+            slug: node.slug,
+          };
+
+          return (
+            <li data-component="product-card" key={index}>
+              <ProductCard product={product} />
+            </li>
+          );
+        })}
       </Grid>
     </Box>
   );

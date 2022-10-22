@@ -17,6 +17,7 @@ import {
   useDisclosure,
   SimpleGrid,
   Image as ChakraImage,
+  Grid,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useState } from 'react';
@@ -24,7 +25,8 @@ import { DownArrow, Share, Favorite, Add } from '../../icons';
 import { useRouter } from 'next/router';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import MarketDrawer from './MarketDrawer';
-import { ProductDetails } from '../../product';
+import { ProductCard, ProductDetails } from '../../product';
+import { BreadCrumbs } from '../..';
 
 const Product = ({ productInfo }) => {
   const router = useRouter();
@@ -50,7 +52,6 @@ const Product = ({ productInfo }) => {
     onOpen: onSalesOpen,
     onClose: onSalesClose,
   } = useDisclosure();
-
   return (
     <Container data-component="ProductView" w="100%" maxW="6xl" pb="8">
       <chakra.section mt="2">
@@ -61,11 +62,11 @@ const Product = ({ productInfo }) => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <chakra.div data-component="BreadCrumbs">
-                {/* {productInfo.product.breadCrumbs && (
-                  <BreadCrumbs links={productInfo.product.breadCrumbs} />
-                )} */}
-              </chakra.div>
+              <Box data-component="BreadCrumbs">
+                {productInfo.productBySlug.breadcrumbs && (
+                  <BreadCrumbs links={productInfo.productBySlug.breadcrumbs} />
+                )}
+              </Box>
               <Box
                 data-component="utility-wrapper"
                 float={{ base: 'left', sm: 'left', lg: 'right' }}
@@ -107,9 +108,9 @@ const Product = ({ productInfo }) => {
                   minH="0vw"
                   mb="2"
                 >
-                  {productInfo?.primaryTitle}
+                  {productInfo?.productBySlug.primaryTitle}
                   <chakra.span display="block" color="neutral.500" mt="1">
-                    {productInfo?.secondaryTitle}
+                    {productInfo?.productBySlug.secondaryTitle}
                   </chakra.span>
                 </chakra.h1>
               </Box>
@@ -162,7 +163,7 @@ const Product = ({ productInfo }) => {
                             whiteSpace="nowrap"
                             color="green.700"
                           >
-                            {productInfo?.condition}
+                            {productInfo?.productBySlug.condition}
                           </chakra.span>
                         </chakra.span>
                       </Link>
@@ -203,8 +204,8 @@ const Product = ({ productInfo }) => {
                       // layout="fill"
                       // width={512}
                       // height={384}
-                      src={productInfo?.media.imageUrl}
-                      alt={productInfo?.media.imageUrl}
+                      src={productInfo?.productBySlug.media.imageUrl}
+                      alt={productInfo?.productBySlug.media.imageUrl}
                     />
                   </Box>
                 </Box>
@@ -357,7 +358,8 @@ const Product = ({ productInfo }) => {
                           letterSpacing="0.004rem"
                           lineHeight="5"
                         >
-                          Sell for ${productInfo?.market.price} or Ask for More
+                          Sell for ${productInfo?.productBySlug.market.price} or
+                          Ask for More
                         </Text>
                         <IconButton
                           aria-label="sell"
@@ -405,7 +407,7 @@ const Product = ({ productInfo }) => {
                         lineHeight="6"
                         my="1"
                       >
-                        ${productInfo.market.price}
+                        ${productInfo.productBySlug.market.price}
                       </Text>
                       <Box display="flex" alignItems="center">
                         <Text
@@ -521,7 +523,7 @@ const Product = ({ productInfo }) => {
         </Box>
       </chakra.section>
 
-      {/* {productInfo?.product.variants?.length > 0 && (
+      {productInfo.relatedProducts?.edges.length > 0 && (
         <chakra.section
           data-component="RelatedProductsContainer"
           mt="4"
@@ -540,27 +542,26 @@ const Product = ({ productInfo }) => {
               marginBottom={6}
               overflow="auto"
             >
-              {productInfo?.product.variants?.map(
-                ({ name, price, imageUrl, slug }, index) => {
-                  const product = {
-                    name: name,
-                    price: price,
-                    imageUrl: imageUrl,
-                    slug: slug,
-                  };
-                  return (
-                    <li data-component="product-card" key={index}>
-                      <ProductCard product={product} />
-                    </li>
-                  );
-                }
-              )}
+              {productInfo.relatedProducts?.edges.map(({ node }, index) => {
+                const product = {
+                  name: node.name,
+                  lowestAsk: node.market.lowestAsk,
+                  lastSale: node.market.lastSale,
+                  imageUrl: node.media.imageUrl,
+                  slug: node.slug,
+                };
+                return (
+                  <li data-component="product-card" key={index}>
+                    <ProductCard product={product} />
+                  </li>
+                );
+              })}
             </Grid>
           </Box>
         </chakra.section>
-      )} */}
+      )}
 
-      <ProductDetails productInfo={productInfo} />
+      <ProductDetails productInfo={productInfo.productBySlug} />
 
       <chakra.section data-component="MarketHistory" mt="6">
         <Divider orientation="horizontal" borderWidth="0 0 1px" />

@@ -7,14 +7,14 @@ import {
 
 export async function getStaticProps(context) {
   const allCategories = await getAllBrowseCategories();
-  const { data: productInfo } = await getProductInfo(context.params.slug);
+  const { data } = await getProductInfo(context.params.slug);
 
   const browseCategories = allCategories.data.categories.edges;
 
   return {
     props: {
       browseCategories,
-      productInfo: productInfo.productBySlug,
+      productInfo: data,
     },
     revalidate: 200,
   };

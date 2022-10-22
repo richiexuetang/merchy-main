@@ -33,8 +33,10 @@ export const theme = extendTheme({
       200: '#ededed',
       300: '#cfcfcf',
       400: '#a1a5a4',
+      500: '#5F5F5F',
       600: '#393939',
       700: '#242424',
+      800: '#121212',
     },
     beige: {
       100: '#f4f3f1',
