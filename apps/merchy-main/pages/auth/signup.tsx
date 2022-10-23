@@ -45,10 +45,10 @@ const SignUp = () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     axios
-      .post(baseUrl + 'dj-rest-auth/registration/', {
+      .post(baseUrl + 'api/account/register', {
         email: inputEmail,
-        password1: inputPassword,
-        password2: inputPassword,
+        password: inputPassword,
+        re_password: inputPassword,
       })
       .then((res) => {
         const token = res.data.key;

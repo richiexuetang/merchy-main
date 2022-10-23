@@ -158,7 +158,9 @@ const ShippingSchema = Yup.object().shape({
 });
 
 const BuyPage = ({ buyProductInfo }) => {
-  const userAuth = useSelector((state: RootState) => state.auth.token);
+  const userAuth = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
   const [clientSecret, setClientSecret] = useState('');
 

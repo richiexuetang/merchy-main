@@ -3,6 +3,9 @@ import { chakra } from '@chakra-ui/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowseCategory } from '../../../types';
 import client from '../../../pages/api/graphql';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUserSuccess } from '../../../store/auth/auth.slice';
 
 // const Loading = () => {
 //   <div>Loading...</div>;
@@ -22,6 +25,31 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({ children, pageProps }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetch('/api/auth/refresh', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const res = await fetch('/api/auth/user', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const data = await res.json();
+      dispatch(loadUserSuccess(data));
+    };
+
+    fetchData();
+  }, [dispatch]);
+
   return (
     <ApolloProvider client={client}>
       <chakra.div minH="100vh">

@@ -1,7 +1,11 @@
 import { Box, chakra, Heading } from '@chakra-ui/react';
+import { RootState } from '../../../store/store';
+import { useSelector } from 'react-redux';
 import AccountListItem from './AccountListItem';
 
 const AccountSidebar = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <Box
       //   left="250px"
@@ -14,7 +18,7 @@ const AccountSidebar = () => {
       display={{ base: 'none', md: 'block' }}
     >
       <Box py="2">
-        <Heading>Your Name</Heading>
+        <Heading textTransform="capitalize">{user?.user.name}</Heading>
       </Box>
 
       <chakra.ul>

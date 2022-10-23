@@ -28,9 +28,8 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { getLayout } from '../../components';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../../store/auth/auth.slice';
+import { loadUserSuccess, loginSuccess } from '../../store/auth/auth.slice';
 
 const LogIn = () => {
   const router = useRouter();
@@ -42,24 +41,37 @@ const LogIn = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleLogIn = async () => {
-    axios
-      .post('http://127.0.0.1:8000/dj-rest-auth/login/', {
-        email: inputEmail,
-        password: inputPassword,
-      })
-      .then((res) => {
-        const token = res.data.key;
-        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-        // localStorage.setItem('token', token);
-        // localStorage.setItem('expirationDate', expirationDate);
-        dispatch(setToken(token));
-        router.push('/');
-        // dispatch(checkAuthTimeout(3600));
-      })
-      .catch((err) => {
-        // dispatch(authFail(err));
-        console.log(err);
+    const body = JSON.stringify({
+      email: inputEmail,
+      password: inputPassword,
+    });
+
+    console.log(body);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: body,
       });
+
+      if (res.status === 200) {
+        dispatch(loginSuccess());
+        const res = await fetch('/api/auth/user', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+
+        const data = await res.json();
+        dispatch(loadUserSuccess(data));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
