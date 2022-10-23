@@ -1,27 +1,51 @@
-import { getLayout } from '../components';
+import { FormHandler, getLayout } from '../components';
 import type { NextPageWithLayout } from './_app';
-import {
-  Container,
-  Box,
-  Heading,
-  Text,
-  VStack,
-  FormControl,
-  FormLabel,
-  Button,
-  Input,
-  Radio,
-  RadioGroup,
-  Stack,
-} from '@chakra-ui/react';
-import { Formik, Field, Form } from 'formik';
-import { suggestionFormFields } from '../data';
-import { formInputFieldStyles } from '../styles';
-import { useState } from 'react';
+import { Container, Box, Heading, Text, Button } from '@chakra-ui/react';
+import { Formik, Form } from 'formik';
+import { useCallback, useEffect, useState } from 'react';
 import { SuggestionSuccess } from '../components';
+import { suggestionFormFields, SuggestionFormFieldType } from '../data';
+
+interface File extends Blob {
+  readonly lastModified: number;
+  readonly name: string;
+}
+
+declare const File: {
+  prototype: File;
+  new (fileBits: BlobPart[], fileName: string, options?: FilePropertyBag): File;
+};
 
 const ProductSuggestion: NextPageWithLayout = () => {
   const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialValues: Record<string, string | null | File> = {};
+
+  const getInitialValues = useCallback(
+    (fields) => {
+      Object.values(fields).forEach((field: SuggestionFormFieldType) => {
+        if (field.name) {
+          if (field.type === 'file') {
+            const name = field.name;
+            const file = new File([name], '', { type: '' });
+            initialValues[field.name] = file;
+          } else {
+            initialValues[field.name] = field.value;
+          }
+        }
+        if (field.children) {
+          getInitialValues(field.children);
+        }
+      });
+    },
+    [initialValues]
+  );
+
+  useEffect(() => {
+    if (Object.keys(initialValues).length === 0) {
+      getInitialValues(suggestionFormFields);
+    }
+  }, [initialValues, getInitialValues]);
 
   const handleOnClick = () => {
     setSuggestionSubmitted(false);
@@ -62,157 +86,36 @@ const ProductSuggestion: NextPageWithLayout = () => {
             </Box>
 
             <Formik
-              initialValues={{
-                email: '',
-                existing: '',
-                productCategory: '',
-              }}
+              initialValues={initialValues}
               onSubmit={async (values) => {
                 await new Promise((r) => setTimeout(r, 500));
+                // if (values.file && typeof values.file === 'object') {
+                //   const {
+                //     name: fileName,
+                //     type: fileType,
+                //     size: fileSize,
+                //   } = values.file;
+                //   const file = values.file;
+                // }
                 alert(JSON.stringify(values, null, 2));
+                console.log(values);
                 setSuggestionSubmitted(true);
               }}
             >
-              {({ values }) => (
-                <Form>
-                  <VStack>
-                    {suggestionFormFields.map(
-                      ({
-                        title,
-                        name,
-                        placeholder,
-                        isRequired,
-                        type,
-                        options,
-                        children,
-                      }) => {
-                        return (
-                          <FormControl key={name} isRequired={isRequired}>
-                            <FormLabel mb="1" fontFamily="suisseIntlRegular">
-                              {title}
-                            </FormLabel>
-                            {type === 'radio' ? (
-                              <>
-                                <RadioGroup mb="20px">
-                                  <Stack direction="column">
-                                    {options.map((value) => {
-                                      return (
-                                        <Field
-                                          key={value}
-                                          as={Radio}
-                                          name={name}
-                                          type={type}
-                                          value={value}
-                                        >
-                                          {value}
-                                        </Field>
-                                      );
-                                    })}
-                                  </Stack>
-                                </RadioGroup>
-                                {values.existing && children && (
-                                  <>
-                                    {children.map(
-                                      ({
-                                        title,
-                                        name,
-                                        placeholder,
-                                        isRequired,
-                                        type,
-                                        options,
-                                        children,
-                                      }) => (
-                                        <Box key={name}>
-                                          <FormLabel
-                                            mb="1"
-                                            fontFamily="suisseIntlRegular"
-                                          >
-                                            {title}
-                                          </FormLabel>
-                                          <RadioGroup mb="20px">
-                                            <Stack direction="column">
-                                              {options.map((value) => {
-                                                return (
-                                                  <Field
-                                                    key={value}
-                                                    as={Radio}
-                                                    name={name}
-                                                    type={type}
-                                                    value={value}
-                                                  >
-                                                    {value}
-                                                  </Field>
-                                                );
-                                              })}
-                                            </Stack>
-                                          </RadioGroup>
-                                          {values.productCategory && children && (
-                                            <>
-                                              {children.map(
-                                                ({
-                                                  title,
-                                                  name,
-                                                  placeholder,
-                                                  isRequired,
-                                                  type,
-                                                  options,
-                                                  children,
-                                                  condition,
-                                                }) => {
-                                                  return (
-                                                    condition ===
-                                                      values.existing &&
-                                                    values.productCategory && (
-                                                      <Box key={name}>
-                                                        <FormLabel
-                                                          mb="1"
-                                                          fontFamily="suisseIntlRegular"
-                                                        >
-                                                          {title}
-                                                        </FormLabel>
-                                                        <Field
-                                                          as={Input}
-                                                          name={name}
-                                                          type={type}
-                                                          placeholder={
-                                                            placeholder
-                                                          }
-                                                          {...formInputFieldStyles}
-                                                        />
-                                                      </Box>
-                                                    )
-                                                  );
-                                                }
-                                              )}
-                                            </>
-                                          )}
-                                        </Box>
-                                      )
-                                    )}
-                                  </>
-                                )}
-                              </>
-                            ) : (
-                              <Field
-                                as={Input}
-                                name={name}
-                                type={type}
-                                placeholder={placeholder}
-                                {...formInputFieldStyles}
-                              />
-                            )}
-                            {}
-                          </FormControl>
-                        );
-                      }
-                    )}
-                  </VStack>
+              {({ values, setFieldValue, handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
+                  <FormHandler
+                    suggestionFormFields={suggestionFormFields}
+                    values={values}
+                    setFieldValue={setFieldValue}
+                  />
                   <Box alignItems="center" w="100%" pt="3" mb="5">
                     <Button
                       type="submit"
                       variant="suggestionSubmit"
                       h="42px"
                       fontFamily="suisseIntlRegular"
+                      onClick={() => console.log('clicked')}
                     >
                       Submit Form
                     </Button>

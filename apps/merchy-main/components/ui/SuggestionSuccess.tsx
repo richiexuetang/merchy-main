@@ -7,7 +7,6 @@ import {
   VStack,
   Box,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import Link from 'next/link';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 

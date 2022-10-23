@@ -9,6 +9,7 @@ export interface SuggestionFormFieldType {
   children?: any[];
   options?: string[];
   condition?: string;
+  value: string;
 }
 
 export const suggestionFormFields: SuggestionFormFieldType[] = [
@@ -20,6 +21,8 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
     type: 'text',
     errorMessage: 'Email is a required field',
     options: [],
+    condition: null,
+    value: '',
   },
   {
     title:
@@ -30,6 +33,7 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
     type: 'radio',
     errorMessage: 'required field',
     options: ['New Product', 'Existing Product'],
+    condition: null,
     children: [
       {
         title: 'Product Category',
@@ -45,6 +49,8 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
           'Trading Cards',
           'Electronics',
         ],
+        condition: null,
+        value: '',
         children: [
           {
             title: 'Product Name',
@@ -54,7 +60,12 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             type: 'text',
             errorMessage: 'required field',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Style Code',
@@ -64,7 +75,12 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             type: 'text',
             errorMessage: 'required field',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Color',
@@ -74,16 +90,26 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             type: 'text',
             errorMessage: 'required field',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Release Date',
             name: 'productReleaseDate',
             placeholder: 'mm/dd/yyyy',
             isRequired: false,
-            type: 'text',
+            type: 'date',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Retail Price',
@@ -91,15 +117,25 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             isRequired: false,
             type: 'text',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Notes',
             name: 'productNotes',
             isRequired: false,
-            type: 'text',
+            type: 'rich',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Link to Product',
@@ -107,7 +143,12 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             isRequired: false,
             type: 'text',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Enter the estimated quantity you intend to buy or sell.',
@@ -115,7 +156,12 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             isRequired: false,
             type: 'text',
             options: [],
-            condition: 'New Product',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'URL Link to Product on MerchY',
@@ -123,7 +169,12 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             isRequired: true,
             type: 'text',
             options: [],
-            condition: 'Existing Product',
+            condition: {
+              parent: 'existing',
+              value: 'Existing Product',
+              checkNull: false,
+            },
+            value: '',
           },
           {
             title: 'Describe what needs to be changed on this product page.',
@@ -131,10 +182,43 @@ export const suggestionFormFields: SuggestionFormFieldType[] = [
             isRequired: true,
             type: 'text',
             options: [],
-            condition: 'Existing Product',
+            condition: {
+              parent: 'existing',
+              value: 'Existing Product',
+              checkNull: false,
+            },
+            value: '',
+          },
+          {
+            title: 'Image Upload',
+            name: 'file',
+            isRequired: false,
+            type: 'file',
+            condition: {
+              parent: 'existing',
+              value: 'New Product',
+              checkNull: false,
+            },
+            value: null,
+            children: [
+              {
+                title: 'Do you own the rights to this image?',
+                name: 'rightsToImage',
+                isRequired: 'true',
+                type: 'radio',
+                options: ['Yes', 'No'],
+                condition: {
+                  parent: 'file',
+                  value: '',
+                  checkNull: true,
+                },
+                value: '',
+              },
+            ],
           },
         ],
       },
     ],
+    value: '',
   },
 ];
