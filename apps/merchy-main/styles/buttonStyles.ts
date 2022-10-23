@@ -67,6 +67,14 @@ export const ButtonStyles = {
       bg: 'transparent',
       h: '32px',
     },
+    suggestionSubmit: {
+      p: '16px 16px',
+      border: '0px solid transparent',
+      borderRadius: '3px',
+      font: 'normal 700 15px',
+      bg: 'black',
+      color: 'white',
+    },
   },
   defaultProps: {},
 };

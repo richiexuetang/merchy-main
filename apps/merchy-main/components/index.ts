@@ -49,4 +49,5 @@ export {
   BreadCrumbs,
   AccountMenu,
   AccountSidebar,
+  SuggestionSuccess,
 } from './ui';

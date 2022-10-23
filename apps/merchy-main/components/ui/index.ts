@@ -7,3 +7,4 @@ export { default as BreadCrumbs } from './BreadCrumbs';
 export { default as AccountMenu } from './AccountMenu';
 export { default as Blurb } from './Blurb';
 export { BrowseHeader } from './Browse';
+export { default as SuggestionSuccess } from './SuggestionSuccess';

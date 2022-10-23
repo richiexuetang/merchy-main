@@ -33,7 +33,7 @@ export const Layout: React.FC<Props> = ({ children, pageProps }) => {
           role="main"
           data-component="Main"
         >
-          <chakra.div pt={{ base: 'initial', md: '0' }}>{children}</chakra.div>
+          {children}
         </chakra.main>
         <Footer />
       </chakra.div>

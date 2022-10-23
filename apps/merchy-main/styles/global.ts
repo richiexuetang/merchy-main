@@ -3,13 +3,13 @@ import { chakra, extendTheme, Text as ChakraText } from '@chakra-ui/react';
 import { ButtonStyles as Button } from './buttonStyles';
 import { TextStyles as Text } from './textStyles';
 import { FormStyles as Form } from './formStyles';
+import { HeadingStyles as Heading } from './headingStyles';
+import { LinkStyles as Link } from './linkStyles';
+import { FormInputStyles as Input } from './formInputStyles';
 
 export const theme = extendTheme({
   styles: {
     global: {
-      // body: {
-      //   overflow: 'hidden',
-      // },
       input: {
         boxSizing: 'border-box',
       },
@@ -25,6 +25,9 @@ export const theme = extendTheme({
     Button,
     Text,
     Form,
+    Heading,
+    Link,
+    Input,
   },
   colors: {
     neutral: {

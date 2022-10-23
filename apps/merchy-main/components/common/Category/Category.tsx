@@ -8,6 +8,7 @@ import {
   Heading,
   Checkbox,
   SimpleGrid,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
@@ -348,117 +349,132 @@ const Category = ({
               </Box>
             </Box>
 
-            <SimpleGrid id="browse-grid" columns={{ base: 2, lg: 4, xl: 4 }}>
-              {products?.map(({ node }, index) => {
-                return (
-                  <Box padding="0 8px 16px" key={index}>
-                    <Box
-                      border="solid #E2E8F0"
-                      borderWidth="thin"
-                      borderRadius="3px"
-                      minW="141px"
-                      h="auto"
-                      pos="relative"
-                      mr="0"
-                      _hover={{
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <Link href={`/product/${node.slug}`}>
-                        <Box
-                          display="flex"
-                          flexDir="column"
-                          borderColor="neutral.200"
-                        >
-                          <Box margin={{ base: '2', lg: '4' }}>
-                            <Box
-                              display="flex"
-                              justifyContent="center"
-                              w="140px"
-                              h="75px"
-                              maxW="100%"
-                              m="0px auto"
-                            >
-                              <Image
-                                layout="fixed"
-                                width={145}
-                                height={75}
-                                src={node.media.thumbUrl}
-                                alt={node.name}
-                                priority={true}
-                              />
-                            </Box>
-                          </Box>
+            {products && products.node ? (
+              <SimpleGrid id="browse-grid" columns={{ base: 2, lg: 4, xl: 4 }}>
+                {products.map(({ node }, index) => {
+                  return (
+                    <Box padding="0 8px 16px" key={index}>
+                      <Box
+                        border="solid #E2E8F0"
+                        borderWidth="thin"
+                        borderRadius="3px"
+                        minW="141px"
+                        h="auto"
+                        pos="relative"
+                        mr="0"
+                        _hover={{
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <Link href={`/product/${node.slug}`}>
                           <Box
                             display="flex"
                             flexDir="column"
-                            h="100%"
-                            padding="2"
-                            textAlign="left"
-                            pos="relative"
+                            borderColor="neutral.200"
                           >
-                            <Text
-                              overflow="hidden"
-                              fontWeight="md"
-                              fontSize={{ base: 'xs', md: 'sm' }}
-                              h={{ base: '34px', md: '40px' }}
-                            >
-                              {node.name}
-                            </Text>
+                            <Box margin={{ base: '2', lg: '4' }}>
+                              <Box
+                                display="flex"
+                                justifyContent="center"
+                                w="140px"
+                                h="75px"
+                                maxW="100%"
+                                m="0px auto"
+                              >
+                                <Image
+                                  layout="fixed"
+                                  width={145}
+                                  height={75}
+                                  src={node.media.thumbUrl}
+                                  alt={node.name}
+                                  priority={true}
+                                />
+                              </Box>
+                            </Box>
                             <Box
                               display="flex"
                               flexDir="column"
-                              justifyContent="space-between"
                               h="100%"
+                              padding="2"
+                              textAlign="left"
+                              pos="relative"
                             >
-                              <Box>
-                                <Text
-                                  lineHeight="md"
-                                  fontSize="xs"
-                                  fontWeight="medium"
-                                  mt="1"
-                                >
-                                  {sortBy === 'market__highestBid'
-                                    ? 'Highest Bid'
-                                    : 'Lowest Ask'}
-                                </Text>
-                                <Text fontWeight="bold" lineHeight="1.3" mt="1">
-                                  {sortBy === 'market__highestBid'
-                                    ? `${node.market.highestBid}`
-                                    : `${node.market.lowestAsk}`}
-                                </Text>
-                              </Box>
-                              {sortBy !== 'featured' && (
-                                <Box display="flex" mt="1">
-                                  {sortBy === 'market__salesEver' && (
-                                    <chakra.span {...spanStyles}>
-                                      {node.market.salesEver} sold
-                                    </chakra.span>
-                                  )}
-                                  {sortBy === 'releaseDate' && (
-                                    <chakra.span {...spanStyles}>
-                                      Released{' '}
-                                      {moment(
-                                        node.productDetails.releaseDate
-                                      ).format('MM/DD/YYYY')}
-                                    </chakra.span>
-                                  )}
-                                  {sortBy === 'market__lastSale' && (
-                                    <chakra.span {...spanStyles}>
-                                      Last Sale: ${node.market.lastSale}
-                                    </chakra.span>
-                                  )}
+                              <Text
+                                overflow="hidden"
+                                fontWeight="md"
+                                fontSize={{ base: 'xs', md: 'sm' }}
+                                h={{ base: '34px', md: '40px' }}
+                              >
+                                {node.name}
+                              </Text>
+                              <Box
+                                display="flex"
+                                flexDir="column"
+                                justifyContent="space-between"
+                                h="100%"
+                              >
+                                <Box>
+                                  <Text
+                                    lineHeight="md"
+                                    fontSize="xs"
+                                    fontWeight="medium"
+                                    mt="1"
+                                  >
+                                    {sortBy === 'market__highestBid'
+                                      ? 'Highest Bid'
+                                      : 'Lowest Ask'}
+                                  </Text>
+                                  <Text
+                                    fontWeight="bold"
+                                    lineHeight="1.3"
+                                    mt="1"
+                                  >
+                                    {sortBy === 'market__highestBid'
+                                      ? `${node.market.highestBid}`
+                                      : `${node.market.lowestAsk}`}
+                                  </Text>
                                 </Box>
-                              )}
+                                {sortBy !== 'featured' && (
+                                  <Box display="flex" mt="1">
+                                    {sortBy === 'market__salesEver' && (
+                                      <chakra.span {...spanStyles}>
+                                        {node.market.salesEver} sold
+                                      </chakra.span>
+                                    )}
+                                    {sortBy === 'releaseDate' && (
+                                      <chakra.span {...spanStyles}>
+                                        Released{' '}
+                                        {moment(
+                                          node.productDetails.releaseDate
+                                        ).format('MM/DD/YYYY')}
+                                      </chakra.span>
+                                    )}
+                                    {sortBy === 'market__lastSale' && (
+                                      <chakra.span {...spanStyles}>
+                                        Last Sale: ${node.market.lastSale}
+                                      </chakra.span>
+                                    )}
+                                  </Box>
+                                )}
+                              </Box>
                             </Box>
                           </Box>
-                        </Box>
-                      </Link>
+                        </Link>
+                      </Box>
                     </Box>
-                  </Box>
-                );
-              })}
-            </SimpleGrid>
+                  );
+                })}
+              </SimpleGrid>
+            ) : (
+              <Box>
+                <Heading variant="regular">
+                  Nothing to see here! Please change your filters or{' '}
+                  <Link href="/suggestion" as="/suggestion" passHref>
+                    <ChakraLink variant="green">SUGGEST A PRODUCT.</ChakraLink>
+                  </Link>
+                </Heading>
+              </Box>
+            )}
 
             {categoryInfo.data.currentCategoryInfo.shortBlurb && (
               <Blurb
