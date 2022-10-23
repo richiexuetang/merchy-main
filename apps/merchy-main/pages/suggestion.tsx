@@ -5,6 +5,8 @@ import { Formik, Form } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { SuggestionSuccess } from '../components';
 import { suggestionFormFields, SuggestionFormFieldType } from '../data';
+import axios from 'axios';
+import applyCaseMiddleware from 'axios-case-converter';
 
 interface File extends Blob {
   readonly lastModified: number;
@@ -19,19 +21,13 @@ declare const File: {
 const ProductSuggestion: NextPageWithLayout = () => {
   const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialValues: Record<string, string | null | File> = {};
+  const initialValues: Record<string, string | File> = {};
 
   const getInitialValues = useCallback(
     (fields) => {
       Object.values(fields).forEach((field: SuggestionFormFieldType) => {
         if (field.name) {
-          if (field.type === 'file') {
-            const name = field.name;
-            const file = new File([name], '', { type: '' });
-            initialValues[field.name] = file;
-          } else {
-            initialValues[field.name] = field.value;
-          }
+          initialValues[field.name] = field.value;
         }
         if (field.children) {
           getInitialValues(field.children);
@@ -47,10 +43,6 @@ const ProductSuggestion: NextPageWithLayout = () => {
     }
   }, [initialValues, getInitialValues]);
 
-  const handleOnClick = () => {
-    setSuggestionSubmitted(false);
-  };
-
   return (
     <Box
       data-component="page-container"
@@ -62,7 +54,7 @@ const ProductSuggestion: NextPageWithLayout = () => {
     >
       <Box w="full" overflowY="hidden">
         {suggestionSubmitted ? (
-          <SuggestionSuccess onClick={handleOnClick} />
+          <SuggestionSuccess onClick={() => setSuggestionSubmitted(false)} />
         ) : (
           <Container
             padding="0"
@@ -89,23 +81,43 @@ const ProductSuggestion: NextPageWithLayout = () => {
               initialValues={initialValues}
               onSubmit={async (values) => {
                 await new Promise((r) => setTimeout(r, 500));
-                // if (values.file && typeof values.file === 'object') {
-                //   const {
-                //     name: fileName,
-                //     type: fileType,
-                //     size: fileSize,
-                //   } = values.file;
-                //   const file = values.file;
-                // }
+                const client = applyCaseMiddleware(axios.create());
+                const fileName =
+                  typeof values.file !== 'object' ? '' : values.file.name;
+
+                if (values.existing === 'New Product') {
+                  try {
+                    await client.post(
+                      process.env.NEXT_PUBLIC_API_BASE_URL + 'new-suggestion/',
+                      {
+                        ...values,
+                        fileName: fileName,
+                      }
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+                } else {
+                  try {
+                    await client.post(
+                      process.env.NEXT_PUBLIC_API_BASE_URL +
+                        'existing-suggestion/',
+                      { ...values, fileName: fileName }
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
                 setSuggestionSubmitted(true);
               }}
             >
-              {({ values, setFieldValue, handleSubmit }) => (
+              {({ values, setFieldValue, handleSubmit, handleChange }) => (
                 <Form onSubmit={handleSubmit}>
                   <FormHandler
                     suggestionFormFields={suggestionFormFields}
                     values={values}
                     setFieldValue={setFieldValue}
+                    handleChange={handleChange}
                   />
                   <Box alignItems="center" w="100%" pt="3" mb="5">
                     <Button

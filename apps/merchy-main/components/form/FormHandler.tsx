@@ -1,11 +1,23 @@
-import { FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { formInputFieldStyles } from '../../styles/styles';
 import { Field } from 'formik';
-import { DateField, FileFormField, RadioField, RichTextField } from './fields';
+import {
+  DateField,
+  FileFormField,
+  RadioField,
+  RichTextField,
+  LabelField,
+  NumberField,
+} from './fields';
 
-const FormHandler = ({ suggestionFormFields, values, setFieldValue }) => {
+const FormHandler = ({
+  suggestionFormFields,
+  values,
+  setFieldValue,
+  handleChange,
+}) => {
   return (
-    <VStack>
+    <>
       {suggestionFormFields.map(
         ({
           title,
@@ -15,19 +27,29 @@ const FormHandler = ({ suggestionFormFields, values, setFieldValue }) => {
           type,
           options,
           children,
-          condition,
+          conditions,
+          label,
         }) => {
-          const render =
-            (condition && values[condition.parent] === condition.value) ||
-            (condition &&
-              condition.checkNull &&
-              values[condition.parent] !== null) ||
-            condition === null;
+          let render = true;
+          if (conditions) {
+            for (let i = 0; i < conditions.length; i++) {
+              const value = conditions[i].value;
+              const parent = conditions[i].parent;
+              const checkNull = conditions[i].checkNull;
+              if (
+                (value && value.length && !value.includes(values[parent])) ||
+                (checkNull && !values['file'])
+              ) {
+                render = false;
+                break;
+              }
+            }
+          }
 
           return (
-            <FormControl key={title} isRequired={isRequired}>
+            <Box key={name}>
               {render && (
-                <>
+                <FormControl key={title} isRequired={isRequired}>
                   <FormLabel mb="1" fontFamily="suisseIntlRegular">
                     {title}
                   </FormLabel>
@@ -77,11 +99,24 @@ const FormHandler = ({ suggestionFormFields, values, setFieldValue }) => {
                             placeholder={placeholder}
                           />
                         );
+                      case 'number':
+                        return (
+                          <NumberField
+                            value={values[name]}
+                            name={name}
+                            setFieldValue={setFieldValue}
+                            onValueChange={(val) =>
+                              setFieldValue(name, val.floatValue)
+                            }
+                          />
+                        );
+                      case 'label':
+                        return <LabelField label={label} />;
                       default:
                         <></>;
                     }
                   })()}
-                </>
+                </FormControl>
               )}
 
               {children?.length && (
@@ -89,13 +124,14 @@ const FormHandler = ({ suggestionFormFields, values, setFieldValue }) => {
                   suggestionFormFields={children}
                   values={values}
                   setFieldValue={setFieldValue}
+                  handleChange={handleChange}
                 />
               )}
-            </FormControl>
+            </Box>
           );
         }
       )}
-    </VStack>
+    </>
   );
 };
 

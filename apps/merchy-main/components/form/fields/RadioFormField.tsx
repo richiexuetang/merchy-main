@@ -3,7 +3,7 @@ import { Field } from 'formik';
 
 const RadioField = ({ name, type, options }) => {
   return (
-    <RadioGroup mb="20px">
+    <RadioGroup mb="20px" colorScheme="blackAlpha">
       <Stack direction="column">
         {options.map((value) => {
           return (
