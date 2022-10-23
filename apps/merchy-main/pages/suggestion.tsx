@@ -97,8 +97,6 @@ const ProductSuggestion: NextPageWithLayout = () => {
                 //   } = values.file;
                 //   const file = values.file;
                 // }
-                alert(JSON.stringify(values, null, 2));
-                console.log(values);
                 setSuggestionSubmitted(true);
               }}
             >
@@ -115,7 +113,6 @@ const ProductSuggestion: NextPageWithLayout = () => {
                       variant="suggestionSubmit"
                       h="42px"
                       fontFamily="suisseIntlRegular"
-                      onClick={() => console.log('clicked')}
                     >
                       Submit Form
                     </Button>
