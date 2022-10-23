@@ -9,7 +9,6 @@ export async function getStaticProps(context) {
   const allCategories = await getAllBrowseCategories();
   const { data } = await getProductInfo(context.params.slug);
 
-  console.log('data', data);
   const browseCategories = allCategories.data.categories.edges;
 
   return {

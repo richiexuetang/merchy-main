@@ -49,7 +49,6 @@ export default function CheckoutForm({ setPageState, clientSecret }) {
 
     setIsLoading(true);
 
-    console.log('elements', elements);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {

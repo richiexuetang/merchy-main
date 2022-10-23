@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { convertToRaw, ContentState, EditorState } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import { EditorProps } from 'react-draft-wysiwyg';
 import dynamic from 'next/dynamic';
 
@@ -12,7 +11,7 @@ interface ITextEditorProps {
   setFieldValue: (val: string) => void;
 }
 
-const Editor = dynamic(
+const Editor = dynamic<EditorProps>(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   { ssr: false }
 );
@@ -32,9 +31,8 @@ const RichTextField = ({ value, setFieldValue }: ITextEditorProps) => {
     setEditorState(editorState);
   };
 
-  //return only on the client-side
   return (
-    <div>
+    <>
       <Editor
         editorState={editorState}
         editorStyle={{
@@ -47,7 +45,7 @@ const RichTextField = ({ value, setFieldValue }: ITextEditorProps) => {
         }}
         onEditorStateChange={onEditorStateChange}
       />
-    </div>
+    </>
   );
 };
 
