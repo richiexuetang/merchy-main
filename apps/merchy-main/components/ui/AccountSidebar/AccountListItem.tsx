@@ -11,7 +11,7 @@ import {
   Settings,
 } from '../../icons';
 
-const AccountListItem = ({ slug, description }) => {
+const AccountListItem = ({ slug, description, active }) => {
   const liStyles = {
     paddingInline: '4',
     py: '4',
@@ -19,6 +19,7 @@ const AccountListItem = ({ slug, description }) => {
     _hover: {
       bg: 'neutral.300',
     },
+    bg: active ? 'neutral.white' : 'inherit',
   };
 
   return (

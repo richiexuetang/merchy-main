@@ -46,7 +46,6 @@ const LogIn = () => {
       password: inputPassword,
     });
 
-    console.log(body);
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -68,6 +67,7 @@ const LogIn = () => {
 
         const data = await res.json();
         dispatch(loadUserSuccess(data));
+        router.push('/');
       }
     } catch (err) {
       console.log(err);

@@ -1,5 +1,9 @@
 export const HeadingStyles = {
-  baseStyle: {},
+  baseStyle: {
+    fontFamily: 'suisseIntlMedium',
+    fontWeight: '500',
+    fontSize: '2xl',
+  },
   sizes: {},
   variants: {
     regular: {

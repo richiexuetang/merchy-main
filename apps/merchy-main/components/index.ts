@@ -42,6 +42,7 @@ export {
 } from './icons';
 export {
   Text,
+  AccountProfile,
   Blurb,
   BrowseNavbar,
   SelectDropdown,
@@ -50,5 +51,6 @@ export {
   AccountMenu,
   AccountSidebar,
   SuggestionSuccess,
+  Following as FollowProducts,
 } from './ui';
 export { FileFormField, FormHandler, RadioField } from './form';

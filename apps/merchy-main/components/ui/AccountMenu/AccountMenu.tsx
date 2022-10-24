@@ -11,10 +11,11 @@ import {
   Settings,
 } from '../../icons';
 import { useDispatch } from 'react-redux';
-import { removeToken } from '../../../store/auth/auth.slice';
+import { logoutSuccess } from '../../../store/auth/auth.slice';
 
 const AccountMenu = () => {
   const dispatch = useDispatch();
+
   const linkStyles = {
     display: 'block',
     h: '80px',
@@ -28,6 +29,21 @@ const AccountMenu = () => {
     fontSize: { md: 'xs', lg: 'md' },
     _hover: { bg: 'neutral.300' },
   } as const;
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      dispatch(logoutSuccess());
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Box
@@ -257,11 +273,7 @@ const AccountMenu = () => {
         </NextLink>
 
         <NextLink href="/">
-          <Link
-            order="6"
-            {...linkStyles}
-            onClick={() => dispatch(removeToken())}
-          >
+          <Link order="6" {...linkStyles} onClick={handleLogout}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Logout />
               <Box>

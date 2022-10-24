@@ -74,6 +74,7 @@ export const {
   registerSuccess,
   removeAuthLoading,
   resetRegisterSuccess,
+  logoutSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;
