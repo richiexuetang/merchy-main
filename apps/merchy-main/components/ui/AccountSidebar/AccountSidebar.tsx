@@ -20,7 +20,15 @@ const AccountSidebar = () => {
       display={{ base: 'none', md: 'block' }}
     >
       <Box py="2">
-        <Heading textTransform="capitalize" paddingInline="3" pb="4">
+        <Heading
+          fontFamily="suisseIntlMedium"
+          fontWeight="500"
+          fontSize="2xl"
+          textTransform="capitalize"
+          paddingInline="3"
+          pb="4"
+          lineHeight="1.5rem"
+        >
           {user?.user.name}
         </Heading>
       </Box>

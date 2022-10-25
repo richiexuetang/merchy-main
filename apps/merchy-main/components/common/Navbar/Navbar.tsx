@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               onMouseEnter={() => setIsOpen(true)}
               onMouseLeave={() => setIsOpen(false)}
             >
-              <NextLink href="/">
+              <NextLink href="/sneakers">
                 <Link
                   padding={{ md: '8px 1px', xl: '8px' }}
                   fontSize={{ md: 'xs', lg: 'md' }}
@@ -89,17 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
             </chakra.li>
 
             <chakra.li {...navListStyle}>
-              <NextLink href="news">
-                <Link
-                  padding={{ md: '8px 1px', xl: '8px' }}
-                  fontSize={{ md: 'xs', lg: 'md' }}
-                >
-                  News
-                </Link>
-              </NextLink>
-            </chakra.li>
-            <chakra.li {...navListStyle}>
-              <NextLink href="about">
+              <NextLink href="/about">
                 <Link
                   padding={{ md: '8px 1px', xl: '8px' }}
                   fontSize={{ md: 'xs', lg: 'md' }}
@@ -109,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
               </NextLink>
             </chakra.li>
             <chakra.li {...navListStyle}>
-              <NextLink href="help">
+              <NextLink href="/help">
                 <Link
                   padding={{ md: '8px 1px', xl: '8px' }}
                   fontSize={{ md: 'xs', lg: 'md' }}
@@ -118,6 +108,7 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
                 </Link>
               </NextLink>
             </chakra.li>
+
             <chakra.li {...navListStyle}>
               <NextLink href="sell">
                 <Link

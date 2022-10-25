@@ -9,6 +9,7 @@ export {
   Carousel,
   Product,
   Buy,
+  NavInput,
 } from './common';
 export {
   ProductCard,
@@ -52,5 +53,6 @@ export {
   AccountSidebar,
   SuggestionSuccess,
   Following as FollowProducts,
+  IconBlockItem,
 } from './ui';
 export { FileFormField, FormHandler, RadioField } from './form';

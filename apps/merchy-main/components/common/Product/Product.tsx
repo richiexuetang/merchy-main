@@ -27,6 +27,7 @@ import { ArrowForwardIcon } from '@chakra-ui/icons';
 import MarketDrawer from './MarketDrawer';
 import { ProductCard, ProductDetails } from '../../product';
 import { BreadCrumbs } from '../..';
+import ActionModal from './ActionModal';
 
 const Product = ({ productInfo }) => {
   const router = useRouter();
@@ -51,6 +52,12 @@ const Product = ({ productInfo }) => {
     isOpen: isSalesOpen,
     onOpen: onSalesOpen,
     onClose: onSalesClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isFollowOpen,
+    onOpen: onFollowOpen,
+    onClose: onFollowClose,
   } = useDisclosure();
   return (
     <Container data-component="ProductView" w="100%" maxW="6xl" pb="8">
@@ -78,6 +85,12 @@ const Product = ({ productInfo }) => {
                       aria-label="Add To Portfolio"
                       bg="transparent"
                       icon={<Add />}
+                      onClick={onFollowOpen}
+                    />
+                    <ActionModal
+                      productInfo={productInfo}
+                      isFollowOpen={isFollowOpen}
+                      onFollowClose={onFollowClose}
                     />
                   </li>
                   <li>
@@ -85,8 +98,14 @@ const Product = ({ productInfo }) => {
                       aria-label="Follow"
                       bg="transparent"
                       icon={<Favorite />}
+                      onClick={onFollowOpen}
                     />
                   </li>
+                  <ActionModal
+                    productInfo={productInfo}
+                    isFollowOpen={isFollowOpen}
+                    onFollowClose={onFollowClose}
+                  />
                   <li>
                     <IconButton
                       aria-label="Share"

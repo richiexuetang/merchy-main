@@ -6,6 +6,7 @@ import { FormStyles as Form } from './formStyles';
 import { HeadingStyles as Heading } from './headingStyles';
 import { LinkStyles as Link } from './linkStyles';
 import { FormInputStyles as Input } from './formInputStyles';
+import { BoxStyles as Box } from './boxStyles';
 
 export const theme = extendTheme({
   styles: {
@@ -22,6 +23,7 @@ export const theme = extendTheme({
     },
   },
   components: {
+    Box,
     Button,
     Text,
     Form,

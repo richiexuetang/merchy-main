@@ -75,6 +75,20 @@ export const ButtonStyles = {
       bg: 'black',
       color: 'white',
     },
+    green: {
+      fontFamily: 'suisseIntlRegular',
+      borderRadius: '0',
+      minW: '260px',
+      m: { base: '0 auto 20px', lg: '0 10px', xl: '0 20px 20px' },
+      bg: '#006340',
+      p: '15px 25px 16px',
+      color: '#fff',
+      letterSpacing: '-.75px',
+      _hover: {
+        bg: 'rgba(0,99,64,.85)',
+      },
+      h: '55px',
+    },
   },
   defaultProps: {},
 };

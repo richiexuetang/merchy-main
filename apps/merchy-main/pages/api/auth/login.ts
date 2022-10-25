@@ -1,10 +1,9 @@
-import cookie from 'cookie';
+import { setCookie } from 'cookies-next';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-
     const body = JSON.stringify({
       email,
       password,
@@ -26,22 +25,24 @@ export default async (req, res) => {
       const data = await apiRes.json();
 
       if (apiRes.status === 200) {
-        res.setHeader('Set-Cookie', [
-          cookie.serialize('access', data.access, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
-            maxAge: 60 * 30,
-            sameSite: 'strict',
-            path: '/api/',
-          }),
-          cookie.serialize('refresh', data.refresh, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
-            maxAge: 60 * 60 * 24,
-            sameSite: 'strict',
-            path: '/api/',
-          }),
-        ]);
+        setCookie('access', data.access, {
+          req,
+          res,
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== 'development',
+          maxAge: 60 * 60 * 24,
+          sameSite: 'strict',
+          path: '/api/',
+        });
+        setCookie('refresh', data.refresh, {
+          req,
+          res,
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== 'development',
+          maxAge: 60 * 60 * 24,
+          sameSite: 'strict',
+          path: '/api/',
+        });
 
         return res.status(200).json({
           success: 'Logged in successfully',

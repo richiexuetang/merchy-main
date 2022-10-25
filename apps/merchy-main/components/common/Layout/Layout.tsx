@@ -6,6 +6,8 @@ import client from '../../../pages/api/graphql';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadUserSuccess } from '../../../store/auth/auth.slice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 // const Loading = () => {
 //   <div>Loading...</div>;

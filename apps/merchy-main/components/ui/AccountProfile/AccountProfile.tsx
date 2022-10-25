@@ -31,7 +31,7 @@ const AccountProfile = () => {
           <Heading fontWeight="500" fontSize="lg" lineHeight="lg" mb="1">
             Name
           </Heading>
-          <Text textTransform="capitalize">{user?.user.name || ''}</Text>
+          <Text textTransform="capitalize">{user?.user?.name || ''}</Text>
         </Box>
 
         <Box>
@@ -45,14 +45,14 @@ const AccountProfile = () => {
           <Heading fontWeight="500" fontSize="lg" lineHeight="lg" mb="1">
             Email Address
           </Heading>
-          <Text>{user?.user.email || ''}</Text>
+          <Text>{user?.user?.email || ''}</Text>
         </Box>
 
         <Box>
           <Heading fontWeight="500" fontSize="lg" lineHeight="lg" mb="1">
             Username
           </Heading>
-          <Text>{user?.user.name.replace(' ', '') || ''}69</Text>
+          <Text>{user?.user?.name?.replace(' ', '') || ''}69</Text>
         </Box>
 
         <Box>

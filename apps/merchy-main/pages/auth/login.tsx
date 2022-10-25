@@ -156,7 +156,6 @@ const LogIn = () => {
                 <FormControl variant="floating">
                   <Input
                     placeholder=" "
-                    autoComplete="off"
                     value={inputEmail}
                     onChange={(e) => setInputEmail(e.target.value)}
                   />
@@ -169,7 +168,6 @@ const LogIn = () => {
                     <Input
                       type={passwordVisible ? 'text' : 'password'}
                       placeholder=" "
-                      autoComplete="off"
                       pr={8}
                       value={inputPassword}
                       onChange={(e) => setInputPassword(e.target.value)}

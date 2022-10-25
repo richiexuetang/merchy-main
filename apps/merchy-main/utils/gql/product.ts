@@ -35,6 +35,8 @@ export const ProductPaths = gql`
 export const GetProductInfo = gql`
   query ($productSlug: String!, $first: Int) {
     productBySlug(productSlug: $productSlug) {
+      name
+      slug
       primaryTitle
       secondaryTitle
       condition

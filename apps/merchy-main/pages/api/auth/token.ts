@@ -28,37 +28,10 @@ export default async (req, res) => {
 
       const data = await apiRes.json();
 
-      if (apiRes.status === 200) {
-        setCookie('access', data.access, {
-          req,
-          res,
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
-          maxAge: 60 * 60 * 24,
-          sameSite: 'strict',
-          path: '/api/',
-        });
-        setCookie('refresh', data.refresh, {
-          req,
-          res,
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
-          maxAge: 60 * 60 * 24,
-          sameSite: 'strict',
-          path: '/api/',
-        });
-
-        return res.status(200).json({
-          success: 'Refresh request successful',
-        });
-      } else {
-        return res.status(apiRes.status).json({
-          error: 'Failed to fulfill refresh request',
-        });
-      }
+      return res.status(200).json(data);
     } catch (err) {
       return res.status(500).json({
-        error: 'Something went wrong when trying to fulfill refresh request',
+        error: 'Something went wrong when trying to fulfill token request',
       });
     }
   } else {

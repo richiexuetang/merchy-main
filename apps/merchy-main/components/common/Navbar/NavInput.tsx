@@ -7,6 +7,9 @@ import {
   Box,
   Portal,
   chakra,
+  Image,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import NextImage from 'next/image';
@@ -17,7 +20,7 @@ const NavInput = () => {
   const [searchFilter, setSearchFilter] = useState('');
   const [executeSearch, { data }] = useLazyQuery(SearchProducts);
 
-  const handleChange = (e) => {
+  const handleSearchChange = (e) => {
     setSearchFilter(e.target.value);
 
     executeSearch({
@@ -68,20 +71,19 @@ const NavInput = () => {
       pr={{ base: '0px', md: '8' }}
       flexGrow="1"
     >
-      <Box>
-        <Box pos="relative" flexGrow="1">
-          <InputGroup>
-            <InputLeftElement {...leftElementStyles}>
-              <SearchIcon />
-            </InputLeftElement>
-            <Input
-              {...inputStyles}
-              placeholder="Search for brand, color, etc."
-              onChange={(e) => handleChange(e)}
-            />
-          </InputGroup>
-        </Box>
+      <Box data-component="SearchBoxSite" pos="relative" flexGrow="1">
+        <InputGroup>
+          <InputLeftElement {...leftElementStyles}>
+            <SearchIcon />
+          </InputLeftElement>
+          <Input
+            {...inputStyles}
+            placeholder="Search for brand, color, etc."
+            onChange={(e) => handleSearchChange(e)}
+          />
+        </InputGroup>
       </Box>
+
       {searchFilter && (
         <Portal>
           <Box
@@ -90,19 +92,18 @@ const NavInput = () => {
             color="neutral.black"
             m="auto"
             overflowY="scroll"
-            padding={{ base: '0px 5%', md: '0px 10%' }}
             textAlign="left"
             left="0"
             w="100%"
             zIndex="1024"
-            pos="absolute"
             top="90px"
+            position="absolute"
           >
             {data || data?.allProducts.edges.length > 0 ? (
-              <chakra.ul>
+              <List>
                 {data.allProducts.edges.map(({ node }) => {
                   return (
-                    <chakra.li
+                    <ListItem
                       key={node.primaryTitle}
                       borderBottom="1px solid #CFCFCF"
                       pb="10px"
@@ -128,14 +129,11 @@ const NavInput = () => {
                           padding="8px"
                           w="100%"
                         >
-                          <ProductImage
+                          <Image
                             src={node.media.imageUrl}
                             alt={node.media.label}
-                            layout="fixed"
-                            width={125}
-                            height={125}
-                            w="auto"
-                            h="auto"
+                            width="125px"
+                            height="125px"
                             marginRight="20px"
                           />
                           <Box w="100%">
@@ -163,10 +161,10 @@ const NavInput = () => {
                           </Box>
                         </Box>
                       </Link>
-                    </chakra.li>
+                    </ListItem>
                   );
                 })}
-              </chakra.ul>
+              </List>
             ) : (
               <Box
                 border="none"

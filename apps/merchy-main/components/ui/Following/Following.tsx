@@ -12,19 +12,25 @@ import {
   Tbody,
   Table,
   Image,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { RootState } from '../../../store/store';
 import { useSelector } from 'react-redux';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { gql, useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import DeleteModal from './DeleteModal';
+import Link from 'next/link';
+import AddModal from './AddModal';
 
-const AccountProfile = gql`
-  query accountProfile($accountEmail: String!) {
-    accountProfile(accountEmail: $accountEmail) {
+const UserProfile = gql`
+  query userProfile($userEmail: String!) {
+    userProfile(userEmail: $userEmail) {
       following {
         edges {
           node {
             name
+            slug
             primaryTitle
             secondaryTitle
             market {
@@ -43,11 +49,28 @@ const AccountProfile = gql`
 `;
 
 const Following = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    isOpen: isAddModalOpen,
+    onOpen: onAddModalOpen,
+    onClose: onAddModalClose,
+  } = useDisclosure();
+
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const { data, loading, error } = useQuery(AccountProfile, {
-    variables: { accountEmail: user?.user.email },
+  const { data, loading, error } = useQuery(UserProfile, {
+    variables: { userEmail: user?.user?.email },
   });
+
+  const [followProducts, setFollowProducts] = useState(null);
+  const [focusedProduct, setFocusedProduct] = useState(null);
+
+  useEffect(() => {
+    if (!followProducts && !loading && !error) {
+      setFollowProducts(data.userProfile.following.edges);
+    }
+  }, [loading, followProducts, data, error]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -56,6 +79,11 @@ const Following = () => {
   if (error) {
     return <div>ops</div>;
   }
+
+  const handleModalOpen = (idx) => {
+    setFocusedProduct({ ...followProducts[idx].node, idx: idx });
+    onOpen();
+  };
 
   const thStyles = {
     px: '0px',
@@ -87,9 +115,15 @@ const Following = () => {
         <Heading fontWeight="500" fontSize="2xl" w="100%">
           Following
         </Heading>
-        <Button variant="signup" h="32px" fontSize="sm">
+        <Button
+          variant="signup"
+          h="32px"
+          fontSize="sm"
+          onClick={onAddModalOpen}
+        >
           Add Product
         </Button>
+        <AddModal isOpen={isAddModalOpen} onClose={onAddModalClose} />
       </Box>
 
       <Box w="full" overflowX="auto">
@@ -153,7 +187,7 @@ const Following = () => {
                 ></Th>
               </Tr>
             </Thead>
-            {data?.accountProfile.following.edges.map(({ node }) => {
+            {followProducts?.map(({ node }, idx) => {
               return (
                 <Tbody key={node.name} display="block" overflowY="auto">
                   <Tr
@@ -171,56 +205,58 @@ const Following = () => {
                       whiteSpace="nowrap"
                       boxSizing="border-box"
                     >
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        cursor="pointer"
-                        flexDir="row"
-                        h="100%"
-                      >
+                      <Link href="/product/[slug]" as={`/product/${node.slug}`}>
                         <Box
-                          flex="0 0 auto"
+                          display="flex"
+                          alignItems="center"
+                          cursor="pointer"
+                          flexDir="row"
                           h="100%"
-                          w="60px"
-                          textAlign="center"
-                        >
-                          <Image src={node.media.imageUrl} alt={node.name} />
-                        </Box>
-                        <Box
-                          ml="5"
-                          textAlign="left"
-                          flexGrow="1"
-                          minW={{ base: '150px', lg: '200px' }}
                         >
                           <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            pos="relative"
+                            flex="0 0 auto"
+                            h="100%"
+                            w="60px"
+                            textAlign="center"
                           >
-                            <Text
-                              fontSize="sm"
+                            <Image src={node.media.imageUrl} alt={node.name} />
+                          </Box>
+                          <Box
+                            ml="5"
+                            textAlign="left"
+                            flexGrow="1"
+                            minW={{ base: '150px', lg: '200px' }}
+                          >
+                            <Box
+                              display="flex"
+                              justifyContent="space-between"
+                              pos="relative"
+                            >
+                              <Text
+                                fontSize="sm"
+                                mb="1"
+                                lineHeight="sm"
+                                overflow="hidden"
+                                textOverflow="ellipsis"
+                                whiteSpace="nowrap"
+                              >
+                                {node.primaryTitle}
+                              </Text>
+                            </Box>
+                            <Heading
+                              fontWeight="500"
+                              fontSize="md"
+                              lineHeight="md"
                               mb="1"
-                              lineHeight="sm"
                               overflow="hidden"
                               textOverflow="ellipsis"
                               whiteSpace="nowrap"
                             >
-                              {node.primaryTitle}
-                            </Text>
+                              {node.secondaryTitle}
+                            </Heading>
                           </Box>
-                          <Heading
-                            fontWeight="500"
-                            fontSize="md"
-                            lineHeight="md"
-                            mb="1"
-                            overflow="hidden"
-                            textOverflow="ellipsis"
-                            whiteSpace="nowrap"
-                          >
-                            {node.secondaryTitle}
-                          </Heading>
                         </Box>
-                      </Box>
+                      </Link>
                     </Td>
                     <Td
                       {...thStyles}
@@ -260,7 +296,17 @@ const Following = () => {
                       whiteSpace="nowrap"
                       boxSizing="border-box"
                     >
-                      <DeleteIcon cursor="pointer" />
+                      <DeleteIcon
+                        cursor="pointer"
+                        onClick={() => handleModalOpen(idx)}
+                      />
+                      <DeleteModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        product={focusedProduct}
+                        followProducts={followProducts}
+                        setFollowProducts={setFollowProducts}
+                      />
                     </Td>
                   </Tr>
                 </Tbody>
