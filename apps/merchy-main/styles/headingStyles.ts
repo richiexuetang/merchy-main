@@ -17,6 +17,13 @@ export const HeadingStyles = {
       font: 'normal 400 33px suisseIntlRegular',
       color: '#414141',
     },
+    h4: {
+      fontFamily: 'suisseIntlRegular',
+      fontWeight: '500',
+      fontSize: 'xl',
+      lineHeight: 'xl',
+      mt: '4',
+    },
   },
   defaultProps: {},
 };

@@ -1,6 +1,11 @@
 import { Container, Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { AccountProfile, AccountSidebar, FollowProducts } from '../..';
+import {
+  AccountProfile,
+  AccountSidebar,
+  FollowProducts,
+  AccountSettings,
+} from '../..';
 import { getLayout } from '../Layout';
 
 const Account = () => {
@@ -18,6 +23,8 @@ const Account = () => {
             return <AccountProfile />;
           case 'following':
             return <FollowProducts />;
+          case 'settings':
+            return <AccountSettings />;
           default:
             <Container
               pos="relative"

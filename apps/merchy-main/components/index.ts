@@ -43,6 +43,7 @@ export {
 } from './icons';
 export {
   Text,
+  AccountSettings,
   AccountProfile,
   Blurb,
   BrowseNavbar,

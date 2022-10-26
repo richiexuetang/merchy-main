@@ -1,5 +1,6 @@
 export { default as AccountSidebar } from './AccountSidebar';
 export { default as AccountProfile } from './AccountProfile';
+export { default as AccountSettings } from './AccountSettings';
 export { default as AccountMenu } from './AccountMenu';
 export { default as Blurb } from './Blurb';
 export { default as BreadCrumbs } from './BreadCrumbs';
