@@ -60,7 +60,7 @@ const Following = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const { data, loading, error } = useQuery(UserProfile, {
-    variables: { userEmail: user?.user?.email },
+    variables: { userEmail: user?.email },
   });
 
   const [followProducts, setFollowProducts] = useState(null);

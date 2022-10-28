@@ -58,7 +58,7 @@ const AccountSettings = () => {
               >
                 Payment
               </Text>
-              <Text textTransform="capitalize">{user?.user?.name || ''}</Text>
+              <Text textTransform="capitalize">{user?.name || ''}</Text>
             </Box>
 
             <Box>

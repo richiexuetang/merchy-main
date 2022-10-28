@@ -7,6 +7,7 @@ import { NextPage } from 'next';
 import { Provider } from 'react-redux';
 import { store } from '../store/store';
 import { DefaultSeo } from 'next-seo';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -39,12 +40,14 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         }}
       />
       <Head />
-      <Provider store={store}>
-        <ChakraProvider theme={theme}>
-          <Fonts />
-          {getLayout(<Component {...pageProps} />, pageProps)}
-        </ChakraProvider>
-      </Provider>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+        <Provider store={store}>
+          <ChakraProvider theme={theme}>
+            <Fonts />
+            {getLayout(<Component {...pageProps} />, pageProps)}
+          </ChakraProvider>
+        </Provider>
+      </GoogleOAuthProvider>
     </>
   );
 }

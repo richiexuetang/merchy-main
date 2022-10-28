@@ -30,6 +30,8 @@ import { useState } from 'react';
 import { getLayout } from '../../components';
 import { useDispatch } from 'react-redux';
 import { loadUserSuccess, loginSuccess } from '../../store/auth/auth.slice';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const LogIn = () => {
   const router = useRouter();
@@ -39,6 +41,22 @@ const LogIn = () => {
   const [inputPassword, setInputPassword] = useState('');
 
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      const { data } = await axios.post(
+        'http://127.0.0.1:8000/api/account/google-auth',
+        {
+          access_token: `${tokenResponse.access_token}`,
+        }
+      );
+
+      console.log('userInfo', data, data.user);
+      dispatch(loginSuccess());
+      dispatch(loadUserSuccess(data.user));
+    },
+    onError: (errorResponse) => console.log(errorResponse),
+  });
 
   const handleLogIn = async () => {
     const body = JSON.stringify({
@@ -66,7 +84,7 @@ const LogIn = () => {
         });
 
         const data = await res.json();
-        dispatch(loadUserSuccess(data));
+        dispatch(loadUserSuccess(data.user));
         router.push('/');
       }
     } catch (err) {
@@ -117,7 +135,14 @@ const LogIn = () => {
 
           <Box data-component="tab-container" padding="16px">
             <VStack>
-              <Button leftIcon={<Google />} variant="continue">
+              <Button
+                leftIcon={<Google />}
+                variant="continue"
+                onClick={() => {
+                  handleGoogleLogin();
+                  router.push('/');
+                }}
+              >
                 Continue With Google
               </Button>
               <Button leftIcon={<Facebook />} variant="continue">
@@ -129,7 +154,6 @@ const LogIn = () => {
               <Button leftIcon={<Twitter />} variant="continue">
                 Continue With Twitter
               </Button>
-
               <Stack
                 direction="row"
                 w="full"
@@ -150,7 +174,6 @@ const LogIn = () => {
                   borderWidth="0px 0px 1px"
                 />
               </Stack>
-
               <Stack w="full">
                 {/* Email Address Form Field */}
                 <FormControl variant="floating">
@@ -206,7 +229,6 @@ const LogIn = () => {
                   </Text>
                 </Flex>
               </Stack>
-
               <VStack w="full">
                 <Button variant="authentication" onClick={handleLogIn}>
                   Log In

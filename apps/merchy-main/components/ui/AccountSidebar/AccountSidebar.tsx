@@ -29,7 +29,7 @@ const AccountSidebar = () => {
           pb="4"
           lineHeight="1.5rem"
         >
-          {user?.user.name}
+          {user?.name}
         </Heading>
       </Box>
 
