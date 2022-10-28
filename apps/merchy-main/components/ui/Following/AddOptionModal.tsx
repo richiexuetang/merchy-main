@@ -38,7 +38,7 @@ const AddOptionModal = ({ isOpen, onClose, option }) => {
     await fetch('/api/auth/token').then((res) =>
       res.json().then((data) => {
         const access = data.access;
-        const email = user.user.email;
+        const email = user.email;
         const body = JSON.stringify({
           email,
           slug,

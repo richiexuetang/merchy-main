@@ -113,7 +113,7 @@ const Help = () => {
         {user ? (
           <VStack alignItems="left">
             <Heading fontWeight="600" fontSize="lg" lineHeight="lg">
-              Hi {user.user.first_name}, what can we help you with today?
+              Hi {user.first_name}, what can we help you with today?
             </Heading>
 
             <HStack spacing="20px" mt="0.5rem" mb="0px" marginInline="0px">

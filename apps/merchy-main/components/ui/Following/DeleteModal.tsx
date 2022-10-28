@@ -35,7 +35,7 @@ const DeleteModal = ({
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}api/account/profile`,
         {
-          data: { slug: slug, email: user.user.email },
+          data: { slug: slug, email: user.email },
           headers: {
             Authorization: `Bearer ${data.access}`,
           },
