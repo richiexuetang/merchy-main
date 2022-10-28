@@ -45,7 +45,7 @@ const LogIn = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       const { data } = await axios.post(
-        'http://127.0.0.1:8000/api/account/google-auth',
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}api/account/google-auth`,
         {
           access_token: `${tokenResponse.access_token}`,
         }
