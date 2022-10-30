@@ -9,7 +9,6 @@ import {
   Text,
   Button,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { RootState } from '../../../store/store';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';

@@ -51,9 +51,9 @@ const LogIn = () => {
         }
       );
 
-      console.log('userInfo', data, data.user);
       dispatch(loginSuccess());
       dispatch(loadUserSuccess(data.user));
+      router.push('/');
     },
     onError: (errorResponse) => console.log(errorResponse),
   });
@@ -138,10 +138,7 @@ const LogIn = () => {
               <Button
                 leftIcon={<Google />}
                 variant="continue"
-                onClick={() => {
-                  handleGoogleLogin();
-                  router.push('/');
-                }}
+                onClick={() => handleGoogleLogin()}
               >
                 Continue With Google
               </Button>
