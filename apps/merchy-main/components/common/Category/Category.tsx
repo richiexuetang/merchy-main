@@ -74,7 +74,7 @@ const Category = ({
   const [executeSearch, { data: categoryProducts }] =
     useLazyQuery(GetCategoryProducts);
 
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState(initialProducts.edges);
   const [attributeFilters, setAttributeFilters] = useState(
     attributeFiltersInitialState
   );
@@ -349,7 +349,7 @@ const Category = ({
               </Box>
             </Box>
 
-            {products && products.node ? (
+            {products ? (
               <SimpleGrid id="browse-grid" columns={{ base: 2, lg: 4, xl: 4 }}>
                 {products.map(({ node }, index) => {
                   return (
