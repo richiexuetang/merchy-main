@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../api';
 import { getLayout } from '../components';
 import { logoutSuccess } from '../store/auth/auth.slice';
 import { RootState } from '../store/store';
@@ -24,18 +25,8 @@ const Help = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-
-      dispatch(logoutSuccess());
-    } catch (err) {
-      console.log(err);
-    }
+    await logout();
+    dispatch(logoutSuccess());
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Box, chakra, Text } from '@chakra-ui/react';
+import { Box, Text, Link as ChakraLink, ListItem } from '@chakra-ui/react';
 import Link from 'next/link';
 import {
   Buying,
@@ -10,9 +10,13 @@ import {
   Selling,
   Settings,
 } from '../../icons';
+import { useDispatch } from 'react-redux';
+import { logoutSuccess } from 'apps/merchy-main/store/auth/auth.slice';
+import { logout } from 'apps/merchy-main/api';
 
 const AccountListItem = ({ slug, description, active }) => {
-  const liStyles = {
+  const dispatch = useDispatch();
+  const accountListItemStyles = {
     paddingInline: '4',
     py: '4',
     cursor: 'pointer',
@@ -22,9 +26,17 @@ const AccountListItem = ({ slug, description, active }) => {
     bg: active ? 'neutral.white' : 'inherit',
   };
 
+  const handleLogout = async () => {
+    await logout();
+    dispatch(logoutSuccess());
+  };
+
+  const href = slug === 'logout' ? '/' : '/account/[slug]';
+  const as = slug === 'logout' ? '/' : `/account/${slug}`;
+
   return (
-    <chakra.li {...liStyles}>
-      <Link href={`/account/[slug]`} as={`/account/${slug}`}>
+    <ListItem {...accountListItemStyles}>
+      <Link href={href} as={as}>
         <Box display="flex">
           <Box display="flex" alignItems="center" justifyContent="center">
             <Box
@@ -52,6 +64,12 @@ const AccountListItem = ({ slug, description, active }) => {
                     return <Following />;
                   case 'settings':
                     return <Settings />;
+                  case 'logout':
+                    return (
+                      <ChakraLink onClick={handleLogout}>
+                        <Logout />
+                      </ChakraLink>
+                    );
                   default:
                     return null;
                 }
@@ -59,29 +77,20 @@ const AccountListItem = ({ slug, description, active }) => {
             </Box>
           </Box>
           <Box>
-            <Text
-              fontSize="sm"
-              mb="1"
-              lineHeight="19px"
-              letterSpacing="0.004rem"
-              color="neutral.black"
-              textTransform="capitalize"
-            >
+            <Text variant="sm" textTransform="capitalize">
               {slug}
             </Text>
-            <Text
-              fontSize="xs"
-              lineHeight="1"
-              letterSpacing="0"
-              fontWeight="300"
-              color="neutral.500"
-            >
-              {description}
+            <Text variant="xs">
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              />
             </Text>
           </Box>
         </Box>
       </Link>
-    </chakra.li>
+    </ListItem>
   );
 };
 

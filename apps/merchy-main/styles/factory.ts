@@ -184,3 +184,20 @@ export const CustomContainer = defineStyleConfig({
     variant: 'account',
   },
 });
+
+export const CustomListItem = defineStyleConfig({
+  baseStyle: {},
+  variants: {
+    account: {
+      paddingInline: '4',
+      py: '4',
+      cursor: 'pointer',
+      _hover: {
+        bg: 'neutral.300',
+      },
+    },
+  },
+  defaultProps: {
+    variant: 'account',
+  },
+});

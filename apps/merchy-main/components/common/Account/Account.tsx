@@ -43,7 +43,6 @@ const Account = () => {
               paddingInline="8"
               py="8"
             >
-              {' '}
               <Heading>Your Portfolio</Heading>
             </Container>;
         }

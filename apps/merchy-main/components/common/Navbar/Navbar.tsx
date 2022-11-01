@@ -9,7 +9,6 @@ import { BrowseCategory } from '../../../types';
 import { useSelector } from 'react-redux';
 import { AccountMenu } from '../../ui';
 import { RootState } from '../../../store/store';
-import { useRouter } from 'next/router';
 import {
   NavListItem,
   LogoIcon,
@@ -28,7 +27,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const userAuth = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
@@ -98,7 +96,6 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
                 <NavListItem
                   onMouseEnter={() => setAccountDropdown(true)}
                   onMouseLeave={() => setAccountDropdown(false)}
-                  onClick={() => router.push('/account/profile')}
                 >
                   <Icon as={Account} w="6" h="6" verticalAlign="middle" />
                   {accountDropdown && <AccountMenu />}

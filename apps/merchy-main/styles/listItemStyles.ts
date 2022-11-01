@@ -14,6 +14,14 @@ export const ListItemStyles = {
       whiteSpace: 'nowrap',
       cursor: 'pointer',
     },
+    account: {
+      paddingInline: '4',
+      py: '4',
+      cursor: 'pointer',
+      _hover: {
+        bg: 'neutral.300',
+      },
+    },
   },
   defaultProps: {},
 };

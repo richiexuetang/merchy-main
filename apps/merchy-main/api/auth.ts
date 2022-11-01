@@ -3,6 +3,7 @@ import {
   loadUserSuccess,
   loginFail,
   loginSuccess,
+  logoutSuccess,
   registerSuccess,
   removeAuthLoading,
   setAuthLoading,
@@ -132,6 +133,8 @@ export const logout = () => async (dispatch) => {
         Accept: 'application/json',
       },
     });
+
+    dispatch(logoutSuccess);
   } catch (err) {
     console.log(err);
   }

@@ -8,9 +8,6 @@ import {
   Box,
   Button,
 } from '@chakra-ui/react';
-// import { RootState } from '../../../store/store';
-// import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import { Formik, Form } from 'formik';
 import { addToPortfolioFormFields } from 'apps/merchy-main/data';
 import { FormHandler } from '../../form';
@@ -20,11 +17,7 @@ const AddToPortfolioModal = ({
   onPortfolioClose,
   productInfo,
 }) => {
-  const router = useRouter();
-  //   const { slug } = router.query;
   const initialValues: Record<string, string> = {};
-
-  //   const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <Modal

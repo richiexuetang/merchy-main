@@ -11,3 +11,4 @@ export {
   getProductInfo,
   fetchProductCollections,
 } from './product';
+export { logout } from './auth';
