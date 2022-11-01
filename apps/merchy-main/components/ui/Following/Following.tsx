@@ -7,7 +7,6 @@ import {
   TableContainer,
   Thead,
   Tr,
-  Th,
   Td,
   Tbody,
   Table,
@@ -22,6 +21,7 @@ import { useEffect, useState } from 'react';
 import DeleteModal from './DeleteModal';
 import Link from 'next/link';
 import AddModal from './AddModal';
+import { AccountTr, AccountTh } from '../../../styles';
 
 const UserProfile = gql`
   query userProfile($userEmail: String!) {
@@ -130,62 +130,13 @@ const Following = () => {
         <TableContainer overflowX="hidden">
           <Table variant="comfortable">
             <Thead>
-              <Tr
-                display="flex"
-                flex="1 0 auto"
-                minW="0px"
-                h="fit-content"
-                borderBottom="1px solid #EDEDED"
-              >
-                <Th
-                  {...thStyles}
-                  w="250px"
-                  flex="250 0 auto"
-                  textAlign="left"
-                  whiteSpace="nowrap"
-                  boxSizing="border-box"
-                >
-                  Name
-                </Th>
-                <Th
-                  {...thStyles}
-                  w="150px"
-                  flex="150 0 auto"
-                  textAlign="left"
-                  whiteSpace="nowrap"
-                  boxSizing="border-box"
-                >
-                  Market Value
-                </Th>
-                <Th
-                  {...thStyles}
-                  w="150px"
-                  flex="150 0 auto"
-                  textAlign="left"
-                  whiteSpace="nowrap"
-                  boxSizing="border-box"
-                >
-                  Lowest Ask
-                </Th>
-                <Th
-                  {...thStyles}
-                  w="150px"
-                  flex="150 0 auto"
-                  textAlign="left"
-                  whiteSpace="nowrap"
-                  boxSizing="border-box"
-                >
-                  Last Sale
-                </Th>
-                <Th
-                  {...thStyles}
-                  w="150px"
-                  flex="150 0 auto"
-                  textAlign="left"
-                  whiteSpace="nowrap"
-                  boxSizing="border-box"
-                ></Th>
-              </Tr>
+              <AccountTr>
+                <AccountTh flex="250 0 auto">Name</AccountTh>
+                <AccountTh flex="150 0 auto">Market Value</AccountTh>
+                <AccountTh flex="150 0 auto">Lowest Ask</AccountTh>
+                <AccountTh flex="150 0 auto">Last Sale</AccountTh>
+                <AccountTh flex="150 0 auto"></AccountTh>
+              </AccountTr>
             </Thead>
             {followProducts?.map(({ node }, idx) => {
               return (

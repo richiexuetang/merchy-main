@@ -20,7 +20,7 @@ export const loadUser = () => async (dispatch) => {
     const data = await res.json();
 
     if (res.status === 200) {
-      dispatch(loadUserSuccess(data));
+      dispatch(loadUserSuccess(data.user));
     }
   } catch (err) {
     dispatch(loadUserFail());

@@ -51,9 +51,6 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.user = null;
     },
-    logoutFail: (state) => {
-      state.isAuthenticated = false;
-    },
     loadUserSuccess: (state, action: PayloadAction<User>) => {
       state.isAuthenticated = true;
       state.user = action.payload;

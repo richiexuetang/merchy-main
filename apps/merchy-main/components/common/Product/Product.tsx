@@ -22,6 +22,7 @@ import ActionModal from './ActionModal';
 import MarketHistory from './MarketHistory';
 import BuySellContainer from './BuySellContainer';
 import MarketActivity from './MarketActivity';
+import AddToPortfolioModal from './AddToPortfolioModal';
 
 const Product = ({ productInfo }) => {
   const [show, setShow] = useState(false);
@@ -33,6 +34,13 @@ const Product = ({ productInfo }) => {
     onOpen: onFollowOpen,
     onClose: onFollowClose,
   } = useDisclosure();
+
+  const {
+    isOpen: isPortfolioOpen,
+    onOpen: onPortfolioOpen,
+    onClose: onPortfolioClose,
+  } = useDisclosure();
+
   return (
     <Container data-component="ProductView" w="100%" maxW="6xl" pb="8">
       <chakra.section mt="2">
@@ -59,12 +67,12 @@ const Product = ({ productInfo }) => {
                       aria-label="Add To Portfolio"
                       bg="transparent"
                       icon={<Add />}
-                      onClick={onFollowOpen}
+                      onClick={onPortfolioOpen}
                     />
-                    <ActionModal
+                    <AddToPortfolioModal
                       productInfo={productInfo}
-                      isFollowOpen={isFollowOpen}
-                      onFollowClose={onFollowClose}
+                      isPortfolioOpen={isPortfolioOpen}
+                      onPortfolioClose={onPortfolioClose}
                     />
                   </li>
                   <li>

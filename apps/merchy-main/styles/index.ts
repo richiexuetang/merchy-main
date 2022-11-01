@@ -1,4 +1,6 @@
 export {
+  AccountTh,
+  AccountTr,
   NavListItem,
   LogoIcon,
   LogoSpan,
@@ -7,6 +9,6 @@ export {
   NavIconButton,
   ProductFooterSpan,
 } from './factory';
-export { formInputFieldStyles } from './styles';
+export { formInputFieldStyles, tabStyles } from './styles';
 export { theme, GlobalStyle } from './global';
 export { default as Fonts } from './fonts';

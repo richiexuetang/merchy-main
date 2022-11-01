@@ -5,6 +5,9 @@ import {
   AccountSidebar,
   FollowProducts,
   AccountSettings,
+  PurchaseHistory,
+  AccountPortfolio,
+  AccountSecurity,
 } from '../..';
 import { getLayout } from '../Layout';
 
@@ -25,6 +28,12 @@ const Account = () => {
             return <FollowProducts />;
           case 'settings':
             return <AccountSettings />;
+          case 'buying':
+            return <PurchaseHistory />;
+          case 'portfolio':
+            return <AccountPortfolio />;
+          case 'security':
+            return <AccountSecurity />;
           default:
             <Container
               pos="relative"

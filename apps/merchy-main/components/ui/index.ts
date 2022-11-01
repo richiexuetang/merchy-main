@@ -1,12 +1,16 @@
 export { default as AccountSidebar } from './AccountSidebar';
 export { default as AccountProfile } from './AccountProfile';
+export { default as AccountPortfolio } from './AccountPortfolio';
 export { default as AccountSettings } from './AccountSettings';
+export { default as AccountSecurity } from './AccountSecurity';
 export { default as AccountMenu } from './AccountMenu';
 export { default as Blurb } from './Blurb';
 export { default as BreadCrumbs } from './BreadCrumbs';
 export { default as BrowseNavbar } from './BrowseNavbar';
 export { default as CustomCheckbox } from './CustomCheckbox';
+export { default as PurchaseHistory } from './PurchaseHistory';
 export { default as Following } from './Following';
+export { FlexHeader } from './Header';
 export { default as IconBlockItem } from './IconBlockItem';
 export { default as SelectDropdown } from './SelectDropdown';
 export { default as Text } from './Text';

@@ -8,7 +8,7 @@ import { LinkStyles as Link } from './linkStyles';
 import { FormInputStyles as Input } from './formInputStyles';
 // import { BoxStyles as Box } from './boxStyles';
 import { ListItemStyles as ListItem } from './listItemStyles';
-import { CustomBox } from './factory';
+import { CustomBox, CustomContainer } from './factory';
 
 export const theme = extendTheme({
   styles: {
@@ -26,6 +26,7 @@ export const theme = extendTheme({
   },
   components: {
     CustomBox,
+    CustomContainer,
     Button,
     ListItem,
     Text,
@@ -33,6 +34,9 @@ export const theme = extendTheme({
     Heading,
     Link,
     Input,
+  },
+  space: {
+    auto: 'auto',
   },
   colors: {
     neutral: {

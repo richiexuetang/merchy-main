@@ -6,6 +6,8 @@ import {
   List,
   Link,
   IconButton,
+  Tr,
+  Th,
 } from '@chakra-ui/react';
 
 export const NavListItem = chakra(ListItem, {
@@ -95,6 +97,34 @@ export const ProductFooterSpan = chakra('span', {
   },
 });
 
+export const AccountTr = chakra(Tr, {
+  baseStyle: {
+    display: 'flex',
+    flex: '1 0 auto',
+    minW: '0px',
+    h: 'fit-content',
+    borderBottom: '1px solid #EDEDED',
+  },
+});
+
+export const AccountTh = chakra(Th, {
+  baseStyle: {
+    px: '0px',
+    verticalAlign: 'top',
+    minW: '0px',
+    cursor: 'pointer',
+    paddingInline: { base: '4', sm: '6', md: '6' },
+    py: '2',
+    lineHeight: '1rem',
+    alignSelf: 'center',
+    w: '250px',
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    fontWeight: 'medium',
+  },
+});
+
 export const CustomBox = defineStyleConfig({
   baseStyle: {},
   variants: {
@@ -135,8 +165,22 @@ export const CustomBox = defineStyleConfig({
       pos: 'relative',
     },
   },
-  // The default variant value
   defaultProps: {
     variant: 'smooth',
+  },
+});
+
+export const CustomContainer = defineStyleConfig({
+  baseStyle: {},
+  variants: {
+    account: {
+      width: '100%',
+      marginInline: 'auto',
+      py: { base: '4', md: '8', lg: '6' },
+      paddingInline: 4,
+    },
+  },
+  defaultProps: {
+    variant: 'account',
   },
 });

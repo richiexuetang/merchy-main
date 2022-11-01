@@ -14,3 +14,10 @@ export const formInputFieldStyles = {
     boxShadow: 'none',
   },
 };
+
+export const tabStyles = {
+  _selected: {
+    color: 'neutral.black',
+    borderBottomColor: 'neutral.black',
+  },
+};

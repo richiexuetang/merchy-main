@@ -6,8 +6,6 @@ import client from '../../../pages/api/graphql';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadUserSuccess } from '../../../store/auth/auth.slice';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 
 // const Loading = () => {
 //   <div>Loading...</div>;
@@ -46,7 +44,7 @@ export const Layout: React.FC<Props> = ({ children, pageProps }) => {
       });
 
       const data = await res.json();
-      dispatch(loadUserSuccess(data));
+      dispatch(loadUserSuccess(data.user));
     };
 
     fetchData();

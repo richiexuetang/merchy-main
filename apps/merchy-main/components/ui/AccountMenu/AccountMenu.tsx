@@ -123,7 +123,7 @@ const AccountMenu = () => {
           </Link>
         </NextLink>
 
-        <NextLink href="/account/[slug]" as={`/account/portfoolio`}>
+        <NextLink href="/account/[slug]" as={`/account/portfolio`}>
           <Link order="3" {...linkStyles}>
             <Box display="flex" flexDir="row" alignItems="center">
               <Portfolio />
