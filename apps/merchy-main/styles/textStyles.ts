@@ -11,6 +11,14 @@ export const TextStyles = {
       fontSize: '12px',
       fontWeight: 500,
     },
+    marketActivitySmall: {
+      color: 'neutral.black',
+      fontSize: 'sm',
+      fontWeight: 'normal',
+      fontFamily: 'suisseIntlRegular',
+      lineHeight: '5',
+      letterSpacing: '0.004rem',
+    },
   },
   defaultProps: {},
 };

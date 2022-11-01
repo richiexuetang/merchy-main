@@ -1,59 +1,22 @@
 import {
   Box,
-  chakra,
   Container,
   Grid,
-  Text,
   Select,
   Heading,
-  Checkbox,
   SimpleGrid,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { getLayout } from '../Layout';
 import { useLazyQuery } from '@apollo/client';
-import Image from 'next/image';
-import { BrowseNavbar, BreadCrumbs, Blurb, BrowseHeader } from '../../ui';
+import { BreadCrumbs, Blurb, BrowseHeader } from '../../ui';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ScrollToTop from 'react-scroll-to-top';
-import moment from 'moment';
 import { GetCategoryProducts } from '../../../utils/gql';
-
-const h2Styles = {
-  fontWeight: 600,
-  fontSize: '16px',
-  marginBottom: 2,
-  lineHeight: '24px',
-  minH: '0vw',
-  letterSpacing: '1px',
-  color: 'black',
-};
-
-const spanStyles = {
-  display: 'inline-flex',
-  verticalAlign: 'top',
-  alignItems: 'center',
-  maxW: '100%',
-  fontWeight: 'normal',
-  lineHeight: '1.2',
-  outline: 'transparent solid 2px',
-  outlineOffset: '2px',
-  mb: '1',
-  mr: '1',
-  mt: '1',
-  minW: '1.5rem',
-  minH: '1.5rem',
-  fontSize: 'xs',
-  borderRadius: '0',
-  paddingInline: '1',
-  bg: 'beige.100',
-  color: 'neutral.black',
-  h: '22px',
-  fontFamily: 'suisseIntlMedium',
-  py: '2px',
-};
+import Card from './Card';
+import LeftNav from './LeftNav';
 
 const attributeFiltersInitialState = {
   priceRange: '',
@@ -197,110 +160,13 @@ const Category = ({
           mt={{ lg: '10' }}
           overflow="hidden"
         >
-          {/* Left Nav Menu */}
-          <Box
-            display={{ base: 'none', lg: 'block' }}
-            paddingLeft={4}
-            gridColumn={{
-              base: 'span 3/span 3',
-              md: 'span 2/span 2',
-              lg: 'span 1/span 1',
-            }}
-          >
-            <Box>
-              {/* Left Top Nav Menu */}
-              <Box marginBottom={8}>
-                {rootLevel.map(({ name, slug: url, level }) => {
-                  let active = false;
-                  if (
-                    typeof slug === 'string' &&
-                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
-                  ) {
-                    active = true;
-                  }
-
-                  return (
-                    level === 0 && (
-                      <BrowseNavbar
-                        key={url}
-                        name={name}
-                        slug={url}
-                        active={active}
-                        nextLevel={[]}
-                      />
-                    )
-                  );
-                })}
-              </Box>
-              {/* End of Left Top Nav Menu */}
-
-              {/* Below Retail Section  */}
-              <Box marginBottom={8}>
-                <Box marginBottom="7px" role="button">
-                  <chakra.h2 {...h2Styles}> BELOW RETAIL </chakra.h2>
-                </Box>
-              </Box>
-              {/* End of Below Retail */}
-
-              <Box marginBottom={8}>
-                {levelOne?.map(({ name, slug: url, level }) => {
-                  let active = false;
-                  let children = [];
-                  if (
-                    typeof slug === 'string' &&
-                    name.toLowerCase() === slug?.replace('-', ' ').toLowerCase()
-                  ) {
-                    active = true;
-                    children = levelTwo;
-                  }
-
-                  return (
-                    level === 1 && (
-                      <BrowseNavbar
-                        key={url}
-                        name={name}
-                        slug={url}
-                        active={active}
-                        nextLevel={children}
-                      />
-                    )
-                  );
-                })}
-              </Box>
-
-              <Box>
-                {filterAttributes.map(({ node }) => {
-                  return (
-                    <Box key={node.fieldValue}>
-                      <Heading {...h2Styles} textTransform="uppercase">
-                        {node.displayName}
-                      </Heading>
-                      <chakra.ul display="flex" flexWrap="wrap">
-                        {node.productAttribute.edges.map(({ node: x }) => {
-                          return (
-                            <chakra.li key={x.value} w="100%" mb="0">
-                              <Checkbox
-                                m="0px 0px 8px"
-                                fontWeight="400"
-                                colorScheme="blackAlpha"
-                                value={x.value}
-                                onChange={(e) =>
-                                  handleCheckboxChange(e, node.fieldValue)
-                                }
-                              >
-                                {x.displayName}
-                              </Checkbox>
-                            </chakra.li>
-                          );
-                        })}
-                      </chakra.ul>
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-          </Box>
-          {/* End of Left Nav Menu */}
+          <LeftNav
+            levelOne={levelOne}
+            levelTwo={levelTwo}
+            rootLevel={rootLevel}
+            handleCheckboxChange={handleCheckboxChange}
+            filterAttributes={filterAttributes}
+          />
 
           {/* Product Section */}
           <Box
@@ -349,121 +215,11 @@ const Category = ({
               </Box>
             </Box>
 
-            {products ? (
+            {products && products.length > 0 ? (
               <SimpleGrid id="browse-grid" columns={{ base: 2, lg: 4, xl: 4 }}>
-                {products.map(({ node }, index) => {
-                  return (
-                    <Box padding="0 8px 16px" key={index}>
-                      <Box
-                        border="solid #E2E8F0"
-                        borderWidth="thin"
-                        borderRadius="3px"
-                        minW="141px"
-                        h="auto"
-                        pos="relative"
-                        mr="0"
-                        _hover={{
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <Link href={`/product/${node.slug}`}>
-                          <Box
-                            display="flex"
-                            flexDir="column"
-                            borderColor="neutral.200"
-                          >
-                            <Box margin={{ base: '2', lg: '4' }}>
-                              <Box
-                                display="flex"
-                                justifyContent="center"
-                                w="140px"
-                                h="75px"
-                                maxW="100%"
-                                m="0px auto"
-                              >
-                                <Image
-                                  layout="fixed"
-                                  width={145}
-                                  height={75}
-                                  src={node.media.thumbUrl}
-                                  alt={node.name}
-                                  priority={true}
-                                />
-                              </Box>
-                            </Box>
-                            <Box
-                              display="flex"
-                              flexDir="column"
-                              h="100%"
-                              padding="2"
-                              textAlign="left"
-                              pos="relative"
-                            >
-                              <Text
-                                overflow="hidden"
-                                fontWeight="md"
-                                fontSize={{ base: 'xs', md: 'sm' }}
-                                h={{ base: '34px', md: '40px' }}
-                              >
-                                {node.name}
-                              </Text>
-                              <Box
-                                display="flex"
-                                flexDir="column"
-                                justifyContent="space-between"
-                                h="100%"
-                              >
-                                <Box>
-                                  <Text
-                                    lineHeight="md"
-                                    fontSize="xs"
-                                    fontWeight="medium"
-                                    mt="1"
-                                  >
-                                    {sortBy === 'market__highestBid'
-                                      ? 'Highest Bid'
-                                      : 'Lowest Ask'}
-                                  </Text>
-                                  <Text
-                                    fontWeight="bold"
-                                    lineHeight="1.3"
-                                    mt="1"
-                                  >
-                                    {sortBy === 'market__highestBid'
-                                      ? `${node.market.highestBid}`
-                                      : `${node.market.lowestAsk}`}
-                                  </Text>
-                                </Box>
-                                {sortBy !== 'featured' && (
-                                  <Box display="flex" mt="1">
-                                    {sortBy === 'market__salesEver' && (
-                                      <chakra.span {...spanStyles}>
-                                        {node.market.salesEver} sold
-                                      </chakra.span>
-                                    )}
-                                    {sortBy === 'releaseDate' && (
-                                      <chakra.span {...spanStyles}>
-                                        Released{' '}
-                                        {moment(
-                                          node.productDetails.releaseDate
-                                        ).format('MM/DD/YYYY')}
-                                      </chakra.span>
-                                    )}
-                                    {sortBy === 'market__lastSale' && (
-                                      <chakra.span {...spanStyles}>
-                                        Last Sale: ${node.market.lastSale}
-                                      </chakra.span>
-                                    )}
-                                  </Box>
-                                )}
-                              </Box>
-                            </Box>
-                          </Box>
-                        </Link>
-                      </Box>
-                    </Box>
-                  );
-                })}
+                {products.map(({ node }) => (
+                  <Card key={node.name} product={node} sortBy={sortBy} />
+                ))}
               </SimpleGrid>
             ) : (
               <Box>

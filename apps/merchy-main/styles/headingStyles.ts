@@ -24,6 +24,16 @@ export const HeadingStyles = {
       lineHeight: 'xl',
       mt: '4',
     },
+    h2: {
+      fontFamily: 'suisseIntlRegular',
+      fontWeight: 600,
+      fontSize: '16px',
+      mb: '7px',
+      lineHeight: '24px',
+      minH: '0vw',
+      letterSpacing: '1px',
+      color: 'black',
+    },
   },
   defaultProps: {},
 };

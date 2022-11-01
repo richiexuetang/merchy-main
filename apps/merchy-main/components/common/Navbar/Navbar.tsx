@@ -1,15 +1,7 @@
 import { Account, Bell, Logo } from '../../icons';
 import { BrowseMenu } from './BrowseMenu';
 import NavInput from './NavInput';
-import {
-  chakra,
-  Flex,
-  Icon,
-  Link,
-  Button,
-  IconButton,
-  Box,
-} from '@chakra-ui/react';
+import { Flex, Icon, Link, Button, Box } from '@chakra-ui/react';
 import { useState } from 'react';
 import NavbarRoot from './NavbarRoot';
 import NextLink from 'next/link';
@@ -17,13 +9,16 @@ import { BrowseCategory } from '../../../types';
 import { useSelector } from 'react-redux';
 import { AccountMenu } from '../../ui';
 import { RootState } from '../../../store/store';
-
-const navListStyle = {
-  pos: 'relative',
-  m: { base: '0', md: '0 2px', lg: '0 4px' },
-  fontWeight: '500',
-  whiteSpace: 'nowrap',
-} as const;
+import { useRouter } from 'next/router';
+import {
+  NavListItem,
+  LogoIcon,
+  LogoSpan,
+  NavList,
+  NavLink,
+  NavIconButton,
+} from '../../../styles';
+import { CustomBox } from '../../../styles/boxStyles';
 
 interface NavbarProps {
   browseCategories: BrowseCategory[];
@@ -33,138 +28,86 @@ const Navbar: React.FC<NavbarProps> = ({ browseCategories }) => {
   const userAuth = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountDropdown, setAccountDropdown] = useState<boolean>(false);
 
   return (
     <NavbarRoot>
-      <chakra.div pos="sticky" zIndex="1030" top={0} bg="white">
+      <Box pos="sticky" zIndex="1030" top={0} bg="white">
         <Flex minH="48px" justify="space-between" align="center">
-          {/* Logo */}
-          <Box display={{ base: 'none', md: 'inline-block' }}>
+          <CustomBox variant="inlineBlock">
             <Link display={{ base: 'none', md: 'block' }} href="/">
-              <chakra.span
-                display={{ base: 'flex', md: 'block' }}
-                mx={{ base: '0px', md: '2.5rem' }}
-              >
-                <Icon
-                  as={Logo}
-                  h="auto"
-                  w={{ base: '95px', md: '125px' }}
-                  display="inline-block"
-                  lineHeight="44px"
-                  flexShrink="0"
-                  verticalAlign="middle"
-                />
-              </chakra.span>
+              <LogoSpan>
+                <LogoIcon as={Logo} />
+              </LogoSpan>
             </Link>
-          </Box>
-          {/* End of Logo */}
+          </CustomBox>
 
           <NavInput />
-          <chakra.ul
-            display={{ base: 'none', md: 'flex' }}
-            flexFlow="row nowrap"
-            justifyContent="flex-end"
-            alignItems="center"
-            h="90px"
-            m="0"
-            pr="30px"
-          >
-            <chakra.li
-              {...navListStyle}
+          <NavList>
+            <NavListItem
               onMouseEnter={() => setIsOpen(true)}
               onMouseLeave={() => setIsOpen(false)}
             >
               <NextLink href="/sneakers">
-                <Link
-                  padding={{ md: '8px 1px', xl: '8px' }}
-                  fontSize={{ md: 'xs', lg: 'md' }}
-                >
-                  Browse
-                </Link>
+                <NavLink>Browse</NavLink>
               </NextLink>
               <BrowseMenu isOpen={isOpen} browseCategories={browseCategories} />
-            </chakra.li>
+            </NavListItem>
 
-            <chakra.li {...navListStyle}>
+            <NavListItem>
               <NextLink href="/about">
-                <Link
-                  padding={{ md: '8px 1px', xl: '8px' }}
-                  fontSize={{ md: 'xs', lg: 'md' }}
-                >
-                  About
-                </Link>
+                <NavLink>About</NavLink>
               </NextLink>
-            </chakra.li>
-            <chakra.li {...navListStyle}>
+            </NavListItem>
+            <NavListItem>
               <NextLink href="/help">
-                <Link
-                  padding={{ md: '8px 1px', xl: '8px' }}
-                  fontSize={{ md: 'xs', lg: 'md' }}
-                >
-                  Help
-                </Link>
+                <NavLink>Help</NavLink>
               </NextLink>
-            </chakra.li>
+            </NavListItem>
 
-            <chakra.li {...navListStyle}>
-              <NextLink href="sell">
-                <Link
-                  padding={{ md: '8px 1px', xl: '8px' }}
-                  fontSize={{ md: 'xs', lg: 'md' }}
-                >
-                  Sell
-                </Link>
+            <NavListItem>
+              <NextLink href="/sell">
+                <NavLink>Sell</NavLink>
               </NextLink>
-            </chakra.li>
+            </NavListItem>
 
             {!userAuth ? (
               <>
-                <chakra.li {...navListStyle}>
+                <NavListItem>
                   <NextLink href="/auth/[slug]" as="/auth/login">
                     <Button variant="login">Login</Button>
                   </NextLink>
-                </chakra.li>
-                <chakra.li {...navListStyle}>
+                </NavListItem>
+                <NavListItem>
                   <NextLink href="/auth/[slug]" as="/auth/signup">
                     <Button variant="signup">SignUp</Button>
                   </NextLink>
-                </chakra.li>
+                </NavListItem>
               </>
             ) : (
               <>
-                <chakra.li {...navListStyle}>
-                  <IconButton
-                    bg="none"
-                    w="6"
+                <NavListItem>
+                  <NavIconButton
                     aria-label="Message Center Icon"
-                    h="42px"
-                    minW="auto"
-                    mr="0"
-                    fontSize="1.25rem"
-                    _hover={{
-                      bg: 'transparent',
-                    }}
                     icon={<Bell />}
                   />
-                </chakra.li>
-                <chakra.li
-                  {...navListStyle}
+                </NavListItem>
+                <NavListItem
                   onMouseEnter={() => setAccountDropdown(true)}
                   onMouseLeave={() => setAccountDropdown(false)}
+                  onClick={() => router.push('/account/profile')}
                 >
-                  <NextLink href="/profile">
-                    <Icon as={Account} w="6" h="6" verticalAlign="middle" />
-                  </NextLink>
+                  <Icon as={Account} w="6" h="6" verticalAlign="middle" />
                   {accountDropdown && <AccountMenu />}
-                </chakra.li>
+                </NavListItem>
               </>
             )}
-          </chakra.ul>
+          </NavList>
         </Flex>
-      </chakra.div>
+      </Box>
     </NavbarRoot>
   );
 };
