@@ -1,0 +1,11 @@
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/bin/Debug/net8.0/MerchY.Shared.Hosting.deps.json
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/bin/Debug/net8.0/MerchY.Shared.Hosting.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.csproj.AssemblyReference.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.GeneratedMSBuildEditorConfig.editorconfig
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.AssemblyInfoInputs.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.AssemblyInfo.cs
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.csproj.CoreCompileInputs.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.sourcelink.json
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/MerchY.Shared.Hosting.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/refint/MerchY.Shared.Hosting.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting/obj/Debug/net8.0/ref/MerchY.Shared.Hosting.dll

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0F812D0C-77D6-42BA-A39D-E5C9278D1436}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{19FB3D53-7C36-4D68-AFC8-6C135BB03CD1}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{84F9B2D9-6AD1-4F2D-9811-FD1DFF56A19C}"
 EndProject
@@ -18,6 +21,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{49B67AE4-D882-4155-B4E5-10D408F02DA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchY.Shared.Localization", "src\shared\MerchY.Shared.Localization\MerchY.Shared.Localization.csproj", "{7D43E533-4817-43CB-9E3B-30AC55EE6100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchY.Shared.Hosting", "src\shared\MerchY.Shared.Hosting\MerchY.Shared.Hosting.csproj", "{1B09186C-5958-49D7-A75A-AA022043A96B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchY.Shared.Hosting.AspNetCore", "src\shared\MerchY.Shared.Hosting.AspNetCore\MerchY.Shared.Hosting.AspNetCore.csproj", "{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchY.Shared.Hosting.Gateways", "src\shared\MerchY.Shared.Hosting.Gateways\MerchY.Shared.Hosting.Gateways.csproj", "{E6023DE1-4661-417B-BA85-3116BAFB9A38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchY.Shared.Hosting.Microservices", "src\shared\MerchY.Shared.Hosting.Microservices\MerchY.Shared.Hosting.Microservices.csproj", "{2B942F9F-E202-4EA8-9C7E-FB1E75D16327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +45,10 @@ Global
 		{3E77172A-3DAE-4C5E-8BCD-BE3CADD58833} = {A2576A1E-B7E6-48A7-94EE-CE7F00729731}
 		{49B67AE4-D882-4155-B4E5-10D408F02DA5} = {0F812D0C-77D6-42BA-A39D-E5C9278D1436}
 		{7D43E533-4817-43CB-9E3B-30AC55EE6100} = {49B67AE4-D882-4155-B4E5-10D408F02DA5}
+		{1B09186C-5958-49D7-A75A-AA022043A96B} = {49B67AE4-D882-4155-B4E5-10D408F02DA5}
+		{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA} = {49B67AE4-D882-4155-B4E5-10D408F02DA5}
+		{E6023DE1-4661-417B-BA85-3116BAFB9A38} = {49B67AE4-D882-4155-B4E5-10D408F02DA5}
+		{2B942F9F-E202-4EA8-9C7E-FB1E75D16327} = {49B67AE4-D882-4155-B4E5-10D408F02DA5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E653610F-5CB3-4AF9-A0FD-CD158D7E7AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +63,21 @@ Global
 		{7D43E533-4817-43CB-9E3B-30AC55EE6100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D43E533-4817-43CB-9E3B-30AC55EE6100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D43E533-4817-43CB-9E3B-30AC55EE6100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B09186C-5958-49D7-A75A-AA022043A96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B09186C-5958-49D7-A75A-AA022043A96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B09186C-5958-49D7-A75A-AA022043A96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B09186C-5958-49D7-A75A-AA022043A96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67EF6B69-DE87-4718-B8A5-1EF29DADC0AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6023DE1-4661-417B-BA85-3116BAFB9A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6023DE1-4661-417B-BA85-3116BAFB9A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6023DE1-4661-417B-BA85-3116BAFB9A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6023DE1-4661-417B-BA85-3116BAFB9A38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B942F9F-E202-4EA8-9C7E-FB1E75D16327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B942F9F-E202-4EA8-9C7E-FB1E75D16327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B942F9F-E202-4EA8-9C7E-FB1E75D16327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B942F9F-E202-4EA8-9C7E-FB1E75D16327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

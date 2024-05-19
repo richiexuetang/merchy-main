@@ -1,0 +1,11 @@
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/bin/Debug/net8.0/MerchY.Shared.Localization.deps.json
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/bin/Debug/net8.0/MerchY.Shared.Localization.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.csproj.AssemblyReference.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.GeneratedMSBuildEditorConfig.editorconfig
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.AssemblyInfoInputs.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.AssemblyInfo.cs
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.csproj.CoreCompileInputs.cache
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.sourcelink.json
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/MerchY.Shared.Localization.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/refint/MerchY.Shared.Localization.dll
+/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Localization/obj/Debug/net8.0/ref/MerchY.Shared.Localization.dll
