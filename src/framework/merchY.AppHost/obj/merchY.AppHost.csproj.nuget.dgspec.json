@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/merchY.AppHost.csproj": {}
+  },
+  "projects": {
+    "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/merchY.AppHost.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/merchY.AppHost.csproj",
+        "projectName": "merchY.AppHost",
+        "projectPath": "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/merchY.AppHost.csproj",
+        "packagesPath": "/Users/richardtang/.nuget/packages/",
+        "outputPath": "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/richardtang/Desktop/repos/merchy-main/NuGet.Config",
+          "/Users/richardtang/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Aspire.Hosting.AppHost": {
+              "target": "Package",
+              "version": "[8.0.0-preview.7.24251.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

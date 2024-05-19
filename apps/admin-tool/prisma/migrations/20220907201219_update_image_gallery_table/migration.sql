@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE "ImageGallery" ALTER COLUMN "label" DROP NOT NULL,
-ALTER COLUMN "smallImageUrl" DROP NOT NULL,
-ALTER COLUMN "thumbUrl" DROP NOT NULL;
