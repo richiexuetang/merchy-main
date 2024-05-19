@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("merchY.AppHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d46cd63ebfdfcf6fd973597ca455b8d36f0547cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d830247fc087029fd34f849d63b378e32e049d4b")]
 [assembly: System.Reflection.AssemblyProductAttribute("merchY.AppHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("merchY.AppHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

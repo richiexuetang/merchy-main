@@ -112,12 +112,12 @@
           }
         }
       },
-      "Grpc.AspNetCore/2.60.0": {
+      "Grpc.AspNetCore/2.62.0": {
         "type": "package",
         "dependencies": {
           "Google.Protobuf": "3.24.0",
-          "Grpc.AspNetCore.Server.ClientFactory": "2.60.0",
-          "Grpc.Tools": "2.60.0"
+          "Grpc.AspNetCore.Server.ClientFactory": "2.62.0",
+          "Grpc.Tools": "2.62.0"
         },
         "compile": {
           "lib/net8.0/_._": {}
@@ -126,10 +126,10 @@
           "lib/net8.0/_._": {}
         }
       },
-      "Grpc.AspNetCore.Server/2.60.0": {
+      "Grpc.AspNetCore.Server/2.62.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.Net.Common": "2.60.0"
+          "Grpc.Net.Common": "2.62.0"
         },
         "compile": {
           "lib/net8.0/Grpc.AspNetCore.Server.dll": {
@@ -145,11 +145,11 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Grpc.AspNetCore.Server.ClientFactory/2.60.0": {
+      "Grpc.AspNetCore.Server.ClientFactory/2.62.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.AspNetCore.Server": "2.60.0",
-          "Grpc.Net.ClientFactory": "2.60.0"
+          "Grpc.AspNetCore.Server": "2.62.0",
+          "Grpc.Net.ClientFactory": "2.62.0"
         },
         "compile": {
           "lib/net8.0/Grpc.AspNetCore.Server.ClientFactory.dll": {
@@ -165,7 +165,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Grpc.Core.Api/2.60.0": {
+      "Grpc.Core.Api/2.62.0": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/Grpc.Core.Api.dll": {
@@ -178,10 +178,10 @@
           }
         }
       },
-      "Grpc.Net.Client/2.60.0": {
+      "Grpc.Net.Client/2.62.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.Net.Common": "2.60.0",
+          "Grpc.Net.Common": "2.62.0",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0"
         },
         "compile": {
@@ -195,10 +195,10 @@
           }
         }
       },
-      "Grpc.Net.ClientFactory/2.60.0": {
+      "Grpc.Net.ClientFactory/2.62.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.Net.Client": "2.60.0",
+          "Grpc.Net.Client": "2.62.0",
           "Microsoft.Extensions.Http": "6.0.0"
         },
         "compile": {
@@ -212,10 +212,10 @@
           }
         }
       },
-      "Grpc.Net.Common/2.60.0": {
+      "Grpc.Net.Common/2.62.0": {
         "type": "package",
         "dependencies": {
-          "Grpc.Core.Api": "2.60.0"
+          "Grpc.Core.Api": "2.62.0"
         },
         "compile": {
           "lib/net8.0/Grpc.Net.Common.dll": {
@@ -228,7 +228,7 @@
           }
         }
       },
-      "Grpc.Tools/2.60.0": {
+      "Grpc.Tools/2.62.0": {
         "type": "package",
         "build": {
           "build/_._": {}
@@ -471,7 +471,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -838,7 +838,7 @@
           }
         }
       },
-      "Microsoft.Extensions.Options/8.0.0": {
+      "Microsoft.Extensions.Options/8.0.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
@@ -967,7 +967,7 @@
           "buildMultiTargeting/_._": {}
         }
       },
-      "Polly.Core/8.3.1": {
+      "Polly.Core/8.4.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/Polly.Core.dll": {
@@ -1205,15 +1205,15 @@
         "lib/netstandard2.0/Google.Protobuf.xml"
       ]
     },
-    "Grpc.AspNetCore/2.60.0": {
-      "sha512": "fFLF1/7C+ZZ10vpw63jNRp9VMIXAAmSFKD8pp8rDtD6Z51H4qYYto/go+XhBs7av5piG+GziSP0uA1VZAYLgAA==",
+    "Grpc.AspNetCore/2.62.0": {
+      "sha512": "DnfhwUepm1zlgIDuZkuvi7B7gugM2m8GOUlmyUxDaBviyfj/Of6+dIAR342QQwnBwPFeSboDZu9DJA/3TGVz0g==",
       "type": "package",
-      "path": "grpc.aspnetcore/2.60.0",
+      "path": "grpc.aspnetcore/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.aspnetcore.2.60.0.nupkg.sha512",
+        "grpc.aspnetcore.2.62.0.nupkg.sha512",
         "grpc.aspnetcore.nuspec",
         "lib/net6.0/_._",
         "lib/net7.0/_._",
@@ -1221,15 +1221,15 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.AspNetCore.Server/2.60.0": {
-      "sha512": "BwBvT8WJm5YfUtRdUxG1iqxd1p0rVo3GC/+gM93vS2MvQQa+E9o8PH6hrTrS9OMXeN3IzpU0yv27QBryl4OKZw==",
+    "Grpc.AspNetCore.Server/2.62.0": {
+      "sha512": "0ZmdjQ3TxV2DT9tqldfWjVh3R51IdDjuc8vuUJRoJAU4M9sRGNJqJC72wxU81tQFeHLhe0ahq8FngFPuAvByrg==",
       "type": "package",
-      "path": "grpc.aspnetcore.server/2.60.0",
+      "path": "grpc.aspnetcore.server/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.aspnetcore.server.2.60.0.nupkg.sha512",
+        "grpc.aspnetcore.server.2.62.0.nupkg.sha512",
         "grpc.aspnetcore.server.nuspec",
         "lib/net6.0/Grpc.AspNetCore.Server.dll",
         "lib/net6.0/Grpc.AspNetCore.Server.pdb",
@@ -1243,14 +1243,14 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.AspNetCore.Server.ClientFactory/2.60.0": {
-      "sha512": "QjhyB/vW1RkvdT2ddxvsOzA5gRhiYxGww3VMXlXVBXD2rKrSj9m8Z3BlatdTtiM+W+zsMfgoggxCIIktcxyWkA==",
+    "Grpc.AspNetCore.Server.ClientFactory/2.62.0": {
+      "sha512": "hJUzvFmfI4JgQEJMu+1IVaKg+zMlDiFNlmyW/2m2X/XUAKIaopx0hd3aaQ+hiWr6Ih5RHH5ZVx+1QgLqNPLdgw==",
       "type": "package",
-      "path": "grpc.aspnetcore.server.clientfactory/2.60.0",
+      "path": "grpc.aspnetcore.server.clientfactory/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "grpc.aspnetcore.server.clientfactory.2.60.0.nupkg.sha512",
+        "grpc.aspnetcore.server.clientfactory.2.62.0.nupkg.sha512",
         "grpc.aspnetcore.server.clientfactory.nuspec",
         "lib/net6.0/Grpc.AspNetCore.Server.ClientFactory.dll",
         "lib/net6.0/Grpc.AspNetCore.Server.ClientFactory.pdb",
@@ -1264,15 +1264,15 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Core.Api/2.60.0": {
-      "sha512": "VWah+8dGJhhsay5BQ/Ljq6GYDWj0lSjdzqyoBgUQhXTbBqhs+q5dRFROKxI1xxzlL4pfUO45cf/y+KnHVFG9ew==",
+    "Grpc.Core.Api/2.62.0": {
+      "sha512": "q4Jj6bRZHNnE4CMLqgjiBUCKLit+tRr0simZsS2W6U++akd7CzXByeKy2tddqT68hFzP2XzceXA2YtBTfWtixA==",
       "type": "package",
-      "path": "grpc.core.api/2.60.0",
+      "path": "grpc.core.api/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.core.api.2.60.0.nupkg.sha512",
+        "grpc.core.api.2.62.0.nupkg.sha512",
         "grpc.core.api.nuspec",
         "lib/net462/Grpc.Core.Api.dll",
         "lib/net462/Grpc.Core.Api.pdb",
@@ -1286,15 +1286,15 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Net.Client/2.60.0": {
-      "sha512": "J9U96gjZHOcqSgAThg9vZZhLsbTD005bUggPtMP/RVQnGc3+tQJTpkRUCJtJWq9cykNydsRVoyU38TjPP/VJ4A==",
+    "Grpc.Net.Client/2.62.0": {
+      "sha512": "C7HxLt+wWPTpPFORRHkxxtDLL+K/jXSmZBaPLhFM8AEkN0bYjklIfCwnzajn1gcbRcEETBb0WnRgHJdVzpwbCg==",
       "type": "package",
-      "path": "grpc.net.client/2.60.0",
+      "path": "grpc.net.client/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.net.client.2.60.0.nupkg.sha512",
+        "grpc.net.client.2.62.0.nupkg.sha512",
         "grpc.net.client.nuspec",
         "lib/net462/Grpc.Net.Client.dll",
         "lib/net462/Grpc.Net.Client.pdb",
@@ -1317,15 +1317,15 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Net.ClientFactory/2.60.0": {
-      "sha512": "lCUZjbv6TtI1FbOUE593PLCkXqW2Yrf3KsFfzxIMdJ54o4ELwCEQ26xjfrm+hMTefiXxvXf9FO7zL1rGLWWSig==",
+    "Grpc.Net.ClientFactory/2.62.0": {
+      "sha512": "t0EbT6QHFBpc2OWMi5WdT8fKvn8OD6JDDlsL6VDHUC8kwIu7ouuW3JEJvEkdqD/25EUhWeBk6EISitAPK8NaFQ==",
       "type": "package",
-      "path": "grpc.net.clientfactory/2.60.0",
+      "path": "grpc.net.clientfactory/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "grpc.net.clientfactory.2.60.0.nupkg.sha512",
+        "grpc.net.clientfactory.2.62.0.nupkg.sha512",
         "grpc.net.clientfactory.nuspec",
         "lib/net6.0/Grpc.Net.ClientFactory.dll",
         "lib/net6.0/Grpc.Net.ClientFactory.pdb",
@@ -1345,14 +1345,14 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Net.Common/2.60.0": {
-      "sha512": "Y/917aplgD1RA0q1cd9WpnMGyl9Luu3WZl6ZMpPvNQwg2TNw/3uXUDSriDBybeCtxnKUCtxUcWO3WsVkhM1DcA==",
+    "Grpc.Net.Common/2.62.0": {
+      "sha512": "eBv5I4RPWfdezGXqooU5hs3+XcfVMLk5XDlA4G/Nd9TMX78ZGrFl/lM1Ad187zgBLmH7WPAgfjKRWLBwaa1Wbw==",
       "type": "package",
-      "path": "grpc.net.common/2.60.0",
+      "path": "grpc.net.common/2.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "grpc.net.common.2.60.0.nupkg.sha512",
+        "grpc.net.common.2.62.0.nupkg.sha512",
         "grpc.net.common.nuspec",
         "lib/net6.0/Grpc.Net.Common.dll",
         "lib/net6.0/Grpc.Net.Common.pdb",
@@ -1372,10 +1372,10 @@
         "packageIcon.png"
       ]
     },
-    "Grpc.Tools/2.60.0": {
-      "sha512": "gX2YT08W+4eM25T+ypdbrena91iqz1QywTseu4wVEfYEFpUWbb3G7tDCNU4Fb2D01SS+EipjmRRfXx/BWryrvA==",
+    "Grpc.Tools/2.62.0": {
+      "sha512": "tVU0hseOI3tYI9Z62++01EAUBNsKMQfZfeuZyW9Qa3z1D7IqtQKoU2u+3426uIPCTzVVi8qBgsszThyKam9NQA==",
       "type": "package",
-      "path": "grpc.tools/2.60.0",
+      "path": "grpc.tools/2.62.0",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1404,7 +1404,7 @@
         "build/native/include/google/protobuf/timestamp.proto",
         "build/native/include/google/protobuf/type.proto",
         "build/native/include/google/protobuf/wrappers.proto",
-        "grpc.tools.2.60.0.nupkg.sha512",
+        "grpc.tools.2.62.0.nupkg.sha512",
         "grpc.tools.nuspec",
         "packageIcon.png",
         "tools/linux_arm64/grpc_csharp_plugin",
@@ -1769,10 +1769,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
-      "sha512": "cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
+    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.1": {
+      "sha512": "fGLiCRLMYd00JYpClraLjJTNKLmMJPnqxMaiRzEBIIvevlzxz33mXy39Lkd48hu1G+N21S7QpaO5ZzKsI6FRuA==",
       "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1796,7 +1796,7 @@
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
-        "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.8.0.1.nupkg.sha512",
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -2301,10 +2301,10 @@
         "microsoft.extensions.objectpool.nuspec"
       ]
     },
-    "Microsoft.Extensions.Options/8.0.0": {
-      "sha512": "JOVOfqpnqlVLUzINQ2fox8evY2SKLYJ3BV8QDe/Jyp21u1T7r45x/R/5QdteURMR5r01GxeJSBBUOCOyaNXA3g==",
+    "Microsoft.Extensions.Options/8.0.2": {
+      "sha512": "dWGKvhFybsaZpGmzkGCbNNwBD1rVlWzrZKANLW/CcbFJpCEceMCGzT7zZwHOGBCbwM0SzBuceMj5HN1LKV1QqA==",
       "type": "package",
-      "path": "microsoft.extensions.options/8.0.0",
+      "path": "microsoft.extensions.options/8.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2343,7 +2343,7 @@
         "lib/netstandard2.0/Microsoft.Extensions.Options.xml",
         "lib/netstandard2.1/Microsoft.Extensions.Options.dll",
         "lib/netstandard2.1/Microsoft.Extensions.Options.xml",
-        "microsoft.extensions.options.8.0.0.nupkg.sha512",
+        "microsoft.extensions.options.8.0.2.nupkg.sha512",
         "microsoft.extensions.options.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -2548,10 +2548,10 @@
         "tools/net9.0/slngen.runtimeconfig.json"
       ]
     },
-    "Polly.Core/8.3.1": {
-      "sha512": "b9mMAjqXuCXFCtf/RtRPwFUkAm/sz37s7G+taDvS5EqfkJsLiWfO2xO2cSISjIgIY+88oIZTGguP6UrRGRlqzg==",
+    "Polly.Core/8.4.0": {
+      "sha512": "3AZxuP//pxOeBo9tQs7/tz4Z5TTbu4BYfjpaXZD0JYKJo98ngN9TMUz1nybh4k0ykWkMBpGZALV/AmVIE3ew7A==",
       "type": "package",
-      "path": "polly.core/8.3.1",
+      "path": "polly.core/8.4.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2572,7 +2572,7 @@
         "lib/netstandard2.0/Polly.Core.xml",
         "package-icon.png",
         "package-readme.md",
-        "polly.core.8.3.1.nupkg.sha512",
+        "polly.core.8.4.0.nupkg.sha512",
         "polly.core.nuspec"
       ]
     },
@@ -2839,6 +2839,8 @@
       "packagesPath": "/Users/richardtang/.nuget/packages/",
       "outputPath": "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.AppHost/obj/",
       "projectStyle": "PackageReference",
+      "centralPackageVersionsManagementEnabled": true,
+      "CentralPackageTransitivePinningEnabled": true,
       "configFilePaths": [
         "/Users/richardtang/Desktop/repos/merchy-main/NuGet.Config",
         "/Users/richardtang/.nuget/NuGet/NuGet.Config"
@@ -2872,6 +2874,76 @@
             "version": "[8.0.0-preview.7.24251.11, )"
           }
         },
+        "centralPackageVersions": {
+          "Asp.Versioning.Http": "[8.1.0, )",
+          "Asp.Versioning.Http.Client": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "Aspire.Azure.AI.OpenAI": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Hosting.AppHost": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Hosting.Azure.CognitiveServices": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Hosting.PostgreSQL": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Hosting.RabbitMQ": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Hosting.Redis": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Npgsql": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.RabbitMQ.Client": "[8.0.0-preview.7.24251.11, )",
+          "Aspire.StackExchange.Redis": "[8.0.0-preview.7.24251.11, )",
+          "AspNetCore.HealthChecks.Uris": "[8.0.1, )",
+          "Automapper": "[13.0.1, )",
+          "Dapper": "[2.1.35, )",
+          "Duende.IdentityServer": "[7.0.4, )",
+          "Duende.IdentityServer.AspNetIdentity": "[7.0.4, )",
+          "Duende.IdentityServer.EntityFramework": "[7.0.4, )",
+          "Duende.IdentityServer.EntityFramework.Storage": "[7.0.4, )",
+          "Duende.IdentityServer.Storage": "[7.0.4, )",
+          "FluentValidation.AspNetCore": "[11.3.0, )",
+          "Grpc.AspNetCore": "[2.62.0, )",
+          "Grpc.AspNetCore.Server.ClientFactory": "[2.62.0, )",
+          "Grpc.Tools": "[2.62.0, )",
+          "MediatR": "[12.2.0, )",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "[8.0.4, )",
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": "[8.0.4, )",
+          "Microsoft.AspNetCore.Components.QuickGrid": "[8.0.4, )",
+          "Microsoft.AspNetCore.Components.Web": "[8.0.4, )",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[8.0.4, )",
+          "Microsoft.AspNetCore.Identity.UI": "[8.0.4, )",
+          "Microsoft.AspNetCore.Mvc.Testing": "[8.0.4, )",
+          "Microsoft.AspNetCore.OpenApi": "[8.0.4, )",
+          "Microsoft.AspNetCore.TestHost": "[8.0.4, )",
+          "Microsoft.EntityFrameworkCore.Tools": "[8.0.4, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[8.0.1, )",
+          "Microsoft.Extensions.FileProviders.Embedded": "[8.0.4, )",
+          "Microsoft.Extensions.Http.Resilience": "[8.4.0, )",
+          "Microsoft.Extensions.Identity.Stores": "[8.0.4, )",
+          "Microsoft.Extensions.Options": "[8.0.2, )",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "[8.0.0, )",
+          "Microsoft.Extensions.ServiceDiscovery": "[8.0.0-preview.7.24251.11, )",
+          "Microsoft.Extensions.ServiceDiscovery.Yarp": "[8.0.0-preview.7.24251.11, )",
+          "Microsoft.NET.Test.Sdk": "[17.9.0, )",
+          "Microsoft.SemanticKernel": "[1.11.1, )",
+          "Microsoft.SemanticKernel.Connectors.Onnx": "[1.10.0-alpha, )",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "[8.0.0-rc.1.23461.3, )",
+          "Microsoft.Web.LibraryManager.Build": "[2.1.175, )",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "[8.0.4, )",
+          "NSubstitute": "[5.1.0, )",
+          "NSubstitute.Analyzers.CSharp": "[1.0.17, )",
+          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.8.1, )",
+          "OpenTelemetry.Extensions.Hosting": "[1.8.1, )",
+          "OpenTelemetry.Instrumentation.AspNetCore": "[1.8.1, )",
+          "OpenTelemetry.Instrumentation.GrpcNetClient": "[1.6.0-beta.3, )",
+          "OpenTelemetry.Instrumentation.Http": "[1.8.1, )",
+          "OpenTelemetry.Instrumentation.Runtime": "[1.8.0, )",
+          "Pgvector": "[0.2.0, )",
+          "Pgvector.EntityFrameworkCore": "[0.2.0, )",
+          "Polly.Core": "[8.4.0, )",
+          "Swashbuckle.AspNetCore": "[6.5.0, )",
+          "System.Reflection.TypeExtensions": "[4.7.0, )",
+          "Volo.Abp.AspNetCore.Mvc": "[8.1.3, )",
+          "Volo.Abp.Validation": "[8.1.3, )",
+          "xunit": "[2.8.0, )",
+          "xunit.runner.visualstudio": "[2.8.0, )",
+          "Yarp.ReverseProxy": "[2.1.0, )"
+        },
         "imports": [
           "net461",
           "net462",
@@ -2889,6 +2961,38 @@
           }
         },
         "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "centralTransitiveDependencyGroups": {
+    "net8.0": {
+      "Grpc.AspNetCore": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[2.62.0, )"
+      },
+      "Grpc.AspNetCore.Server.ClientFactory": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[2.62.0, )"
+      },
+      "Grpc.Tools": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[2.62.0, )"
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[8.0.1, )"
+      },
+      "Microsoft.Extensions.Options": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[8.0.2, )"
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[8.0.0, )"
+      },
+      "Polly.Core": {
+        "include": "Runtime, Compile, Native, BuildTransitive",
+        "version": "[8.4.0, )"
       }
     }
   }

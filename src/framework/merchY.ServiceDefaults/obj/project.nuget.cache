@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hxVnouuPdOqLeTUB29dDOaN7tDi2DmVi6PLYnyau8o2/wT6iOK5joseNHLW6lTCYO0lFX+abzZvUNaLX8NYDIw==",
+  "dgSpecHash": "7mMWJlrKJgu+ImcZik9N2QZboVYfF81pNrQVR3WBcGh67Xaqp74idfuVKwm+xKiVvqSXQ25PeFT+Xmfr/yk9mQ==",
   "success": true,
   "projectFilePath": "/Users/richardtang/Desktop/repos/merchy-main/src/framework/merchY.ServiceDefaults/merchY.ServiceDefaults.csproj",
   "expectedPackageFiles": [
@@ -48,7 +48,7 @@
     "/Users/richardtang/.nuget/packages/opentelemetry.instrumentation.aspnetcore/1.8.1/opentelemetry.instrumentation.aspnetcore.1.8.1.nupkg.sha512",
     "/Users/richardtang/.nuget/packages/opentelemetry.instrumentation.http/1.8.1/opentelemetry.instrumentation.http.1.8.1.nupkg.sha512",
     "/Users/richardtang/.nuget/packages/opentelemetry.instrumentation.runtime/1.8.0/opentelemetry.instrumentation.runtime.1.8.0.nupkg.sha512",
-    "/Users/richardtang/.nuget/packages/polly.core/8.3.0/polly.core.8.3.0.nupkg.sha512",
+    "/Users/richardtang/.nuget/packages/polly.core/8.4.0/polly.core.8.4.0.nupkg.sha512",
     "/Users/richardtang/.nuget/packages/polly.extensions/8.3.0/polly.extensions.8.3.0.nupkg.sha512",
     "/Users/richardtang/.nuget/packages/polly.ratelimiting/8.3.0/polly.ratelimiting.8.3.0.nupkg.sha512",
     "/Users/richardtang/.nuget/packages/system.diagnostics.diagnosticsource/8.0.0/system.diagnostics.diagnosticsource.8.0.0.nupkg.sha512",
