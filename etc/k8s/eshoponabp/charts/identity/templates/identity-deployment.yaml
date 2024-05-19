@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Release.Name }}-{{ .Chart.Name }}
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 443
+        env:
+        - name: App__SelfUrl
+          value: "{{ .Values.config.selfUrl }}"
+        - name: App__CorsOrigins
+          value: "{{ .Values.config.corsOrigins }}"
+        - name: "ConnectionStrings__IdentityService"
+          value: {{ .Values.config.connectionStrings.identityService }}
+        - name: "ConnectionStrings__AdministrationService"
+          value: {{ .Values.config.connectionStrings.administrationService }}
+        - name: "DOTNET_ENVIRONMENT"
+          value: "{{ .Values.config.dotnetEnv }}"
+        - name: "Redis__Configuration"
+          value: "{{ .Values.config.redisHost }}"
+        - name: "RabbitMQ__Connections__Default__HostName"
+          value: "{{ .Values.config.rabbitmqHost }}"
+        - name: "ElasticSearch__Url"
+          value: "{{ .Values.config.elasticsearchHost }}"
+        - name: "Keycloak__url"
+          value: "{{ .Values.config.keycloak.url }}"
+        - name: "Keycloak__adminUsername"
+          value: "{{ .Values.config.keycloak.adminUsername }}"
+        - name: "Keycloak__adminPassword"
+          value: "{{ .Values.config.keycloak.adminPassword }}"
+        - name: "Keycloak__realmName"
+          value: "{{ .Values.config.keycloak.realmName }}"
+        - name: "AuthServer__Authority"
+          value: "{{ .Values.config.authServer.authority }}"
+        - name: "AuthServer__RequireHttpsMetadata"
+          value: "{{ .Values.config.authServer.requireHttpsMetadata }}"
+        - name: "AuthServer__MetadataAddress"
+          value: "{{ .Values.config.authServer.metadataAddress }}"
+        - name: "AuthServer__SwaggerClientId"
+          value: "{{ .Values.config.authServer.swaggerClientId }}"
+        - name: "StringEncryption__DefaultPassPhrase"
+          value: "{{ .Values.config.stringEncryptionDefaultPassPhrase }}"             
+        - name: "Clients__Web__RootUrl"
+          value: {{ .Values.keycloakClients.webRootUrl }}
+        - name: "Clients__PublicWeb__RootUrl"
+          value: {{ .Values.keycloakClients.publicWebRootUrl }}
+        - name: "Clients__PublicWebGateway__RootUrl"
+          value: {{ .Values.keycloakClients.publicWebGatewayRootUrl }}
+        - name: "Clients__WebGateway__RootUrl"
+          value: {{ .Values.keycloakClients.webGatewayRootUrl }}  
+        - name: "Clients__IdentityService__RootUrl"
+          value: {{ .Values.keycloakClients.identityServiceRootUrl }}
+        - name: "Clients__AdministrationService__RootUrl"
+          value: {{ .Values.keycloakClients.administrationServiceRootUrl }}
+        - name: "Clients__AccountService__RootUrl"
+          value: {{ .Values.keycloakClients.accountServiceRootUrl }}
+        - name: "Clients__BasketService__RootUrl"
+          value: {{ .Values.keycloakClients.basketServiceRootUrl }}
+        - name: "Clients__CatalogService__RootUrl"
+          value: {{ .Values.keycloakClients.catalogServiceRootUrl }}
+        - name: "Clients__OrderingService__RootUrl"
+          value: {{ .Values.keycloakClients.orderingServiceRootUrl }}
+        - name: "Clients__CmskitService__RootUrl"
+          value: {{ .Values.keycloakClients.cmskitServiceRootUrl }}
+        - name: "Clients__PaymentService__RootUrl"
+          value: {{ .Values.keycloakClients.paymentServiceRootUrl }}  
+          {{- if .Values.env }}
+{{ toYaml .Values.env | indent 8 }}
+          {{- end }}
+

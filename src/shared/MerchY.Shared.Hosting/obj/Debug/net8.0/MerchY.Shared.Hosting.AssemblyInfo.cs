@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MerchY.Shared.Hosting")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+36b2351e742cf762970caf1cfa7cc6507debf006")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b1f1292fc3bfea66ddffae7ed685b825a78dd26")]
 [assembly: System.Reflection.AssemblyProductAttribute("MerchY.Shared.Hosting")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MerchY.Shared.Hosting")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

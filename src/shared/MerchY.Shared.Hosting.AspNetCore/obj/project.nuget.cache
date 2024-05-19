@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "40sZI4cs6lMw2D97RyINspd0qvSzpcWmQpv/BgxluuEk8UxywLtPCAz0ZZeyjhQimxL9k9CFwzSCbhX5KGHktg==",
+  "dgSpecHash": "Yc6x/JvRygS7MtFL+vhVXTrT3cjQgMkj84XCXxSy49BuumIksN5TmjtrH7pAsXS2Zaa1JpKw+rnBCNH61dUcYg==",
   "success": true,
   "projectFilePath": "/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting.AspNetCore/MerchY.Shared.Hosting.AspNetCore.csproj",
   "expectedPackageFiles": [

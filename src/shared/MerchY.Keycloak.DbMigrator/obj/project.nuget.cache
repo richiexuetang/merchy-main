@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+QGkfbeKgqni1kIYe2MfWMVY+FfEG9vg9Zt+TLffZdAGq3S/ZxlK6RPZwjt/GCpMZhvTGed7eyLA0ygB6UwyPw==",
+  "dgSpecHash": "8W9udHxy1DTk1cyjgXbWID2pAEI2LW7EAKKMPLgSj1+RxEJswrCJlxpWWjgL41BeuPYsXMY7XW5S60owAs02vw==",
   "success": true,
   "projectFilePath": "/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Keycloak.DbMigrator/MerchY.Keycloak.DbMigrator.csproj",
   "expectedPackageFiles": [

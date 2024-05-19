@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <RootNamespace>EShopOnAbp.Shared.Hosting.AspNetCore</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="8.0.0" />
+        <PackageReference Include="Volo.Abp.Swashbuckle" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\EShopOnAbp.Shared.Hosting\EShopOnAbp.Shared.Hosting.csproj" />
+        <ProjectReference Include="..\EShopOnAbp.Shared.Localization\EShopOnAbp.Shared.Localization.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="wwwroot\swagger\ui\requestinterceptor.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="wwwroot\swagger\ui\requestinterceptor.js">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="wwwroot\swagger\ui\requestinterceptor.js" />
+    </ItemGroup>
+
+</Project>
