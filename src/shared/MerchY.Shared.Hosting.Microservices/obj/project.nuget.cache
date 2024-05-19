@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "19wYiK+IBUJllBxVGvscpqUM86v/EPeFsdonzVoWdKRnw88Av7BBW8oBLRtrY1h2oFqVVfqgjB8xNcmBCBx+Cg==",
+  "dgSpecHash": "CEmF1HCmPmrRS9XWuV58EwBr8kqjNwxqIwNmH8MFZ62T8ZPg8SmUM4YW6eOOrmts/p+FRgDKXx+xnc6flr3hjA==",
   "success": true,
   "projectFilePath": "/Users/richardtang/Desktop/repos/merchy-main/src/shared/MerchY.Shared.Hosting.Microservices/MerchY.Shared.Hosting.Microservices.csproj",
   "expectedPackageFiles": [
